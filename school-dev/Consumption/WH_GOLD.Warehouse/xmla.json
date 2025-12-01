@@ -1,0 +1,5806 @@
+{
+  "name": "{{Dataset_Name}}",
+  "compatibilityLevel": 1604,
+  "model": {
+    "name": "{{Dataset_Name}}",
+    "culture": "en-US",
+    "collation": "Latin1_General_100_BIN2_UTF8",
+    "dataAccessOptions": {
+      "legacyRedirects": true,
+      "returnErrorValuesAsNull": true
+    },
+    "defaultPowerBIDataSourceVersion": "powerBI_V3",
+    "sourceQueryCulture": "en-US",
+    "tables": [
+      {
+        "name": "ClassesTargets",
+        "sourceLineageTag": "[LISE].[ClassesTargets]",
+        "columns": [
+          {
+            "name": "ClasseKey",
+            "dataType": "string",
+            "sourceColumn": "ClasseKey",
+            "sourceProviderType": "varchar",
+            "sourceLineageTag": "ClasseKey",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "ClasseID",
+            "dataType": "int64",
+            "sourceColumn": "ClasseID",
+            "formatString": "0",
+            "sourceProviderType": "int",
+            "sourceLineageTag": "ClasseID",
+            "summarizeBy": "sum",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "TargetCount",
+            "dataType": "int64",
+            "sourceColumn": "TargetCount",
+            "formatString": "0",
+            "sourceProviderType": "int",
+            "sourceLineageTag": "TargetCount",
+            "summarizeBy": "sum",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "MaximumCount",
+            "dataType": "int64",
+            "sourceColumn": "MaximumCount",
+            "formatString": "0",
+            "sourceProviderType": "int",
+            "sourceLineageTag": "MaximumCount",
+            "summarizeBy": "sum",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "SchoolYear",
+            "dataType": "string",
+            "sourceColumn": "SchoolYear",
+            "sourceProviderType": "varchar",
+            "sourceLineageTag": "SchoolYear",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          }
+        ],
+        "partitions": [
+          {
+            "name": "{{Partition_Name}}",
+            "mode": "directLake",
+            "source": {
+              "type": "entity",
+              "entityName": "ClassesTargets",
+              "expressionSource": "DatabaseQuery",
+              "schemaName": "LISE"
+            }
+          }
+        ],
+        "annotations": [
+          {
+            "name": "IsTableInBiModel",
+            "value": "False"
+          }
+        ]
+      },
+      {
+        "name": "Classes",
+        "sourceLineageTag": "[LISE].[Classes]",
+        "columns": [
+          {
+            "name": "ClasseID",
+            "dataType": "int64",
+            "sourceColumn": "ClasseID",
+            "formatString": "0",
+            "sourceProviderType": "int",
+            "sourceLineageTag": "ClasseID",
+            "summarizeBy": "sum",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "Classe",
+            "dataType": "string",
+            "sourceColumn": "Classe",
+            "sourceProviderType": "varchar",
+            "sourceLineageTag": "Classe",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "ClasseLibelle",
+            "dataType": "string",
+            "sourceColumn": "ClasseLibelle",
+            "sourceProviderType": "varchar",
+            "sourceLineageTag": "ClasseLibelle",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "NiveauID",
+            "dataType": "int64",
+            "sourceColumn": "NiveauID",
+            "formatString": "0",
+            "sourceProviderType": "int",
+            "sourceLineageTag": "NiveauID",
+            "summarizeBy": "sum",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "EtablissementID",
+            "dataType": "int64",
+            "sourceColumn": "EtablissementID",
+            "formatString": "0",
+            "sourceProviderType": "int",
+            "sourceLineageTag": "EtablissementID",
+            "summarizeBy": "sum",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          }
+        ],
+        "partitions": [
+          {
+            "name": "{{Partition_Name}}",
+            "mode": "directLake",
+            "source": {
+              "type": "entity",
+              "entityName": "Classes",
+              "expressionSource": "DatabaseQuery",
+              "schemaName": "LISE"
+            }
+          }
+        ],
+        "annotations": [
+          {
+            "name": "IsTableInBiModel",
+            "value": "False"
+          }
+        ]
+      },
+      {
+        "name": "Dates",
+        "sourceLineageTag": "[LISE].[Dates]",
+        "columns": [
+          {
+            "name": "DateID",
+            "dataType": "int64",
+            "sourceColumn": "DateID",
+            "formatString": "0",
+            "sourceProviderType": "int",
+            "sourceLineageTag": "DateID",
+            "summarizeBy": "sum",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "Date",
+            "dataType": "dateTime",
+            "sourceColumn": "Date",
+            "formatString": "General Date",
+            "sourceProviderType": "date",
+            "sourceLineageTag": "Date",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "CalendarYear",
+            "dataType": "int64",
+            "sourceColumn": "CalendarYear",
+            "formatString": "0",
+            "sourceProviderType": "int",
+            "sourceLineageTag": "CalendarYear",
+            "summarizeBy": "sum",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "CalendarMonth",
+            "dataType": "int64",
+            "sourceColumn": "CalendarMonth",
+            "formatString": "0",
+            "sourceProviderType": "int",
+            "sourceLineageTag": "CalendarMonth",
+            "summarizeBy": "sum",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "CalendarDay",
+            "dataType": "int64",
+            "sourceColumn": "CalendarDay",
+            "formatString": "0",
+            "sourceProviderType": "int",
+            "sourceLineageTag": "CalendarDay",
+            "summarizeBy": "sum",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "MonthName",
+            "dataType": "string",
+            "sourceColumn": "MonthName",
+            "sourceProviderType": "varchar",
+            "sourceLineageTag": "MonthName",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "DayName",
+            "dataType": "string",
+            "sourceColumn": "DayName",
+            "sourceProviderType": "varchar",
+            "sourceLineageTag": "DayName",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "SchoolYear",
+            "dataType": "string",
+            "sourceColumn": "SchoolYear",
+            "sourceProviderType": "char",
+            "sourceLineageTag": "SchoolYear",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "IsSchoolPeriod",
+            "dataType": "int64",
+            "sourceColumn": "IsSchoolPeriod",
+            "formatString": "0",
+            "sourceProviderType": "int",
+            "sourceLineageTag": "IsSchoolPeriod",
+            "summarizeBy": "sum",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          }
+        ],
+        "partitions": [
+          {
+            "name": "{{Partition_Name}}",
+            "mode": "directLake",
+            "source": {
+              "type": "entity",
+              "entityName": "Dates",
+              "expressionSource": "DatabaseQuery",
+              "schemaName": "LISE"
+            }
+          }
+        ],
+        "annotations": [
+          {
+            "name": "IsTableInBiModel",
+            "value": "False"
+          }
+        ]
+      },
+      {
+        "name": "Eleves",
+        "sourceLineageTag": "[LISE].[Eleves]",
+        "columns": [
+          {
+            "name": "EleveKey",
+            "dataType": "string",
+            "sourceColumn": "EleveKey",
+            "sourceProviderType": "varchar",
+            "sourceLineageTag": "EleveKey",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "EleveID",
+            "dataType": "int64",
+            "sourceColumn": "EleveID",
+            "formatString": "0",
+            "sourceProviderType": "int",
+            "sourceLineageTag": "EleveID",
+            "summarizeBy": "sum",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "ResponsableID",
+            "dataType": "int64",
+            "sourceColumn": "ResponsableID",
+            "formatString": "0",
+            "sourceProviderType": "int",
+            "sourceLineageTag": "ResponsableID",
+            "summarizeBy": "sum",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "DateEntree",
+            "dataType": "dateTime",
+            "sourceColumn": "DateEntree",
+            "formatString": "General Date",
+            "sourceProviderType": "date",
+            "sourceLineageTag": "DateEntree",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "DateSortie",
+            "dataType": "dateTime",
+            "sourceColumn": "DateSortie",
+            "formatString": "General Date",
+            "sourceProviderType": "date",
+            "sourceLineageTag": "DateSortie",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          }
+        ],
+        "partitions": [
+          {
+            "name": "{{Partition_Name}}",
+            "mode": "directLake",
+            "source": {
+              "type": "entity",
+              "entityName": "Eleves",
+              "expressionSource": "DatabaseQuery",
+              "schemaName": "LISE"
+            }
+          }
+        ],
+        "annotations": [
+          {
+            "name": "IsTableInBiModel",
+            "value": "False"
+          }
+        ]
+      },
+      {
+        "name": "Enfants",
+        "sourceLineageTag": "[LISE].[Enfants]",
+        "columns": [
+          {
+            "name": "EleveID",
+            "dataType": "int64",
+            "sourceColumn": "EleveID",
+            "formatString": "0",
+            "sourceProviderType": "int",
+            "sourceLineageTag": "EleveID",
+            "summarizeBy": "sum",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "Nom",
+            "dataType": "string",
+            "sourceColumn": "Nom",
+            "sourceProviderType": "varchar",
+            "sourceLineageTag": "Nom",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "Prenom",
+            "dataType": "string",
+            "sourceColumn": "Prenom",
+            "sourceProviderType": "varchar",
+            "sourceLineageTag": "Prenom",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "Sexe",
+            "dataType": "string",
+            "sourceColumn": "Sexe",
+            "sourceProviderType": "char",
+            "sourceLineageTag": "Sexe",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "DateNaissance",
+            "dataType": "dateTime",
+            "sourceColumn": "DateNaissance",
+            "formatString": "General Date",
+            "sourceProviderType": "date",
+            "sourceLineageTag": "DateNaissance",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "Age",
+            "dataType": "int64",
+            "sourceColumn": "Age",
+            "formatString": "0",
+            "sourceProviderType": "int",
+            "sourceLineageTag": "Age",
+            "summarizeBy": "sum",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "Nationalite",
+            "dataType": "string",
+            "sourceColumn": "Nationalite",
+            "sourceProviderType": "varchar",
+            "sourceLineageTag": "Nationalite",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "IdentiteNationale",
+            "dataType": "string",
+            "sourceColumn": "IdentiteNationale",
+            "sourceProviderType": "varchar",
+            "sourceLineageTag": "IdentiteNationale",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "FullName",
+            "dataType": "string",
+            "sourceColumn": "FullName",
+            "sourceProviderType": "varchar",
+            "sourceLineageTag": "FullName",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          }
+        ],
+        "partitions": [
+          {
+            "name": "{{Partition_Name}}",
+            "mode": "directLake",
+            "source": {
+              "type": "entity",
+              "entityName": "Enfants",
+              "expressionSource": "DatabaseQuery",
+              "schemaName": "LISE"
+            }
+          }
+        ],
+        "annotations": [
+          {
+            "name": "IsTableInBiModel",
+            "value": "False"
+          }
+        ]
+      },
+      {
+        "name": "Etablissements",
+        "sourceLineageTag": "[LISE].[Etablissements]",
+        "columns": [
+          {
+            "name": "EtablissementID",
+            "dataType": "int64",
+            "sourceColumn": "EtablissementID",
+            "formatString": "0",
+            "sourceProviderType": "int",
+            "sourceLineageTag": "EtablissementID",
+            "summarizeBy": "sum",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "Etablissement",
+            "dataType": "string",
+            "sourceColumn": "Etablissement",
+            "sourceProviderType": "varchar",
+            "sourceLineageTag": "Etablissement",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          }
+        ],
+        "partitions": [
+          {
+            "name": "{{Partition_Name}}",
+            "mode": "directLake",
+            "source": {
+              "type": "entity",
+              "entityName": "Etablissements",
+              "expressionSource": "DatabaseQuery",
+              "schemaName": "LISE"
+            }
+          }
+        ],
+        "annotations": [
+          {
+            "name": "IsTableInBiModel",
+            "value": "False"
+          }
+        ]
+      },
+      {
+        "name": "FacturesEleves",
+        "sourceLineageTag": "[LISE].[FacturesEleves]",
+        "columns": [
+          {
+            "name": "EleveKey",
+            "dataType": "string",
+            "sourceColumn": "EleveKey",
+            "sourceProviderType": "varchar",
+            "sourceLineageTag": "EleveKey",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "EleveID",
+            "dataType": "int64",
+            "sourceColumn": "EleveID",
+            "formatString": "0",
+            "sourceProviderType": "int",
+            "sourceLineageTag": "EleveID",
+            "summarizeBy": "sum",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "ResponsableKey",
+            "dataType": "string",
+            "sourceColumn": "ResponsableKey",
+            "sourceProviderType": "varchar",
+            "sourceLineageTag": "ResponsableKey",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "ResponsableID",
+            "dataType": "int64",
+            "sourceColumn": "ResponsableID",
+            "formatString": "0",
+            "sourceProviderType": "int",
+            "sourceLineageTag": "ResponsableID",
+            "summarizeBy": "sum",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "ValidationKey",
+            "dataType": "string",
+            "sourceColumn": "ValidationKey",
+            "sourceProviderType": "varchar",
+            "sourceLineageTag": "ValidationKey",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "ValidationID",
+            "dataType": "int64",
+            "sourceColumn": "ValidationID",
+            "formatString": "0",
+            "sourceProviderType": "int",
+            "sourceLineageTag": "ValidationID",
+            "summarizeBy": "sum",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "ClasseKey",
+            "dataType": "string",
+            "sourceColumn": "ClasseKey",
+            "sourceProviderType": "varchar",
+            "sourceLineageTag": "ClasseKey",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "ClasseID",
+            "dataType": "int64",
+            "sourceColumn": "ClasseID",
+            "formatString": "0",
+            "sourceProviderType": "int",
+            "sourceLineageTag": "ClasseID",
+            "summarizeBy": "sum",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "RegimeID",
+            "dataType": "int64",
+            "sourceColumn": "RegimeID",
+            "formatString": "0",
+            "sourceProviderType": "int",
+            "sourceLineageTag": "RegimeID",
+            "summarizeBy": "sum",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "TotalEleve",
+            "dataType": "double",
+            "sourceColumn": "TotalEleve",
+            "sourceProviderType": "float",
+            "sourceLineageTag": "TotalEleve",
+            "summarizeBy": "sum",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              },
+              {
+                "name": "PBI_FormatHint",
+                "value": "{\"isGeneralNumber\":true}"
+              }
+            ]
+          },
+          {
+            "name": "DateFacture",
+            "dataType": "dateTime",
+            "sourceColumn": "DateFacture",
+            "formatString": "General Date",
+            "sourceProviderType": "date",
+            "sourceLineageTag": "DateFacture",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          }
+        ],
+        "partitions": [
+          {
+            "name": "{{Partition_Name}}",
+            "mode": "directLake",
+            "source": {
+              "type": "entity",
+              "entityName": "FacturesEleves",
+              "expressionSource": "DatabaseQuery",
+              "schemaName": "LISE"
+            }
+          }
+        ],
+        "annotations": [
+          {
+            "name": "IsTableInBiModel",
+            "value": "False"
+          }
+        ]
+      },
+      {
+        "name": "FacturesFamilles",
+        "sourceLineageTag": "[LISE].[FacturesFamilles]",
+        "columns": [
+          {
+            "name": "ResponsableKey",
+            "dataType": "string",
+            "sourceColumn": "ResponsableKey",
+            "sourceProviderType": "varchar",
+            "sourceLineageTag": "ResponsableKey",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "ResponsableID",
+            "dataType": "int64",
+            "sourceColumn": "ResponsableID",
+            "formatString": "0",
+            "sourceProviderType": "int",
+            "sourceLineageTag": "ResponsableID",
+            "summarizeBy": "sum",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "ValidationKey",
+            "dataType": "string",
+            "sourceColumn": "ValidationKey",
+            "sourceProviderType": "varchar",
+            "sourceLineageTag": "ValidationKey",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "ValidationID",
+            "dataType": "int64",
+            "sourceColumn": "ValidationID",
+            "formatString": "0",
+            "sourceProviderType": "int",
+            "sourceLineageTag": "ValidationID",
+            "summarizeBy": "sum",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "FoyerID",
+            "dataType": "int64",
+            "sourceColumn": "FoyerID",
+            "formatString": "0",
+            "sourceProviderType": "int",
+            "sourceLineageTag": "FoyerID",
+            "summarizeBy": "sum",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "ProfessionID",
+            "dataType": "int64",
+            "sourceColumn": "ProfessionID",
+            "formatString": "0",
+            "sourceProviderType": "int",
+            "sourceLineageTag": "ProfessionID",
+            "summarizeBy": "sum",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "TotalFamille",
+            "dataType": "double",
+            "sourceColumn": "TotalFamille",
+            "sourceProviderType": "float",
+            "sourceLineageTag": "TotalFamille",
+            "summarizeBy": "sum",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              },
+              {
+                "name": "PBI_FormatHint",
+                "value": "{\"isGeneralNumber\":true}"
+              }
+            ]
+          },
+          {
+            "name": "DateFacture",
+            "dataType": "dateTime",
+            "sourceColumn": "DateFacture",
+            "formatString": "General Date",
+            "sourceProviderType": "date",
+            "sourceLineageTag": "DateFacture",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          }
+        ],
+        "partitions": [
+          {
+            "name": "{{Partition_Name}}",
+            "mode": "directLake",
+            "source": {
+              "type": "entity",
+              "entityName": "FacturesFamilles",
+              "expressionSource": "DatabaseQuery",
+              "schemaName": "LISE"
+            }
+          }
+        ],
+        "annotations": [
+          {
+            "name": "IsTableInBiModel",
+            "value": "False"
+          }
+        ]
+      },
+      {
+        "name": "FacturesNiveaux",
+        "sourceLineageTag": "[LISE].[FacturesNiveaux]",
+        "columns": [
+          {
+            "name": "NiveauID",
+            "dataType": "int64",
+            "sourceColumn": "NiveauID",
+            "formatString": "0",
+            "sourceProviderType": "int",
+            "sourceLineageTag": "NiveauID",
+            "summarizeBy": "sum",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "ValidationKey",
+            "dataType": "string",
+            "sourceColumn": "ValidationKey",
+            "sourceProviderType": "varchar",
+            "sourceLineageTag": "ValidationKey",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "ValidationID",
+            "dataType": "int64",
+            "sourceColumn": "ValidationID",
+            "formatString": "0",
+            "sourceProviderType": "int",
+            "sourceLineageTag": "ValidationID",
+            "summarizeBy": "sum",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "ResponsableKey",
+            "dataType": "string",
+            "sourceColumn": "ResponsableKey",
+            "sourceProviderType": "varchar",
+            "sourceLineageTag": "ResponsableKey",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "ResponsableID",
+            "dataType": "int64",
+            "sourceColumn": "ResponsableID",
+            "formatString": "0",
+            "sourceProviderType": "int",
+            "sourceLineageTag": "ResponsableID",
+            "summarizeBy": "sum",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "TotalNiveau",
+            "dataType": "double",
+            "sourceColumn": "TotalNiveau",
+            "sourceProviderType": "float",
+            "sourceLineageTag": "TotalNiveau",
+            "summarizeBy": "sum",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              },
+              {
+                "name": "PBI_FormatHint",
+                "value": "{\"isGeneralNumber\":true}"
+              }
+            ]
+          },
+          {
+            "name": "DateFacture",
+            "dataType": "dateTime",
+            "sourceColumn": "DateFacture",
+            "formatString": "General Date",
+            "sourceProviderType": "date",
+            "sourceLineageTag": "DateFacture",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          }
+        ],
+        "partitions": [
+          {
+            "name": "{{Partition_Name}}",
+            "mode": "directLake",
+            "source": {
+              "type": "entity",
+              "entityName": "FacturesNiveaux",
+              "expressionSource": "DatabaseQuery",
+              "schemaName": "LISE"
+            }
+          }
+        ],
+        "annotations": [
+          {
+            "name": "IsTableInBiModel",
+            "value": "False"
+          }
+        ]
+      },
+      {
+        "name": "FacturesServices",
+        "sourceLineageTag": "[LISE].[FacturesServices]",
+        "columns": [
+          {
+            "name": "EleveKey",
+            "dataType": "string",
+            "sourceColumn": "EleveKey",
+            "sourceProviderType": "varchar",
+            "sourceLineageTag": "EleveKey",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "EleveID",
+            "dataType": "int64",
+            "sourceColumn": "EleveID",
+            "formatString": "0",
+            "sourceProviderType": "int",
+            "sourceLineageTag": "EleveID",
+            "summarizeBy": "sum",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "ResponsableKey",
+            "dataType": "string",
+            "sourceColumn": "ResponsableKey",
+            "sourceProviderType": "varchar",
+            "sourceLineageTag": "ResponsableKey",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "ResponsableID",
+            "dataType": "int64",
+            "sourceColumn": "ResponsableID",
+            "formatString": "0",
+            "sourceProviderType": "int",
+            "sourceLineageTag": "ResponsableID",
+            "summarizeBy": "sum",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "ValidationKey",
+            "dataType": "string",
+            "sourceColumn": "ValidationKey",
+            "sourceProviderType": "varchar",
+            "sourceLineageTag": "ValidationKey",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "ValidationID",
+            "dataType": "int64",
+            "sourceColumn": "ValidationID",
+            "formatString": "0",
+            "sourceProviderType": "int",
+            "sourceLineageTag": "ValidationID",
+            "summarizeBy": "sum",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "ServiceID",
+            "dataType": "int64",
+            "sourceColumn": "ServiceID",
+            "formatString": "0",
+            "sourceProviderType": "int",
+            "sourceLineageTag": "ServiceID",
+            "summarizeBy": "sum",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "Quantite",
+            "dataType": "double",
+            "sourceColumn": "Quantite",
+            "sourceProviderType": "float",
+            "sourceLineageTag": "Quantite",
+            "summarizeBy": "sum",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              },
+              {
+                "name": "PBI_FormatHint",
+                "value": "{\"isGeneralNumber\":true}"
+              }
+            ]
+          },
+          {
+            "name": "Prix",
+            "dataType": "double",
+            "sourceColumn": "Prix",
+            "sourceProviderType": "float",
+            "sourceLineageTag": "Prix",
+            "summarizeBy": "sum",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              },
+              {
+                "name": "PBI_FormatHint",
+                "value": "{\"isGeneralNumber\":true}"
+              }
+            ]
+          },
+          {
+            "name": "Remise",
+            "dataType": "double",
+            "sourceColumn": "Remise",
+            "sourceProviderType": "float",
+            "sourceLineageTag": "Remise",
+            "summarizeBy": "sum",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              },
+              {
+                "name": "PBI_FormatHint",
+                "value": "{\"isGeneralNumber\":true}"
+              }
+            ]
+          },
+          {
+            "name": "TotalService",
+            "dataType": "double",
+            "sourceColumn": "TotalService",
+            "sourceProviderType": "float",
+            "sourceLineageTag": "TotalService",
+            "summarizeBy": "sum",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              },
+              {
+                "name": "PBI_FormatHint",
+                "value": "{\"isGeneralNumber\":true}"
+              }
+            ]
+          },
+          {
+            "name": "DateFacture",
+            "dataType": "dateTime",
+            "sourceColumn": "DateFacture",
+            "formatString": "General Date",
+            "sourceProviderType": "date",
+            "sourceLineageTag": "DateFacture",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          }
+        ],
+        "partitions": [
+          {
+            "name": "{{Partition_Name}}",
+            "mode": "directLake",
+            "source": {
+              "type": "entity",
+              "entityName": "FacturesServices",
+              "expressionSource": "DatabaseQuery",
+              "schemaName": "LISE"
+            }
+          }
+        ],
+        "annotations": [
+          {
+            "name": "IsTableInBiModel",
+            "value": "False"
+          }
+        ]
+      },
+      {
+        "name": "FacturesValidations",
+        "sourceLineageTag": "[LISE].[FacturesValidations]",
+        "columns": [
+          {
+            "name": "ValidationKey",
+            "dataType": "string",
+            "sourceColumn": "ValidationKey",
+            "sourceProviderType": "varchar",
+            "sourceLineageTag": "ValidationKey",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "ValidationID",
+            "dataType": "int64",
+            "sourceColumn": "ValidationID",
+            "formatString": "0",
+            "sourceProviderType": "int",
+            "sourceLineageTag": "ValidationID",
+            "summarizeBy": "sum",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "TypeFacture",
+            "dataType": "string",
+            "sourceColumn": "TypeFacture",
+            "sourceProviderType": "varchar",
+            "sourceLineageTag": "TypeFacture",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "NombreFacture",
+            "dataType": "int64",
+            "sourceColumn": "NombreFacture",
+            "formatString": "0",
+            "sourceProviderType": "int",
+            "sourceLineageTag": "NombreFacture",
+            "summarizeBy": "sum",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "DateValidation",
+            "dataType": "dateTime",
+            "sourceColumn": "DateValidation",
+            "formatString": "General Date",
+            "sourceProviderType": "date",
+            "sourceLineageTag": "DateValidation",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          }
+        ],
+        "partitions": [
+          {
+            "name": "{{Partition_Name}}",
+            "mode": "directLake",
+            "source": {
+              "type": "entity",
+              "entityName": "FacturesValidations",
+              "expressionSource": "DatabaseQuery",
+              "schemaName": "LISE"
+            }
+          }
+        ],
+        "annotations": [
+          {
+            "name": "IsTableInBiModel",
+            "value": "False"
+          }
+        ]
+      },
+      {
+        "name": "Foyers",
+        "sourceLineageTag": "[LISE].[Foyers]",
+        "columns": [
+          {
+            "name": "FoyerID",
+            "dataType": "int64",
+            "sourceColumn": "FoyerID",
+            "formatString": "0",
+            "sourceProviderType": "int",
+            "sourceLineageTag": "FoyerID",
+            "summarizeBy": "sum",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "Ville",
+            "dataType": "string",
+            "sourceColumn": "Ville",
+            "sourceProviderType": "varchar",
+            "sourceLineageTag": "Ville",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "VilleID",
+            "dataType": "int64",
+            "sourceColumn": "VilleID",
+            "formatString": "0",
+            "sourceProviderType": "int",
+            "sourceLineageTag": "VilleID",
+            "summarizeBy": "sum",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          }
+        ],
+        "partitions": [
+          {
+            "name": "{{Partition_Name}}",
+            "mode": "directLake",
+            "source": {
+              "type": "entity",
+              "entityName": "Foyers",
+              "expressionSource": "DatabaseQuery",
+              "schemaName": "LISE"
+            }
+          }
+        ],
+        "annotations": [
+          {
+            "name": "IsTableInBiModel",
+            "value": "False"
+          }
+        ]
+      },
+      {
+        "name": "IngestionLogs",
+        "sourceLineageTag": "[LISE].[IngestionLogs]",
+        "columns": [
+          {
+            "name": "IngestionID",
+            "sourceColumn": "IngestionID",
+            "sourceProviderType": "uniqueidentifier",
+            "sourceLineageTag": "IngestionID",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "PipelineName",
+            "dataType": "string",
+            "sourceColumn": "PipelineName",
+            "sourceProviderType": "varchar",
+            "sourceLineageTag": "PipelineName",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "Layer",
+            "dataType": "string",
+            "sourceColumn": "Layer",
+            "sourceProviderType": "varchar",
+            "sourceLineageTag": "Layer",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "TargetObject",
+            "dataType": "string",
+            "sourceColumn": "TargetObject",
+            "sourceProviderType": "varchar",
+            "sourceLineageTag": "TargetObject",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "Status",
+            "dataType": "string",
+            "sourceColumn": "Status",
+            "sourceProviderType": "varchar",
+            "sourceLineageTag": "Status",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "FinishedAtUTC",
+            "dataType": "dateTime",
+            "sourceColumn": "FinishedAtUTC",
+            "formatString": "General Date",
+            "sourceProviderType": "datetime2",
+            "sourceLineageTag": "FinishedAtUTC",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "WatermarkBefore",
+            "dataType": "string",
+            "sourceColumn": "WatermarkBefore",
+            "sourceProviderType": "varchar",
+            "sourceLineageTag": "WatermarkBefore",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "WatermarkAfter",
+            "dataType": "string",
+            "sourceColumn": "WatermarkAfter",
+            "sourceProviderType": "varchar",
+            "sourceLineageTag": "WatermarkAfter",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "RowsWritten",
+            "dataType": "int64",
+            "sourceColumn": "RowsWritten",
+            "formatString": "0",
+            "sourceProviderType": "bigint",
+            "sourceLineageTag": "RowsWritten",
+            "summarizeBy": "sum",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "ErrorMessage",
+            "dataType": "string",
+            "sourceColumn": "ErrorMessage",
+            "sourceProviderType": "varchar",
+            "sourceLineageTag": "ErrorMessage",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "RunID",
+            "dataType": "string",
+            "sourceColumn": "RunID",
+            "sourceProviderType": "varchar",
+            "sourceLineageTag": "RunID",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "BatchID",
+            "dataType": "string",
+            "sourceColumn": "BatchID",
+            "sourceProviderType": "varchar",
+            "sourceLineageTag": "BatchID",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "TriggerType",
+            "dataType": "string",
+            "sourceColumn": "TriggerType",
+            "sourceProviderType": "varchar",
+            "sourceLineageTag": "TriggerType",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "BytesWritten",
+            "dataType": "int64",
+            "sourceColumn": "BytesWritten",
+            "formatString": "0",
+            "sourceProviderType": "bigint",
+            "sourceLineageTag": "BytesWritten",
+            "summarizeBy": "sum",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "FilesWritten",
+            "dataType": "int64",
+            "sourceColumn": "FilesWritten",
+            "formatString": "0",
+            "sourceProviderType": "int",
+            "sourceLineageTag": "FilesWritten",
+            "summarizeBy": "sum",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "DurationSec",
+            "dataType": "int64",
+            "sourceColumn": "DurationSec",
+            "formatString": "0",
+            "sourceProviderType": "int",
+            "sourceLineageTag": "DurationSec",
+            "summarizeBy": "sum",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "ThroughputMBps",
+            "dataType": "double",
+            "sourceColumn": "ThroughputMBps",
+            "sourceProviderType": "decimal",
+            "sourceLineageTag": "ThroughputMBps",
+            "summarizeBy": "sum",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              },
+              {
+                "name": "PBI_FormatHint",
+                "value": "{\"isGeneralNumber\":true}"
+              }
+            ]
+          }
+        ],
+        "partitions": [
+          {
+            "name": "{{Partition_Name}}",
+            "mode": "directLake",
+            "source": {
+              "type": "entity",
+              "entityName": "IngestionLogs",
+              "expressionSource": "DatabaseQuery",
+              "schemaName": "LISE"
+            }
+          }
+        ],
+        "annotations": [
+          {
+            "name": "IsTableInBiModel",
+            "value": "False"
+          }
+        ]
+      },
+      {
+        "name": "Niveaux",
+        "sourceLineageTag": "[LISE].[Niveaux]",
+        "columns": [
+          {
+            "name": "NiveauID",
+            "dataType": "int64",
+            "sourceColumn": "NiveauID",
+            "formatString": "0",
+            "sourceProviderType": "int",
+            "sourceLineageTag": "NiveauID",
+            "summarizeBy": "sum",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "Niveau",
+            "dataType": "string",
+            "sourceColumn": "Niveau",
+            "sourceProviderType": "varchar",
+            "sourceLineageTag": "Niveau",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "EtablissementID",
+            "dataType": "int64",
+            "sourceColumn": "EtablissementID",
+            "formatString": "0",
+            "sourceProviderType": "int",
+            "sourceLineageTag": "EtablissementID",
+            "summarizeBy": "sum",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          }
+        ],
+        "partitions": [
+          {
+            "name": "{{Partition_Name}}",
+            "mode": "directLake",
+            "source": {
+              "type": "entity",
+              "entityName": "Niveaux",
+              "expressionSource": "DatabaseQuery",
+              "schemaName": "LISE"
+            }
+          }
+        ],
+        "annotations": [
+          {
+            "name": "IsTableInBiModel",
+            "value": "False"
+          }
+        ]
+      },
+      {
+        "name": "Parents",
+        "sourceLineageTag": "[LISE].[Parents]",
+        "columns": [
+          {
+            "name": "ResponsableID",
+            "dataType": "int64",
+            "sourceColumn": "ResponsableID",
+            "formatString": "0",
+            "sourceProviderType": "int",
+            "sourceLineageTag": "ResponsableID",
+            "summarizeBy": "sum",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "Nom",
+            "dataType": "string",
+            "sourceColumn": "Nom",
+            "sourceProviderType": "varchar",
+            "sourceLineageTag": "Nom",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "Prenom",
+            "dataType": "string",
+            "sourceColumn": "Prenom",
+            "sourceProviderType": "varchar",
+            "sourceLineageTag": "Prenom",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "FullName",
+            "dataType": "string",
+            "sourceColumn": "FullName",
+            "sourceProviderType": "varchar",
+            "sourceLineageTag": "FullName",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          }
+        ],
+        "partitions": [
+          {
+            "name": "{{Partition_Name}}",
+            "mode": "directLake",
+            "source": {
+              "type": "entity",
+              "entityName": "Parents",
+              "expressionSource": "DatabaseQuery",
+              "schemaName": "LISE"
+            }
+          }
+        ],
+        "annotations": [
+          {
+            "name": "IsTableInBiModel",
+            "value": "False"
+          }
+        ]
+      },
+      {
+        "name": "Payroll",
+        "sourceLineageTag": "[LISE].[Payroll]",
+        "columns": [
+          {
+            "name": "PaieID",
+            "sourceColumn": "PaieID",
+            "sourceProviderType": "uniqueidentifier",
+            "sourceLineageTag": "PaieID",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "PersonnelID",
+            "dataType": "int64",
+            "sourceColumn": "PersonnelID",
+            "formatString": "0",
+            "sourceProviderType": "int",
+            "sourceLineageTag": "PersonnelID",
+            "summarizeBy": "sum",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "Nom",
+            "dataType": "string",
+            "sourceColumn": "Nom",
+            "sourceProviderType": "varchar",
+            "sourceLineageTag": "Nom",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "Prenom",
+            "dataType": "string",
+            "sourceColumn": "Prenom",
+            "sourceProviderType": "varchar",
+            "sourceLineageTag": "Prenom",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "Periode",
+            "dataType": "string",
+            "sourceColumn": "Periode",
+            "sourceProviderType": "varchar",
+            "sourceLineageTag": "Periode",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "Date",
+            "dataType": "dateTime",
+            "sourceColumn": "Date",
+            "formatString": "General Date",
+            "sourceProviderType": "date",
+            "sourceLineageTag": "Date",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "Montant",
+            "dataType": "double",
+            "sourceColumn": "Montant",
+            "sourceProviderType": "float",
+            "sourceLineageTag": "Montant",
+            "summarizeBy": "sum",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              },
+              {
+                "name": "PBI_FormatHint",
+                "value": "{\"isGeneralNumber\":true}"
+              }
+            ]
+          },
+          {
+            "name": "Devise",
+            "dataType": "string",
+            "sourceColumn": "Devise",
+            "sourceProviderType": "varchar",
+            "sourceLineageTag": "Devise",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "ProfessionTypeID",
+            "dataType": "int64",
+            "sourceColumn": "ProfessionTypeID",
+            "formatString": "0",
+            "sourceProviderType": "int",
+            "sourceLineageTag": "ProfessionTypeID",
+            "summarizeBy": "sum",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "EtablissementID",
+            "dataType": "int64",
+            "sourceColumn": "EtablissementID",
+            "formatString": "0",
+            "sourceProviderType": "int",
+            "sourceLineageTag": "EtablissementID",
+            "summarizeBy": "sum",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "ClasseID",
+            "dataType": "int64",
+            "sourceColumn": "ClasseID",
+            "formatString": "0",
+            "sourceProviderType": "int",
+            "sourceLineageTag": "ClasseID",
+            "summarizeBy": "sum",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "NiveauID",
+            "dataType": "int64",
+            "sourceColumn": "NiveauID",
+            "formatString": "0",
+            "sourceProviderType": "int",
+            "sourceLineageTag": "NiveauID",
+            "summarizeBy": "sum",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          }
+        ],
+        "partitions": [
+          {
+            "name": "{{Partition_Name}}",
+            "mode": "directLake",
+            "source": {
+              "type": "entity",
+              "entityName": "Payroll",
+              "expressionSource": "DatabaseQuery",
+              "schemaName": "LISE"
+            }
+          }
+        ],
+        "annotations": [
+          {
+            "name": "IsTableInBiModel",
+            "value": "False"
+          }
+        ]
+      },
+      {
+        "name": "Payroll_Incoming",
+        "sourceLineageTag": "[LISE].[Payroll_Incoming]",
+        "columns": [
+          {
+            "name": "ProfessionTypeID",
+            "dataType": "int64",
+            "sourceColumn": "ProfessionTypeID",
+            "formatString": "0",
+            "sourceProviderType": "int",
+            "sourceLineageTag": "ProfessionTypeID",
+            "summarizeBy": "sum",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "EtablissementID",
+            "dataType": "int64",
+            "sourceColumn": "EtablissementID",
+            "formatString": "0",
+            "sourceProviderType": "int",
+            "sourceLineageTag": "EtablissementID",
+            "summarizeBy": "sum",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "ClasseID",
+            "dataType": "int64",
+            "sourceColumn": "ClasseID",
+            "formatString": "0",
+            "sourceProviderType": "int",
+            "sourceLineageTag": "ClasseID",
+            "summarizeBy": "sum",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "NiveauID",
+            "dataType": "int64",
+            "sourceColumn": "NiveauID",
+            "formatString": "0",
+            "sourceProviderType": "int",
+            "sourceLineageTag": "NiveauID",
+            "summarizeBy": "sum",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "Nom",
+            "dataType": "string",
+            "sourceColumn": "Nom",
+            "sourceProviderType": "varchar",
+            "sourceLineageTag": "Nom",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "Prenom",
+            "dataType": "string",
+            "sourceColumn": "Prenom",
+            "sourceProviderType": "varchar",
+            "sourceLineageTag": "Prenom",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "Periode",
+            "dataType": "string",
+            "sourceColumn": "Periode",
+            "sourceProviderType": "varchar",
+            "sourceLineageTag": "Periode",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "Date",
+            "dataType": "dateTime",
+            "sourceColumn": "Date",
+            "formatString": "General Date",
+            "sourceProviderType": "date",
+            "sourceLineageTag": "Date",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "Montant",
+            "dataType": "double",
+            "sourceColumn": "Montant",
+            "sourceProviderType": "float",
+            "sourceLineageTag": "Montant",
+            "summarizeBy": "sum",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              },
+              {
+                "name": "PBI_FormatHint",
+                "value": "{\"isGeneralNumber\":true}"
+              }
+            ]
+          },
+          {
+            "name": "Devise",
+            "dataType": "string",
+            "sourceColumn": "Devise",
+            "sourceProviderType": "varchar",
+            "sourceLineageTag": "Devise",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "PersonnelID",
+            "dataType": "int64",
+            "sourceColumn": "PersonnelID",
+            "formatString": "0",
+            "sourceProviderType": "int",
+            "sourceLineageTag": "PersonnelID",
+            "summarizeBy": "sum",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          }
+        ],
+        "partitions": [
+          {
+            "name": "{{Partition_Name}}",
+            "mode": "directLake",
+            "source": {
+              "type": "entity",
+              "entityName": "Payroll_Incoming",
+              "expressionSource": "DatabaseQuery",
+              "schemaName": "LISE"
+            }
+          }
+        ],
+        "annotations": [
+          {
+            "name": "IsTableInBiModel",
+            "value": "False"
+          }
+        ]
+      },
+      {
+        "name": "Pays",
+        "sourceLineageTag": "[LISE].[Pays]",
+        "columns": [
+          {
+            "name": "PaysID",
+            "dataType": "int64",
+            "sourceColumn": "PaysID",
+            "formatString": "0",
+            "sourceProviderType": "int",
+            "sourceLineageTag": "PaysID",
+            "summarizeBy": "sum",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "Pays",
+            "dataType": "string",
+            "sourceColumn": "Pays",
+            "sourceProviderType": "varchar",
+            "sourceLineageTag": "Pays",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "Nationalite",
+            "dataType": "string",
+            "sourceColumn": "Nationalite",
+            "sourceProviderType": "varchar",
+            "sourceLineageTag": "Nationalite",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          }
+        ],
+        "partitions": [
+          {
+            "name": "{{Partition_Name}}",
+            "mode": "directLake",
+            "source": {
+              "type": "entity",
+              "entityName": "Pays",
+              "expressionSource": "DatabaseQuery",
+              "schemaName": "LISE"
+            }
+          }
+        ],
+        "annotations": [
+          {
+            "name": "IsTableInBiModel",
+            "value": "False"
+          }
+        ]
+      },
+      {
+        "name": "Personnels",
+        "sourceLineageTag": "[LISE].[Personnels]",
+        "columns": [
+          {
+            "name": "PersonnelID",
+            "dataType": "int64",
+            "sourceColumn": "PersonnelID",
+            "formatString": "0",
+            "sourceProviderType": "int",
+            "sourceLineageTag": "PersonnelID",
+            "summarizeBy": "sum",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "Nom",
+            "dataType": "string",
+            "sourceColumn": "Nom",
+            "sourceProviderType": "varchar",
+            "sourceLineageTag": "Nom",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "Prenom",
+            "dataType": "string",
+            "sourceColumn": "Prenom",
+            "sourceProviderType": "varchar",
+            "sourceLineageTag": "Prenom",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "Nationalite",
+            "dataType": "string",
+            "sourceColumn": "Nationalite",
+            "sourceProviderType": "varchar",
+            "sourceLineageTag": "Nationalite",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "SecuriteSociale",
+            "dataType": "string",
+            "sourceColumn": "SecuriteSociale",
+            "sourceProviderType": "varchar",
+            "sourceLineageTag": "SecuriteSociale",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "Badge",
+            "dataType": "int64",
+            "sourceColumn": "Badge",
+            "formatString": "0",
+            "sourceProviderType": "int",
+            "sourceLineageTag": "Badge",
+            "summarizeBy": "sum",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          }
+        ],
+        "partitions": [
+          {
+            "name": "{{Partition_Name}}",
+            "mode": "directLake",
+            "source": {
+              "type": "entity",
+              "entityName": "Personnels",
+              "expressionSource": "DatabaseQuery",
+              "schemaName": "LISE"
+            }
+          }
+        ],
+        "annotations": [
+          {
+            "name": "IsTableInBiModel",
+            "value": "False"
+          }
+        ]
+      },
+      {
+        "name": "Professeurs",
+        "sourceLineageTag": "[LISE].[Professeurs]",
+        "columns": [
+          {
+            "name": "ProfesseurID",
+            "dataType": "int64",
+            "sourceColumn": "ProfesseurID",
+            "formatString": "0",
+            "sourceProviderType": "int",
+            "sourceLineageTag": "ProfesseurID",
+            "summarizeBy": "sum",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "PersonnelID",
+            "dataType": "int64",
+            "sourceColumn": "PersonnelID",
+            "formatString": "0",
+            "sourceProviderType": "int",
+            "sourceLineageTag": "PersonnelID",
+            "summarizeBy": "sum",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "ClasseID",
+            "dataType": "int64",
+            "sourceColumn": "ClasseID",
+            "formatString": "0",
+            "sourceProviderType": "int",
+            "sourceLineageTag": "ClasseID",
+            "summarizeBy": "sum",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          }
+        ],
+        "partitions": [
+          {
+            "name": "{{Partition_Name}}",
+            "mode": "directLake",
+            "source": {
+              "type": "entity",
+              "entityName": "Professeurs",
+              "expressionSource": "DatabaseQuery",
+              "schemaName": "LISE"
+            }
+          }
+        ],
+        "annotations": [
+          {
+            "name": "IsTableInBiModel",
+            "value": "False"
+          }
+        ]
+      },
+      {
+        "name": "ProfessionTypes",
+        "sourceLineageTag": "[LISE].[ProfessionTypes]",
+        "columns": [
+          {
+            "name": "ProfessionTypeID",
+            "dataType": "int64",
+            "sourceColumn": "ProfessionTypeID",
+            "formatString": "0",
+            "sourceProviderType": "int",
+            "sourceLineageTag": "ProfessionTypeID",
+            "summarizeBy": "sum",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "ProfessionType",
+            "dataType": "string",
+            "sourceColumn": "ProfessionType",
+            "sourceProviderType": "varchar",
+            "sourceLineageTag": "ProfessionType",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          }
+        ],
+        "partitions": [
+          {
+            "name": "{{Partition_Name}}",
+            "mode": "directLake",
+            "source": {
+              "type": "entity",
+              "entityName": "ProfessionTypes",
+              "expressionSource": "DatabaseQuery",
+              "schemaName": "LISE"
+            }
+          }
+        ],
+        "annotations": [
+          {
+            "name": "IsTableInBiModel",
+            "value": "False"
+          }
+        ]
+      },
+      {
+        "name": "Professions",
+        "sourceLineageTag": "[LISE].[Professions]",
+        "columns": [
+          {
+            "name": "ProfessionID",
+            "dataType": "int64",
+            "sourceColumn": "ProfessionID",
+            "formatString": "0",
+            "sourceProviderType": "int",
+            "sourceLineageTag": "ProfessionID",
+            "summarizeBy": "sum",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "Profession",
+            "dataType": "string",
+            "sourceColumn": "Profession",
+            "sourceProviderType": "varchar",
+            "sourceLineageTag": "Profession",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          }
+        ],
+        "partitions": [
+          {
+            "name": "{{Partition_Name}}",
+            "mode": "directLake",
+            "source": {
+              "type": "entity",
+              "entityName": "Professions",
+              "expressionSource": "DatabaseQuery",
+              "schemaName": "LISE"
+            }
+          }
+        ],
+        "annotations": [
+          {
+            "name": "IsTableInBiModel",
+            "value": "False"
+          }
+        ]
+      },
+      {
+        "name": "Regimes",
+        "sourceLineageTag": "[LISE].[Regimes]",
+        "columns": [
+          {
+            "name": "RegimeID",
+            "dataType": "int64",
+            "sourceColumn": "RegimeID",
+            "formatString": "0",
+            "sourceProviderType": "int",
+            "sourceLineageTag": "RegimeID",
+            "summarizeBy": "sum",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "Regime",
+            "dataType": "string",
+            "sourceColumn": "Regime",
+            "sourceProviderType": "varchar",
+            "sourceLineageTag": "Regime",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          }
+        ],
+        "partitions": [
+          {
+            "name": "{{Partition_Name}}",
+            "mode": "directLake",
+            "source": {
+              "type": "entity",
+              "entityName": "Regimes",
+              "expressionSource": "DatabaseQuery",
+              "schemaName": "LISE"
+            }
+          }
+        ],
+        "annotations": [
+          {
+            "name": "IsTableInBiModel",
+            "value": "False"
+          }
+        ]
+      },
+      {
+        "name": "Responsables",
+        "sourceLineageTag": "[LISE].[Responsables]",
+        "columns": [
+          {
+            "name": "ResponsableKey",
+            "dataType": "string",
+            "sourceColumn": "ResponsableKey",
+            "sourceProviderType": "varchar",
+            "sourceLineageTag": "ResponsableKey",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "ResponsableID",
+            "dataType": "int64",
+            "sourceColumn": "ResponsableID",
+            "formatString": "0",
+            "sourceProviderType": "int",
+            "sourceLineageTag": "ResponsableID",
+            "summarizeBy": "sum",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "EnfantsCharge",
+            "dataType": "double",
+            "sourceColumn": "EnfantsCharge",
+            "sourceProviderType": "float",
+            "sourceLineageTag": "EnfantsCharge",
+            "summarizeBy": "sum",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              },
+              {
+                "name": "PBI_FormatHint",
+                "value": "{\"isGeneralNumber\":true}"
+              }
+            ]
+          },
+          {
+            "name": "Reglement",
+            "dataType": "string",
+            "sourceColumn": "Reglement",
+            "sourceProviderType": "varchar",
+            "sourceLineageTag": "Reglement",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "Telephone",
+            "dataType": "string",
+            "sourceColumn": "Telephone",
+            "sourceProviderType": "varchar",
+            "sourceLineageTag": "Telephone",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "Email",
+            "dataType": "string",
+            "sourceColumn": "Email",
+            "sourceProviderType": "varchar",
+            "sourceLineageTag": "Email",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "NumeroCompte",
+            "dataType": "string",
+            "sourceColumn": "NumeroCompte",
+            "sourceProviderType": "varchar",
+            "sourceLineageTag": "NumeroCompte",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "Banque",
+            "dataType": "string",
+            "sourceColumn": "Banque",
+            "sourceProviderType": "varchar",
+            "sourceLineageTag": "Banque",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          }
+        ],
+        "partitions": [
+          {
+            "name": "{{Partition_Name}}",
+            "mode": "directLake",
+            "source": {
+              "type": "entity",
+              "entityName": "Responsables",
+              "expressionSource": "DatabaseQuery",
+              "schemaName": "LISE"
+            }
+          }
+        ],
+        "annotations": [
+          {
+            "name": "IsTableInBiModel",
+            "value": "False"
+          }
+        ]
+      },
+      {
+        "name": "SchoolYears",
+        "sourceLineageTag": "[LISE].[SchoolYears]",
+        "columns": [
+          {
+            "name": "SchoolYear",
+            "dataType": "string",
+            "sourceColumn": "SchoolYear",
+            "sourceProviderType": "varchar",
+            "sourceLineageTag": "SchoolYear",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "SchoolYearLibelle",
+            "dataType": "string",
+            "sourceColumn": "SchoolYearLibelle",
+            "sourceProviderType": "varchar",
+            "sourceLineageTag": "SchoolYearLibelle",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          }
+        ],
+        "partitions": [
+          {
+            "name": "{{Partition_Name}}",
+            "mode": "directLake",
+            "source": {
+              "type": "entity",
+              "entityName": "SchoolYears",
+              "expressionSource": "DatabaseQuery",
+              "schemaName": "LISE"
+            }
+          }
+        ],
+        "annotations": [
+          {
+            "name": "IsTableInBiModel",
+            "value": "False"
+          }
+        ]
+      },
+      {
+        "name": "Services",
+        "sourceLineageTag": "[LISE].[Services]",
+        "columns": [
+          {
+            "name": "ServiceID",
+            "dataType": "int64",
+            "sourceColumn": "ServiceID",
+            "formatString": "0",
+            "sourceProviderType": "int",
+            "sourceLineageTag": "ServiceID",
+            "summarizeBy": "sum",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "Service",
+            "dataType": "string",
+            "sourceColumn": "Service",
+            "sourceProviderType": "varchar",
+            "sourceLineageTag": "Service",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          }
+        ],
+        "partitions": [
+          {
+            "name": "{{Partition_Name}}",
+            "mode": "directLake",
+            "source": {
+              "type": "entity",
+              "entityName": "Services",
+              "expressionSource": "DatabaseQuery",
+              "schemaName": "LISE"
+            }
+          }
+        ],
+        "annotations": [
+          {
+            "name": "IsTableInBiModel",
+            "value": "False"
+          }
+        ]
+      },
+      {
+        "name": "Staff",
+        "sourceLineageTag": "[LISE].[Staff]",
+        "columns": [
+          {
+            "name": "PersonnelKey",
+            "dataType": "string",
+            "sourceColumn": "PersonnelKey",
+            "sourceProviderType": "varchar",
+            "sourceLineageTag": "PersonnelKey",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "PersonnelID",
+            "dataType": "int64",
+            "sourceColumn": "PersonnelID",
+            "formatString": "0",
+            "sourceProviderType": "int",
+            "sourceLineageTag": "PersonnelID",
+            "summarizeBy": "sum",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "Ville",
+            "dataType": "string",
+            "sourceColumn": "Ville",
+            "sourceProviderType": "varchar",
+            "sourceLineageTag": "Ville",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "DateEntree",
+            "dataType": "dateTime",
+            "sourceColumn": "DateEntree",
+            "formatString": "General Date",
+            "sourceProviderType": "date",
+            "sourceLineageTag": "DateEntree",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "DateSortie",
+            "dataType": "dateTime",
+            "sourceColumn": "DateSortie",
+            "formatString": "General Date",
+            "sourceProviderType": "date",
+            "sourceLineageTag": "DateSortie",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "Telephone",
+            "dataType": "string",
+            "sourceColumn": "Telephone",
+            "sourceProviderType": "varchar",
+            "sourceLineageTag": "Telephone",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "Email",
+            "dataType": "string",
+            "sourceColumn": "Email",
+            "sourceProviderType": "varchar",
+            "sourceLineageTag": "Email",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "DateNaissance",
+            "dataType": "dateTime",
+            "sourceColumn": "DateNaissance",
+            "formatString": "General Date",
+            "sourceProviderType": "date",
+            "sourceLineageTag": "DateNaissance",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "Age",
+            "dataType": "int64",
+            "sourceColumn": "Age",
+            "formatString": "0",
+            "sourceProviderType": "int",
+            "sourceLineageTag": "Age",
+            "summarizeBy": "sum",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          }
+        ],
+        "partitions": [
+          {
+            "name": "{{Partition_Name}}",
+            "mode": "directLake",
+            "source": {
+              "type": "entity",
+              "entityName": "Staff",
+              "expressionSource": "DatabaseQuery",
+              "schemaName": "LISE"
+            }
+          }
+        ],
+        "annotations": [
+          {
+            "name": "IsTableInBiModel",
+            "value": "False"
+          }
+        ]
+      },
+      {
+        "name": "Staging_ClassesTargets",
+        "sourceLineageTag": "[LISE].[Staging_ClassesTargets]",
+        "columns": [
+          {
+            "name": "KEYCLASSE",
+            "dataType": "string",
+            "sourceColumn": "KEYCLASSE",
+            "sourceProviderType": "varchar",
+            "sourceLineageTag": "KEYCLASSE",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "IDCLASSE",
+            "dataType": "int64",
+            "sourceColumn": "IDCLASSE",
+            "formatString": "0",
+            "sourceProviderType": "int",
+            "sourceLineageTag": "IDCLASSE",
+            "summarizeBy": "sum",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "TARGETCOUNT",
+            "dataType": "int64",
+            "sourceColumn": "TARGETCOUNT",
+            "formatString": "0",
+            "sourceProviderType": "int",
+            "sourceLineageTag": "TARGETCOUNT",
+            "summarizeBy": "sum",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "MAXIMUMCOUNT",
+            "dataType": "int64",
+            "sourceColumn": "MAXIMUMCOUNT",
+            "formatString": "0",
+            "sourceProviderType": "int",
+            "sourceLineageTag": "MAXIMUMCOUNT",
+            "summarizeBy": "sum",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "SCHOOLYEAR",
+            "dataType": "string",
+            "sourceColumn": "SCHOOLYEAR",
+            "sourceProviderType": "varchar",
+            "sourceLineageTag": "SCHOOLYEAR",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          }
+        ],
+        "partitions": [
+          {
+            "name": "{{Partition_Name}}",
+            "mode": "directLake",
+            "source": {
+              "type": "entity",
+              "entityName": "Staging_ClassesTargets",
+              "expressionSource": "DatabaseQuery",
+              "schemaName": "LISE"
+            }
+          }
+        ],
+        "annotations": [
+          {
+            "name": "IsTableInBiModel",
+            "value": "False"
+          }
+        ]
+      },
+      {
+        "name": "Staging_Classes",
+        "sourceLineageTag": "[LISE].[Staging_Classes]",
+        "columns": [
+          {
+            "name": "IDCLASSE",
+            "dataType": "int64",
+            "sourceColumn": "IDCLASSE",
+            "formatString": "0",
+            "sourceProviderType": "int",
+            "sourceLineageTag": "IDCLASSE",
+            "summarizeBy": "sum",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "CLASSE",
+            "dataType": "string",
+            "sourceColumn": "CLASSE",
+            "sourceProviderType": "varchar",
+            "sourceLineageTag": "CLASSE",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "CLASSELIBELLE",
+            "dataType": "string",
+            "sourceColumn": "CLASSELIBELLE",
+            "sourceProviderType": "varchar",
+            "sourceLineageTag": "CLASSELIBELLE",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "IDNIVEAU",
+            "dataType": "int64",
+            "sourceColumn": "IDNIVEAU",
+            "formatString": "0",
+            "sourceProviderType": "int",
+            "sourceLineageTag": "IDNIVEAU",
+            "summarizeBy": "sum",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "IDETABLISSEMENT",
+            "dataType": "int64",
+            "sourceColumn": "IDETABLISSEMENT",
+            "formatString": "0",
+            "sourceProviderType": "int",
+            "sourceLineageTag": "IDETABLISSEMENT",
+            "summarizeBy": "sum",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          }
+        ],
+        "partitions": [
+          {
+            "name": "{{Partition_Name}}",
+            "mode": "directLake",
+            "source": {
+              "type": "entity",
+              "entityName": "Staging_Classes",
+              "expressionSource": "DatabaseQuery",
+              "schemaName": "LISE"
+            }
+          }
+        ],
+        "annotations": [
+          {
+            "name": "IsTableInBiModel",
+            "value": "False"
+          }
+        ]
+      },
+      {
+        "name": "Staging_Dates",
+        "sourceLineageTag": "[LISE].[Staging_Dates]",
+        "columns": [
+          {
+            "name": "IDDATE",
+            "dataType": "int64",
+            "sourceColumn": "IDDATE",
+            "formatString": "0",
+            "sourceProviderType": "int",
+            "sourceLineageTag": "IDDATE",
+            "summarizeBy": "sum",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "DATE",
+            "dataType": "dateTime",
+            "sourceColumn": "DATE",
+            "formatString": "General Date",
+            "sourceProviderType": "date",
+            "sourceLineageTag": "DATE",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "CALENDARYEAR",
+            "dataType": "int64",
+            "sourceColumn": "CALENDARYEAR",
+            "formatString": "0",
+            "sourceProviderType": "int",
+            "sourceLineageTag": "CALENDARYEAR",
+            "summarizeBy": "sum",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "CALENDARMONTH",
+            "dataType": "int64",
+            "sourceColumn": "CALENDARMONTH",
+            "formatString": "0",
+            "sourceProviderType": "int",
+            "sourceLineageTag": "CALENDARMONTH",
+            "summarizeBy": "sum",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "CALENDARDAY",
+            "dataType": "int64",
+            "sourceColumn": "CALENDARDAY",
+            "formatString": "0",
+            "sourceProviderType": "int",
+            "sourceLineageTag": "CALENDARDAY",
+            "summarizeBy": "sum",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "MONTHNAME",
+            "dataType": "string",
+            "sourceColumn": "MONTHNAME",
+            "sourceProviderType": "varchar",
+            "sourceLineageTag": "MONTHNAME",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "DAYNAME",
+            "dataType": "string",
+            "sourceColumn": "DAYNAME",
+            "sourceProviderType": "varchar",
+            "sourceLineageTag": "DAYNAME",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "SCHOOLYEAR",
+            "dataType": "string",
+            "sourceColumn": "SCHOOLYEAR",
+            "sourceProviderType": "varchar",
+            "sourceLineageTag": "SCHOOLYEAR",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "ISSCHOOLPERIOD",
+            "dataType": "int64",
+            "sourceColumn": "ISSCHOOLPERIOD",
+            "formatString": "0",
+            "sourceProviderType": "int",
+            "sourceLineageTag": "ISSCHOOLPERIOD",
+            "summarizeBy": "sum",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          }
+        ],
+        "partitions": [
+          {
+            "name": "{{Partition_Name}}",
+            "mode": "directLake",
+            "source": {
+              "type": "entity",
+              "entityName": "Staging_Dates",
+              "expressionSource": "DatabaseQuery",
+              "schemaName": "LISE"
+            }
+          }
+        ],
+        "annotations": [
+          {
+            "name": "IsTableInBiModel",
+            "value": "False"
+          }
+        ]
+      },
+      {
+        "name": "Staging_Eleves",
+        "sourceLineageTag": "[LISE].[Staging_Eleves]",
+        "columns": [
+          {
+            "name": "KEYELEVE",
+            "dataType": "string",
+            "sourceColumn": "KEYELEVE",
+            "sourceProviderType": "varchar",
+            "sourceLineageTag": "KEYELEVE",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "IDELEVE",
+            "dataType": "int64",
+            "sourceColumn": "IDELEVE",
+            "formatString": "0",
+            "sourceProviderType": "int",
+            "sourceLineageTag": "IDELEVE",
+            "summarizeBy": "sum",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "IDRESPONSABLE",
+            "dataType": "int64",
+            "sourceColumn": "IDRESPONSABLE",
+            "formatString": "0",
+            "sourceProviderType": "int",
+            "sourceLineageTag": "IDRESPONSABLE",
+            "summarizeBy": "sum",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "DATEENTREE",
+            "dataType": "dateTime",
+            "sourceColumn": "DATEENTREE",
+            "formatString": "General Date",
+            "sourceProviderType": "date",
+            "sourceLineageTag": "DATEENTREE",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "DATESORTIE",
+            "dataType": "dateTime",
+            "sourceColumn": "DATESORTIE",
+            "formatString": "General Date",
+            "sourceProviderType": "date",
+            "sourceLineageTag": "DATESORTIE",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          }
+        ],
+        "partitions": [
+          {
+            "name": "{{Partition_Name}}",
+            "mode": "directLake",
+            "source": {
+              "type": "entity",
+              "entityName": "Staging_Eleves",
+              "expressionSource": "DatabaseQuery",
+              "schemaName": "LISE"
+            }
+          }
+        ],
+        "annotations": [
+          {
+            "name": "IsTableInBiModel",
+            "value": "False"
+          }
+        ]
+      },
+      {
+        "name": "Staging_Enfants",
+        "sourceLineageTag": "[LISE].[Staging_Enfants]",
+        "columns": [
+          {
+            "name": "IDELEVE",
+            "dataType": "int64",
+            "sourceColumn": "IDELEVE",
+            "formatString": "0",
+            "sourceProviderType": "int",
+            "sourceLineageTag": "IDELEVE",
+            "summarizeBy": "sum",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "NOM",
+            "dataType": "string",
+            "sourceColumn": "NOM",
+            "sourceProviderType": "varchar",
+            "sourceLineageTag": "NOM",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "PRENOM",
+            "dataType": "string",
+            "sourceColumn": "PRENOM",
+            "sourceProviderType": "varchar",
+            "sourceLineageTag": "PRENOM",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "SEXE",
+            "dataType": "string",
+            "sourceColumn": "SEXE",
+            "sourceProviderType": "varchar",
+            "sourceLineageTag": "SEXE",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "DATENAISSANCE",
+            "dataType": "dateTime",
+            "sourceColumn": "DATENAISSANCE",
+            "formatString": "General Date",
+            "sourceProviderType": "date",
+            "sourceLineageTag": "DATENAISSANCE",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "AGE",
+            "dataType": "int64",
+            "sourceColumn": "AGE",
+            "formatString": "0",
+            "sourceProviderType": "bigint",
+            "sourceLineageTag": "AGE",
+            "summarizeBy": "sum",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "NATIONALITE",
+            "dataType": "string",
+            "sourceColumn": "NATIONALITE",
+            "sourceProviderType": "varchar",
+            "sourceLineageTag": "NATIONALITE",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "IDENTITENATIONALE",
+            "dataType": "string",
+            "sourceColumn": "IDENTITENATIONALE",
+            "sourceProviderType": "varchar",
+            "sourceLineageTag": "IDENTITENATIONALE",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "FULLNAME",
+            "dataType": "string",
+            "sourceColumn": "FULLNAME",
+            "sourceProviderType": "varchar",
+            "sourceLineageTag": "FULLNAME",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          }
+        ],
+        "partitions": [
+          {
+            "name": "{{Partition_Name}}",
+            "mode": "directLake",
+            "source": {
+              "type": "entity",
+              "entityName": "Staging_Enfants",
+              "expressionSource": "DatabaseQuery",
+              "schemaName": "LISE"
+            }
+          }
+        ],
+        "annotations": [
+          {
+            "name": "IsTableInBiModel",
+            "value": "False"
+          }
+        ]
+      },
+      {
+        "name": "Staging_Etablissements",
+        "sourceLineageTag": "[LISE].[Staging_Etablissements]",
+        "columns": [
+          {
+            "name": "IDETABLISSEMENT",
+            "dataType": "int64",
+            "sourceColumn": "IDETABLISSEMENT",
+            "formatString": "0",
+            "sourceProviderType": "int",
+            "sourceLineageTag": "IDETABLISSEMENT",
+            "summarizeBy": "sum",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "ETABLISSEMENT",
+            "dataType": "string",
+            "sourceColumn": "ETABLISSEMENT",
+            "sourceProviderType": "varchar",
+            "sourceLineageTag": "ETABLISSEMENT",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          }
+        ],
+        "partitions": [
+          {
+            "name": "{{Partition_Name}}",
+            "mode": "directLake",
+            "source": {
+              "type": "entity",
+              "entityName": "Staging_Etablissements",
+              "expressionSource": "DatabaseQuery",
+              "schemaName": "LISE"
+            }
+          }
+        ],
+        "annotations": [
+          {
+            "name": "IsTableInBiModel",
+            "value": "False"
+          }
+        ]
+      },
+      {
+        "name": "Staging_FacturesEleves",
+        "sourceLineageTag": "[LISE].[Staging_FacturesEleves]",
+        "columns": [
+          {
+            "name": "KEYELEVE",
+            "dataType": "string",
+            "sourceColumn": "KEYELEVE",
+            "sourceProviderType": "varchar",
+            "sourceLineageTag": "KEYELEVE",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "IDELEVE",
+            "dataType": "int64",
+            "sourceColumn": "IDELEVE",
+            "formatString": "0",
+            "sourceProviderType": "int",
+            "sourceLineageTag": "IDELEVE",
+            "summarizeBy": "sum",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "KEYRESPONSABLE",
+            "dataType": "string",
+            "sourceColumn": "KEYRESPONSABLE",
+            "sourceProviderType": "varchar",
+            "sourceLineageTag": "KEYRESPONSABLE",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "IDRESPONSABLE",
+            "dataType": "int64",
+            "sourceColumn": "IDRESPONSABLE",
+            "formatString": "0",
+            "sourceProviderType": "int",
+            "sourceLineageTag": "IDRESPONSABLE",
+            "summarizeBy": "sum",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "KEYVALIDATION",
+            "dataType": "string",
+            "sourceColumn": "KEYVALIDATION",
+            "sourceProviderType": "varchar",
+            "sourceLineageTag": "KEYVALIDATION",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "IDVALIDATION",
+            "dataType": "int64",
+            "sourceColumn": "IDVALIDATION",
+            "formatString": "0",
+            "sourceProviderType": "int",
+            "sourceLineageTag": "IDVALIDATION",
+            "summarizeBy": "sum",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "KEYCLASSE",
+            "dataType": "string",
+            "sourceColumn": "KEYCLASSE",
+            "sourceProviderType": "varchar",
+            "sourceLineageTag": "KEYCLASSE",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "IDCLASSE",
+            "dataType": "int64",
+            "sourceColumn": "IDCLASSE",
+            "formatString": "0",
+            "sourceProviderType": "int",
+            "sourceLineageTag": "IDCLASSE",
+            "summarizeBy": "sum",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "IDREGIME",
+            "dataType": "int64",
+            "sourceColumn": "IDREGIME",
+            "formatString": "0",
+            "sourceProviderType": "int",
+            "sourceLineageTag": "IDREGIME",
+            "summarizeBy": "sum",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "TOTALELEVE",
+            "dataType": "double",
+            "sourceColumn": "TOTALELEVE",
+            "sourceProviderType": "real",
+            "sourceLineageTag": "TOTALELEVE",
+            "summarizeBy": "sum",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              },
+              {
+                "name": "PBI_FormatHint",
+                "value": "{\"isGeneralNumber\":true}"
+              }
+            ]
+          },
+          {
+            "name": "DATEFACTURE",
+            "dataType": "dateTime",
+            "sourceColumn": "DATEFACTURE",
+            "formatString": "General Date",
+            "sourceProviderType": "date",
+            "sourceLineageTag": "DATEFACTURE",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          }
+        ],
+        "partitions": [
+          {
+            "name": "{{Partition_Name}}",
+            "mode": "directLake",
+            "source": {
+              "type": "entity",
+              "entityName": "Staging_FacturesEleves",
+              "expressionSource": "DatabaseQuery",
+              "schemaName": "LISE"
+            }
+          }
+        ],
+        "annotations": [
+          {
+            "name": "IsTableInBiModel",
+            "value": "False"
+          }
+        ]
+      },
+      {
+        "name": "Staging_FacturesFamilles",
+        "sourceLineageTag": "[LISE].[Staging_FacturesFamilles]",
+        "columns": [
+          {
+            "name": "KEYRESPONSABLE",
+            "dataType": "string",
+            "sourceColumn": "KEYRESPONSABLE",
+            "sourceProviderType": "varchar",
+            "sourceLineageTag": "KEYRESPONSABLE",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "IDRESPONSABLE",
+            "dataType": "int64",
+            "sourceColumn": "IDRESPONSABLE",
+            "formatString": "0",
+            "sourceProviderType": "int",
+            "sourceLineageTag": "IDRESPONSABLE",
+            "summarizeBy": "sum",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "KEYVALIDATION",
+            "dataType": "string",
+            "sourceColumn": "KEYVALIDATION",
+            "sourceProviderType": "varchar",
+            "sourceLineageTag": "KEYVALIDATION",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "IDVALIDATION",
+            "dataType": "int64",
+            "sourceColumn": "IDVALIDATION",
+            "formatString": "0",
+            "sourceProviderType": "int",
+            "sourceLineageTag": "IDVALIDATION",
+            "summarizeBy": "sum",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "IDFOYER",
+            "dataType": "int64",
+            "sourceColumn": "IDFOYER",
+            "formatString": "0",
+            "sourceProviderType": "int",
+            "sourceLineageTag": "IDFOYER",
+            "summarizeBy": "sum",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "IDPROFESSION",
+            "dataType": "int64",
+            "sourceColumn": "IDPROFESSION",
+            "formatString": "0",
+            "sourceProviderType": "int",
+            "sourceLineageTag": "IDPROFESSION",
+            "summarizeBy": "sum",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "TOTALFAMILLE",
+            "dataType": "double",
+            "sourceColumn": "TOTALFAMILLE",
+            "sourceProviderType": "real",
+            "sourceLineageTag": "TOTALFAMILLE",
+            "summarizeBy": "sum",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              },
+              {
+                "name": "PBI_FormatHint",
+                "value": "{\"isGeneralNumber\":true}"
+              }
+            ]
+          },
+          {
+            "name": "DATEFACTURE",
+            "dataType": "dateTime",
+            "sourceColumn": "DATEFACTURE",
+            "formatString": "General Date",
+            "sourceProviderType": "date",
+            "sourceLineageTag": "DATEFACTURE",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          }
+        ],
+        "partitions": [
+          {
+            "name": "{{Partition_Name}}",
+            "mode": "directLake",
+            "source": {
+              "type": "entity",
+              "entityName": "Staging_FacturesFamilles",
+              "expressionSource": "DatabaseQuery",
+              "schemaName": "LISE"
+            }
+          }
+        ],
+        "annotations": [
+          {
+            "name": "IsTableInBiModel",
+            "value": "False"
+          }
+        ]
+      },
+      {
+        "name": "Staging_FacturesNiveaux",
+        "sourceLineageTag": "[LISE].[Staging_FacturesNiveaux]",
+        "columns": [
+          {
+            "name": "IDNIVEAU",
+            "dataType": "int64",
+            "sourceColumn": "IDNIVEAU",
+            "formatString": "0",
+            "sourceProviderType": "int",
+            "sourceLineageTag": "IDNIVEAU",
+            "summarizeBy": "sum",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "KEYVALIDATION",
+            "dataType": "string",
+            "sourceColumn": "KEYVALIDATION",
+            "sourceProviderType": "varchar",
+            "sourceLineageTag": "KEYVALIDATION",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "IDVALIDATION",
+            "dataType": "int64",
+            "sourceColumn": "IDVALIDATION",
+            "formatString": "0",
+            "sourceProviderType": "int",
+            "sourceLineageTag": "IDVALIDATION",
+            "summarizeBy": "sum",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "KEYRESPONSABLE",
+            "dataType": "string",
+            "sourceColumn": "KEYRESPONSABLE",
+            "sourceProviderType": "varchar",
+            "sourceLineageTag": "KEYRESPONSABLE",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "IDRESPONSABLE",
+            "dataType": "int64",
+            "sourceColumn": "IDRESPONSABLE",
+            "formatString": "0",
+            "sourceProviderType": "int",
+            "sourceLineageTag": "IDRESPONSABLE",
+            "summarizeBy": "sum",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "TOTALNIVEAU",
+            "dataType": "double",
+            "sourceColumn": "TOTALNIVEAU",
+            "sourceProviderType": "real",
+            "sourceLineageTag": "TOTALNIVEAU",
+            "summarizeBy": "sum",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              },
+              {
+                "name": "PBI_FormatHint",
+                "value": "{\"isGeneralNumber\":true}"
+              }
+            ]
+          },
+          {
+            "name": "DATEFACTURE",
+            "dataType": "dateTime",
+            "sourceColumn": "DATEFACTURE",
+            "formatString": "General Date",
+            "sourceProviderType": "date",
+            "sourceLineageTag": "DATEFACTURE",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          }
+        ],
+        "partitions": [
+          {
+            "name": "{{Partition_Name}}",
+            "mode": "directLake",
+            "source": {
+              "type": "entity",
+              "entityName": "Staging_FacturesNiveaux",
+              "expressionSource": "DatabaseQuery",
+              "schemaName": "LISE"
+            }
+          }
+        ],
+        "annotations": [
+          {
+            "name": "IsTableInBiModel",
+            "value": "False"
+          }
+        ]
+      },
+      {
+        "name": "Staging_FacturesServices",
+        "sourceLineageTag": "[LISE].[Staging_FacturesServices]",
+        "columns": [
+          {
+            "name": "KEYELEVE",
+            "dataType": "string",
+            "sourceColumn": "KEYELEVE",
+            "sourceProviderType": "varchar",
+            "sourceLineageTag": "KEYELEVE",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "IDELEVE",
+            "dataType": "int64",
+            "sourceColumn": "IDELEVE",
+            "formatString": "0",
+            "sourceProviderType": "int",
+            "sourceLineageTag": "IDELEVE",
+            "summarizeBy": "sum",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "KEYRESPONSABLE",
+            "dataType": "string",
+            "sourceColumn": "KEYRESPONSABLE",
+            "sourceProviderType": "varchar",
+            "sourceLineageTag": "KEYRESPONSABLE",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "IDRESPONSABLE",
+            "dataType": "int64",
+            "sourceColumn": "IDRESPONSABLE",
+            "formatString": "0",
+            "sourceProviderType": "int",
+            "sourceLineageTag": "IDRESPONSABLE",
+            "summarizeBy": "sum",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "KEYVALIDATION",
+            "dataType": "string",
+            "sourceColumn": "KEYVALIDATION",
+            "sourceProviderType": "varchar",
+            "sourceLineageTag": "KEYVALIDATION",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "IDVALIDATION",
+            "dataType": "int64",
+            "sourceColumn": "IDVALIDATION",
+            "formatString": "0",
+            "sourceProviderType": "int",
+            "sourceLineageTag": "IDVALIDATION",
+            "summarizeBy": "sum",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "IDSERVICE",
+            "dataType": "int64",
+            "sourceColumn": "IDSERVICE",
+            "formatString": "0",
+            "sourceProviderType": "int",
+            "sourceLineageTag": "IDSERVICE",
+            "summarizeBy": "sum",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "QUANTITE",
+            "dataType": "double",
+            "sourceColumn": "QUANTITE",
+            "sourceProviderType": "real",
+            "sourceLineageTag": "QUANTITE",
+            "summarizeBy": "sum",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              },
+              {
+                "name": "PBI_FormatHint",
+                "value": "{\"isGeneralNumber\":true}"
+              }
+            ]
+          },
+          {
+            "name": "PRIX",
+            "dataType": "double",
+            "sourceColumn": "PRIX",
+            "sourceProviderType": "real",
+            "sourceLineageTag": "PRIX",
+            "summarizeBy": "sum",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              },
+              {
+                "name": "PBI_FormatHint",
+                "value": "{\"isGeneralNumber\":true}"
+              }
+            ]
+          },
+          {
+            "name": "REMISE",
+            "dataType": "double",
+            "sourceColumn": "REMISE",
+            "sourceProviderType": "real",
+            "sourceLineageTag": "REMISE",
+            "summarizeBy": "sum",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              },
+              {
+                "name": "PBI_FormatHint",
+                "value": "{\"isGeneralNumber\":true}"
+              }
+            ]
+          },
+          {
+            "name": "TOTALSERVICE",
+            "dataType": "double",
+            "sourceColumn": "TOTALSERVICE",
+            "sourceProviderType": "real",
+            "sourceLineageTag": "TOTALSERVICE",
+            "summarizeBy": "sum",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              },
+              {
+                "name": "PBI_FormatHint",
+                "value": "{\"isGeneralNumber\":true}"
+              }
+            ]
+          },
+          {
+            "name": "DATEFACTURE",
+            "dataType": "dateTime",
+            "sourceColumn": "DATEFACTURE",
+            "formatString": "General Date",
+            "sourceProviderType": "date",
+            "sourceLineageTag": "DATEFACTURE",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          }
+        ],
+        "partitions": [
+          {
+            "name": "{{Partition_Name}}",
+            "mode": "directLake",
+            "source": {
+              "type": "entity",
+              "entityName": "Staging_FacturesServices",
+              "expressionSource": "DatabaseQuery",
+              "schemaName": "LISE"
+            }
+          }
+        ],
+        "annotations": [
+          {
+            "name": "IsTableInBiModel",
+            "value": "False"
+          }
+        ]
+      },
+      {
+        "name": "Staging_FacturesValidations",
+        "sourceLineageTag": "[LISE].[Staging_FacturesValidations]",
+        "columns": [
+          {
+            "name": "KEYVALIDATION",
+            "dataType": "string",
+            "sourceColumn": "KEYVALIDATION",
+            "sourceProviderType": "varchar",
+            "sourceLineageTag": "KEYVALIDATION",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "IDVALIDATION",
+            "dataType": "int64",
+            "sourceColumn": "IDVALIDATION",
+            "formatString": "0",
+            "sourceProviderType": "int",
+            "sourceLineageTag": "IDVALIDATION",
+            "summarizeBy": "sum",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "TYPEFACTURE",
+            "dataType": "string",
+            "sourceColumn": "TYPEFACTURE",
+            "sourceProviderType": "varchar",
+            "sourceLineageTag": "TYPEFACTURE",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "NOMBREFACTURE",
+            "dataType": "int64",
+            "sourceColumn": "NOMBREFACTURE",
+            "formatString": "0",
+            "sourceProviderType": "int",
+            "sourceLineageTag": "NOMBREFACTURE",
+            "summarizeBy": "sum",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "DATEVALIDATION",
+            "dataType": "dateTime",
+            "sourceColumn": "DATEVALIDATION",
+            "formatString": "General Date",
+            "sourceProviderType": "date",
+            "sourceLineageTag": "DATEVALIDATION",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          }
+        ],
+        "partitions": [
+          {
+            "name": "{{Partition_Name}}",
+            "mode": "directLake",
+            "source": {
+              "type": "entity",
+              "entityName": "Staging_FacturesValidations",
+              "expressionSource": "DatabaseQuery",
+              "schemaName": "LISE"
+            }
+          }
+        ],
+        "annotations": [
+          {
+            "name": "IsTableInBiModel",
+            "value": "False"
+          }
+        ]
+      },
+      {
+        "name": "Staging_Foyers",
+        "sourceLineageTag": "[LISE].[Staging_Foyers]",
+        "columns": [
+          {
+            "name": "IDFOYER",
+            "dataType": "int64",
+            "sourceColumn": "IDFOYER",
+            "formatString": "0",
+            "sourceProviderType": "int",
+            "sourceLineageTag": "IDFOYER",
+            "summarizeBy": "sum",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "VILLE",
+            "dataType": "string",
+            "sourceColumn": "VILLE",
+            "sourceProviderType": "varchar",
+            "sourceLineageTag": "VILLE",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "IDVILLE",
+            "dataType": "int64",
+            "sourceColumn": "IDVILLE",
+            "formatString": "0",
+            "sourceProviderType": "int",
+            "sourceLineageTag": "IDVILLE",
+            "summarizeBy": "sum",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          }
+        ],
+        "partitions": [
+          {
+            "name": "{{Partition_Name}}",
+            "mode": "directLake",
+            "source": {
+              "type": "entity",
+              "entityName": "Staging_Foyers",
+              "expressionSource": "DatabaseQuery",
+              "schemaName": "LISE"
+            }
+          }
+        ],
+        "annotations": [
+          {
+            "name": "IsTableInBiModel",
+            "value": "False"
+          }
+        ]
+      },
+      {
+        "name": "Staging_Niveaux",
+        "sourceLineageTag": "[LISE].[Staging_Niveaux]",
+        "columns": [
+          {
+            "name": "IDNIVEAU",
+            "dataType": "int64",
+            "sourceColumn": "IDNIVEAU",
+            "formatString": "0",
+            "sourceProviderType": "int",
+            "sourceLineageTag": "IDNIVEAU",
+            "summarizeBy": "sum",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "NIVEAU",
+            "dataType": "string",
+            "sourceColumn": "NIVEAU",
+            "sourceProviderType": "varchar",
+            "sourceLineageTag": "NIVEAU",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "IDETABLISSEMENT",
+            "dataType": "int64",
+            "sourceColumn": "IDETABLISSEMENT",
+            "formatString": "0",
+            "sourceProviderType": "int",
+            "sourceLineageTag": "IDETABLISSEMENT",
+            "summarizeBy": "sum",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          }
+        ],
+        "partitions": [
+          {
+            "name": "{{Partition_Name}}",
+            "mode": "directLake",
+            "source": {
+              "type": "entity",
+              "entityName": "Staging_Niveaux",
+              "expressionSource": "DatabaseQuery",
+              "schemaName": "LISE"
+            }
+          }
+        ],
+        "annotations": [
+          {
+            "name": "IsTableInBiModel",
+            "value": "False"
+          }
+        ]
+      },
+      {
+        "name": "Staging_Parents",
+        "sourceLineageTag": "[LISE].[Staging_Parents]",
+        "columns": [
+          {
+            "name": "IDRESPONSABLE",
+            "dataType": "int64",
+            "sourceColumn": "IDRESPONSABLE",
+            "formatString": "0",
+            "sourceProviderType": "int",
+            "sourceLineageTag": "IDRESPONSABLE",
+            "summarizeBy": "sum",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "NOM",
+            "dataType": "string",
+            "sourceColumn": "NOM",
+            "sourceProviderType": "varchar",
+            "sourceLineageTag": "NOM",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "PRENOM",
+            "dataType": "string",
+            "sourceColumn": "PRENOM",
+            "sourceProviderType": "varchar",
+            "sourceLineageTag": "PRENOM",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "FULLNAME",
+            "dataType": "string",
+            "sourceColumn": "FULLNAME",
+            "sourceProviderType": "varchar",
+            "sourceLineageTag": "FULLNAME",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          }
+        ],
+        "partitions": [
+          {
+            "name": "{{Partition_Name}}",
+            "mode": "directLake",
+            "source": {
+              "type": "entity",
+              "entityName": "Staging_Parents",
+              "expressionSource": "DatabaseQuery",
+              "schemaName": "LISE"
+            }
+          }
+        ],
+        "annotations": [
+          {
+            "name": "IsTableInBiModel",
+            "value": "False"
+          }
+        ]
+      },
+      {
+        "name": "Staging_Pays",
+        "sourceLineageTag": "[LISE].[Staging_Pays]",
+        "columns": [
+          {
+            "name": "IDPAYS",
+            "dataType": "int64",
+            "sourceColumn": "IDPAYS",
+            "formatString": "0",
+            "sourceProviderType": "int",
+            "sourceLineageTag": "IDPAYS",
+            "summarizeBy": "sum",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "PAYS",
+            "dataType": "string",
+            "sourceColumn": "PAYS",
+            "sourceProviderType": "varchar",
+            "sourceLineageTag": "PAYS",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "NATIONALITE",
+            "dataType": "string",
+            "sourceColumn": "NATIONALITE",
+            "sourceProviderType": "varchar",
+            "sourceLineageTag": "NATIONALITE",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          }
+        ],
+        "partitions": [
+          {
+            "name": "{{Partition_Name}}",
+            "mode": "directLake",
+            "source": {
+              "type": "entity",
+              "entityName": "Staging_Pays",
+              "expressionSource": "DatabaseQuery",
+              "schemaName": "LISE"
+            }
+          }
+        ],
+        "annotations": [
+          {
+            "name": "IsTableInBiModel",
+            "value": "False"
+          }
+        ]
+      },
+      {
+        "name": "Staging_Personnels",
+        "sourceLineageTag": "[LISE].[Staging_Personnels]",
+        "columns": [
+          {
+            "name": "IDPERSONNEL",
+            "dataType": "int64",
+            "sourceColumn": "IDPERSONNEL",
+            "formatString": "0",
+            "sourceProviderType": "int",
+            "sourceLineageTag": "IDPERSONNEL",
+            "summarizeBy": "sum",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "NOM",
+            "dataType": "string",
+            "sourceColumn": "NOM",
+            "sourceProviderType": "varchar",
+            "sourceLineageTag": "NOM",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "PRENOM",
+            "dataType": "string",
+            "sourceColumn": "PRENOM",
+            "sourceProviderType": "varchar",
+            "sourceLineageTag": "PRENOM",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "NATIONALITE",
+            "dataType": "string",
+            "sourceColumn": "NATIONALITE",
+            "sourceProviderType": "varchar",
+            "sourceLineageTag": "NATIONALITE",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "SECURITESOCIALE",
+            "dataType": "int64",
+            "sourceColumn": "SECURITESOCIALE",
+            "formatString": "0",
+            "sourceProviderType": "bigint",
+            "sourceLineageTag": "SECURITESOCIALE",
+            "summarizeBy": "sum",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "BADGE",
+            "dataType": "int64",
+            "sourceColumn": "BADGE",
+            "formatString": "0",
+            "sourceProviderType": "int",
+            "sourceLineageTag": "BADGE",
+            "summarizeBy": "sum",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          }
+        ],
+        "partitions": [
+          {
+            "name": "{{Partition_Name}}",
+            "mode": "directLake",
+            "source": {
+              "type": "entity",
+              "entityName": "Staging_Personnels",
+              "expressionSource": "DatabaseQuery",
+              "schemaName": "LISE"
+            }
+          }
+        ],
+        "annotations": [
+          {
+            "name": "IsTableInBiModel",
+            "value": "False"
+          }
+        ]
+      },
+      {
+        "name": "Staging_Professeurs",
+        "sourceLineageTag": "[LISE].[Staging_Professeurs]",
+        "columns": [
+          {
+            "name": "IDPROFESSEUR",
+            "dataType": "int64",
+            "sourceColumn": "IDPROFESSEUR",
+            "formatString": "0",
+            "sourceProviderType": "int",
+            "sourceLineageTag": "IDPROFESSEUR",
+            "summarizeBy": "sum",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "IDPERSONNEL",
+            "dataType": "int64",
+            "sourceColumn": "IDPERSONNEL",
+            "formatString": "0",
+            "sourceProviderType": "int",
+            "sourceLineageTag": "IDPERSONNEL",
+            "summarizeBy": "sum",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "IDCLASSE",
+            "dataType": "int64",
+            "sourceColumn": "IDCLASSE",
+            "formatString": "0",
+            "sourceProviderType": "int",
+            "sourceLineageTag": "IDCLASSE",
+            "summarizeBy": "sum",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          }
+        ],
+        "partitions": [
+          {
+            "name": "{{Partition_Name}}",
+            "mode": "directLake",
+            "source": {
+              "type": "entity",
+              "entityName": "Staging_Professeurs",
+              "expressionSource": "DatabaseQuery",
+              "schemaName": "LISE"
+            }
+          }
+        ],
+        "annotations": [
+          {
+            "name": "IsTableInBiModel",
+            "value": "False"
+          }
+        ]
+      },
+      {
+        "name": "Staging_Professions",
+        "sourceLineageTag": "[LISE].[Staging_Professions]",
+        "columns": [
+          {
+            "name": "IDPROFESSION",
+            "dataType": "int64",
+            "sourceColumn": "IDPROFESSION",
+            "formatString": "0",
+            "sourceProviderType": "int",
+            "sourceLineageTag": "IDPROFESSION",
+            "summarizeBy": "sum",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "PROFESSION",
+            "dataType": "string",
+            "sourceColumn": "PROFESSION",
+            "sourceProviderType": "varchar",
+            "sourceLineageTag": "PROFESSION",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          }
+        ],
+        "partitions": [
+          {
+            "name": "{{Partition_Name}}",
+            "mode": "directLake",
+            "source": {
+              "type": "entity",
+              "entityName": "Staging_Professions",
+              "expressionSource": "DatabaseQuery",
+              "schemaName": "LISE"
+            }
+          }
+        ],
+        "annotations": [
+          {
+            "name": "IsTableInBiModel",
+            "value": "False"
+          }
+        ]
+      },
+      {
+        "name": "Staging_Regimes",
+        "sourceLineageTag": "[LISE].[Staging_Regimes]",
+        "columns": [
+          {
+            "name": "IDREGIME",
+            "dataType": "int64",
+            "sourceColumn": "IDREGIME",
+            "formatString": "0",
+            "sourceProviderType": "int",
+            "sourceLineageTag": "IDREGIME",
+            "summarizeBy": "sum",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "REGIME",
+            "dataType": "string",
+            "sourceColumn": "REGIME",
+            "sourceProviderType": "varchar",
+            "sourceLineageTag": "REGIME",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          }
+        ],
+        "partitions": [
+          {
+            "name": "{{Partition_Name}}",
+            "mode": "directLake",
+            "source": {
+              "type": "entity",
+              "entityName": "Staging_Regimes",
+              "expressionSource": "DatabaseQuery",
+              "schemaName": "LISE"
+            }
+          }
+        ],
+        "annotations": [
+          {
+            "name": "IsTableInBiModel",
+            "value": "False"
+          }
+        ]
+      },
+      {
+        "name": "Staging_Responsables",
+        "sourceLineageTag": "[LISE].[Staging_Responsables]",
+        "columns": [
+          {
+            "name": "KEYRESPONSABLE",
+            "dataType": "string",
+            "sourceColumn": "KEYRESPONSABLE",
+            "sourceProviderType": "varchar",
+            "sourceLineageTag": "KEYRESPONSABLE",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "IDRESPONSABLE",
+            "dataType": "int64",
+            "sourceColumn": "IDRESPONSABLE",
+            "formatString": "0",
+            "sourceProviderType": "int",
+            "sourceLineageTag": "IDRESPONSABLE",
+            "summarizeBy": "sum",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "ENFANTSACHARGE",
+            "dataType": "double",
+            "sourceColumn": "ENFANTSACHARGE",
+            "sourceProviderType": "float",
+            "sourceLineageTag": "ENFANTSACHARGE",
+            "summarizeBy": "sum",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              },
+              {
+                "name": "PBI_FormatHint",
+                "value": "{\"isGeneralNumber\":true}"
+              }
+            ]
+          },
+          {
+            "name": "REGLEMENT",
+            "dataType": "string",
+            "sourceColumn": "REGLEMENT",
+            "sourceProviderType": "varchar",
+            "sourceLineageTag": "REGLEMENT",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "TELEPHONE",
+            "dataType": "int64",
+            "sourceColumn": "TELEPHONE",
+            "formatString": "0",
+            "sourceProviderType": "int",
+            "sourceLineageTag": "TELEPHONE",
+            "summarizeBy": "sum",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "EMAIL",
+            "dataType": "string",
+            "sourceColumn": "EMAIL",
+            "sourceProviderType": "varchar",
+            "sourceLineageTag": "EMAIL",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "NUMEROCOMPTE",
+            "dataType": "string",
+            "sourceColumn": "NUMEROCOMPTE",
+            "sourceProviderType": "varchar",
+            "sourceLineageTag": "NUMEROCOMPTE",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "BANQUE",
+            "dataType": "string",
+            "sourceColumn": "BANQUE",
+            "sourceProviderType": "varchar",
+            "sourceLineageTag": "BANQUE",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          }
+        ],
+        "partitions": [
+          {
+            "name": "{{Partition_Name}}",
+            "mode": "directLake",
+            "source": {
+              "type": "entity",
+              "entityName": "Staging_Responsables",
+              "expressionSource": "DatabaseQuery",
+              "schemaName": "LISE"
+            }
+          }
+        ],
+        "annotations": [
+          {
+            "name": "IsTableInBiModel",
+            "value": "False"
+          }
+        ]
+      },
+      {
+        "name": "Staging_SchoolYears",
+        "sourceLineageTag": "[LISE].[Staging_SchoolYears]",
+        "columns": [
+          {
+            "name": "SCHOOLYEAR",
+            "dataType": "string",
+            "sourceColumn": "SCHOOLYEAR",
+            "sourceProviderType": "varchar",
+            "sourceLineageTag": "SCHOOLYEAR",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "SCHOOLYEARLIBELLE",
+            "dataType": "string",
+            "sourceColumn": "SCHOOLYEARLIBELLE",
+            "sourceProviderType": "varchar",
+            "sourceLineageTag": "SCHOOLYEARLIBELLE",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          }
+        ],
+        "partitions": [
+          {
+            "name": "{{Partition_Name}}",
+            "mode": "directLake",
+            "source": {
+              "type": "entity",
+              "entityName": "Staging_SchoolYears",
+              "expressionSource": "DatabaseQuery",
+              "schemaName": "LISE"
+            }
+          }
+        ],
+        "annotations": [
+          {
+            "name": "IsTableInBiModel",
+            "value": "False"
+          }
+        ]
+      },
+      {
+        "name": "Staging_Services",
+        "sourceLineageTag": "[LISE].[Staging_Services]",
+        "columns": [
+          {
+            "name": "IDSERVICE",
+            "dataType": "int64",
+            "sourceColumn": "IDSERVICE",
+            "formatString": "0",
+            "sourceProviderType": "int",
+            "sourceLineageTag": "IDSERVICE",
+            "summarizeBy": "sum",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "SERVICE",
+            "dataType": "string",
+            "sourceColumn": "SERVICE",
+            "sourceProviderType": "varchar",
+            "sourceLineageTag": "SERVICE",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          }
+        ],
+        "partitions": [
+          {
+            "name": "{{Partition_Name}}",
+            "mode": "directLake",
+            "source": {
+              "type": "entity",
+              "entityName": "Staging_Services",
+              "expressionSource": "DatabaseQuery",
+              "schemaName": "LISE"
+            }
+          }
+        ],
+        "annotations": [
+          {
+            "name": "IsTableInBiModel",
+            "value": "False"
+          }
+        ]
+      },
+      {
+        "name": "Staging_Staff",
+        "sourceLineageTag": "[LISE].[Staging_Staff]",
+        "columns": [
+          {
+            "name": "KEYPERSONNEL",
+            "dataType": "string",
+            "sourceColumn": "KEYPERSONNEL",
+            "sourceProviderType": "varchar",
+            "sourceLineageTag": "KEYPERSONNEL",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "IDPERSONNEL",
+            "dataType": "int64",
+            "sourceColumn": "IDPERSONNEL",
+            "formatString": "0",
+            "sourceProviderType": "int",
+            "sourceLineageTag": "IDPERSONNEL",
+            "summarizeBy": "sum",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "VILLE",
+            "dataType": "string",
+            "sourceColumn": "VILLE",
+            "sourceProviderType": "varchar",
+            "sourceLineageTag": "VILLE",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "DATEENTREE",
+            "dataType": "dateTime",
+            "sourceColumn": "DATEENTREE",
+            "formatString": "General Date",
+            "sourceProviderType": "date",
+            "sourceLineageTag": "DATEENTREE",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "DATESORTIE",
+            "dataType": "dateTime",
+            "sourceColumn": "DATESORTIE",
+            "formatString": "General Date",
+            "sourceProviderType": "date",
+            "sourceLineageTag": "DATESORTIE",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "TELEPHONE",
+            "dataType": "string",
+            "sourceColumn": "TELEPHONE",
+            "sourceProviderType": "varchar",
+            "sourceLineageTag": "TELEPHONE",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "EMAIL",
+            "dataType": "string",
+            "sourceColumn": "EMAIL",
+            "sourceProviderType": "varchar",
+            "sourceLineageTag": "EMAIL",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "DATENAISSANCE",
+            "dataType": "dateTime",
+            "sourceColumn": "DATENAISSANCE",
+            "formatString": "General Date",
+            "sourceProviderType": "date",
+            "sourceLineageTag": "DATENAISSANCE",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "AGE",
+            "dataType": "int64",
+            "sourceColumn": "AGE",
+            "formatString": "0",
+            "sourceProviderType": "int",
+            "sourceLineageTag": "AGE",
+            "summarizeBy": "sum",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          }
+        ],
+        "partitions": [
+          {
+            "name": "{{Partition_Name}}",
+            "mode": "directLake",
+            "source": {
+              "type": "entity",
+              "entityName": "Staging_Staff",
+              "expressionSource": "DatabaseQuery",
+              "schemaName": "LISE"
+            }
+          }
+        ],
+        "annotations": [
+          {
+            "name": "IsTableInBiModel",
+            "value": "False"
+          }
+        ]
+      },
+      {
+        "name": "Staging_Villes",
+        "sourceLineageTag": "[LISE].[Staging_Villes]",
+        "columns": [
+          {
+            "name": "IDVILLE",
+            "dataType": "int64",
+            "sourceColumn": "IDVILLE",
+            "formatString": "0",
+            "sourceProviderType": "int",
+            "sourceLineageTag": "IDVILLE",
+            "summarizeBy": "sum",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "VILLE",
+            "dataType": "string",
+            "sourceColumn": "VILLE",
+            "sourceProviderType": "varchar",
+            "sourceLineageTag": "VILLE",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "CODEPOSTAL",
+            "dataType": "int64",
+            "sourceColumn": "CODEPOSTAL",
+            "formatString": "0",
+            "sourceProviderType": "int",
+            "sourceLineageTag": "CODEPOSTAL",
+            "summarizeBy": "sum",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "LATITUDE",
+            "dataType": "double",
+            "sourceColumn": "LATITUDE",
+            "sourceProviderType": "float",
+            "sourceLineageTag": "LATITUDE",
+            "summarizeBy": "sum",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              },
+              {
+                "name": "PBI_FormatHint",
+                "value": "{\"isGeneralNumber\":true}"
+              }
+            ]
+          },
+          {
+            "name": "LONGITUDE",
+            "dataType": "double",
+            "sourceColumn": "LONGITUDE",
+            "sourceProviderType": "float",
+            "sourceLineageTag": "LONGITUDE",
+            "summarizeBy": "sum",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              },
+              {
+                "name": "PBI_FormatHint",
+                "value": "{\"isGeneralNumber\":true}"
+              }
+            ]
+          },
+          {
+            "name": "DEPARTEMENT",
+            "dataType": "string",
+            "sourceColumn": "DEPARTEMENT",
+            "sourceProviderType": "varchar",
+            "sourceLineageTag": "DEPARTEMENT",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "PAYS",
+            "dataType": "string",
+            "sourceColumn": "PAYS",
+            "sourceProviderType": "varchar",
+            "sourceLineageTag": "PAYS",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          }
+        ],
+        "partitions": [
+          {
+            "name": "{{Partition_Name}}",
+            "mode": "directLake",
+            "source": {
+              "type": "entity",
+              "entityName": "Staging_Villes",
+              "expressionSource": "DatabaseQuery",
+              "schemaName": "LISE"
+            }
+          }
+        ],
+        "annotations": [
+          {
+            "name": "IsTableInBiModel",
+            "value": "False"
+          }
+        ]
+      },
+      {
+        "name": "Villes",
+        "sourceLineageTag": "[LISE].[Villes]",
+        "columns": [
+          {
+            "name": "VilleID",
+            "dataType": "int64",
+            "sourceColumn": "VilleID",
+            "formatString": "0",
+            "sourceProviderType": "int",
+            "sourceLineageTag": "VilleID",
+            "summarizeBy": "sum",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "Ville",
+            "dataType": "string",
+            "sourceColumn": "Ville",
+            "sourceProviderType": "varchar",
+            "sourceLineageTag": "Ville",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "CodePostal",
+            "dataType": "int64",
+            "sourceColumn": "CodePostal",
+            "formatString": "0",
+            "sourceProviderType": "int",
+            "sourceLineageTag": "CodePostal",
+            "summarizeBy": "sum",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "Latitude",
+            "dataType": "double",
+            "sourceColumn": "Latitude",
+            "sourceProviderType": "float",
+            "sourceLineageTag": "Latitude",
+            "summarizeBy": "sum",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              },
+              {
+                "name": "PBI_FormatHint",
+                "value": "{\"isGeneralNumber\":true}"
+              }
+            ]
+          },
+          {
+            "name": "Longitude",
+            "dataType": "double",
+            "sourceColumn": "Longitude",
+            "sourceProviderType": "float",
+            "sourceLineageTag": "Longitude",
+            "summarizeBy": "sum",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              },
+              {
+                "name": "PBI_FormatHint",
+                "value": "{\"isGeneralNumber\":true}"
+              }
+            ]
+          },
+          {
+            "name": "Departement",
+            "dataType": "string",
+            "sourceColumn": "Departement",
+            "sourceProviderType": "varchar",
+            "sourceLineageTag": "Departement",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "Pays",
+            "dataType": "string",
+            "sourceColumn": "Pays",
+            "sourceProviderType": "varchar",
+            "sourceLineageTag": "Pays",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          }
+        ],
+        "partitions": [
+          {
+            "name": "{{Partition_Name}}",
+            "mode": "directLake",
+            "source": {
+              "type": "entity",
+              "entityName": "Villes",
+              "expressionSource": "DatabaseQuery",
+              "schemaName": "LISE"
+            }
+          }
+        ],
+        "annotations": [
+          {
+            "name": "IsTableInBiModel",
+            "value": "False"
+          }
+        ]
+      }
+    ],
+    "expressions": [
+      {
+        "name": "DatabaseQuery",
+        "kind": "m",
+        "expression": "let\n    database = {{TDS_Endpoint}}\nin\n    database\n"
+      }
+    ],
+    "annotations": [
+      {
+        "name": "__PBI_TimeIntelligenceEnabled",
+        "value": "0"
+      },
+      {
+        "name": "SourceLineageTagType",
+        "value": "DatabaseFullyQualifiedName"
+      }
+    ]
+  }
+}

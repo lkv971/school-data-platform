@@ -1,0 +1,401 @@
+{
+  "properties": {
+    "activities": [
+      {
+        "name": "GetChildItems",
+        "type": "GetMetadata",
+        "dependsOn": [
+          {
+            "activity": "LookupWatermark",
+            "dependencyConditions": [
+              "Succeeded"
+            ]
+          }
+        ],
+        "policy": {
+          "timeout": "0.12:00:00",
+          "retry": 0,
+          "retryIntervalInSeconds": 30,
+          "secureOutput": false,
+          "secureInput": false
+        },
+        "typeProperties": {
+          "fieldList": [
+            "childItems"
+          ],
+          "datasetSettings": {
+            "annotations": [],
+            "type": "DelimitedText",
+            "typeProperties": {
+              "location": {
+                "type": "FileServerLocation"
+              },
+              "columnDelimiter": ",",
+              "escapeChar": "\\",
+              "firstRowAsHeader": true,
+              "quoteChar": "\""
+            },
+            "schema": [],
+            "externalReferences": {
+              "connection": "@pipeline().libraryVariables.VL_LISE_LISE_256_Connection"
+            }
+          },
+          "storeSettings": {
+            "type": "FileServerReadSettings",
+            "enablePartitionDiscovery": false
+          },
+          "formatSettings": {
+            "type": "DelimitedTextReadSettings"
+          }
+        }
+      },
+      {
+        "name": "LookupWatermark",
+        "type": "Lookup",
+        "dependsOn": [],
+        "policy": {
+          "timeout": "0.12:00:00",
+          "retry": 0,
+          "retryIntervalInSeconds": 30,
+          "secureOutput": false,
+          "secureInput": false
+        },
+        "typeProperties": {
+          "source": {
+            "type": "JsonSource",
+            "storeSettings": {
+              "type": "LakehouseReadSettings",
+              "recursive": true,
+              "enablePartitionDiscovery": false
+            },
+            "formatSettings": {
+              "type": "JsonReadSettings"
+            }
+          },
+          "datasetSettings": {
+            "annotations": [],
+            "linkedService": {
+              "name": "b2b21be1_89e4_4895_bb82_950e43f8e3ac",
+              "properties": {
+                "annotations": [],
+                "type": "Lakehouse",
+                "typeProperties": {
+                  "workspaceId": "@pipeline().libraryVariables.VL_LISE_Workspace_ID",
+                  "artifactId": "@pipeline().libraryVariables.VL_LISE_LH_Bronze_ID",
+                  "rootFolder": "Files"
+                }
+              }
+            },
+            "type": "Json",
+            "typeProperties": {
+              "location": {
+                "type": "LakehouseLocation",
+                "fileName": "watermark.json",
+                "folderPath": "Watermarks"
+              }
+            },
+            "schema": {}
+          }
+        }
+      },
+      {
+        "name": "FilterFiles",
+        "type": "Filter",
+        "dependsOn": [
+          {
+            "activity": "GetChildItems",
+            "dependencyConditions": [
+              "Succeeded"
+            ]
+          }
+        ],
+        "typeProperties": {
+          "items": {
+            "value": "@coalesce(activity('GetChildItems').output.childItems, json('[]'))",
+            "type": "Expression"
+          },
+          "condition": {
+            "value": "@contains(createArray('COM_ELEVES.csv', 'COM_RESPONSABLES.csv', 'COM_CLASSES.csv', 'COM_PERSONNELS.csv', 'COM_PROFSPRINCIPAUX.csv', 'COM_NIVEAU.csv', 'COM_ETABLISSEMENT.csv', 'COM_FOYER.csv', 'TAB_CSP.csv', 'TAB_PAYS.csv', 'FAC_COMPTA_GENERAL.csv', 'FAC_HISTO_LIGNE.csv', 'FAC_HISTO_FAMILLE.csv', 'FAC_HISTO_ELEVE.csv', 'FAC_VALIDATION.csv'), item().name)",
+            "type": "Expression"
+          }
+        }
+      },
+      {
+        "name": "ForEachFile",
+        "type": "ForEach",
+        "dependsOn": [
+          {
+            "activity": "FilterFiles",
+            "dependencyConditions": [
+              "Succeeded"
+            ]
+          }
+        ],
+        "typeProperties": {
+          "items": {
+            "value": "@coalesce(activity('FilterFiles').output.value, activity('FilterFiles').output.value, json('[]'))",
+            "type": "Expression"
+          },
+          "activities": [
+            {
+              "name": "GetLastModified",
+              "type": "GetMetadata",
+              "dependsOn": [],
+              "policy": {
+                "timeout": "0.12:00:00",
+                "retry": 0,
+                "retryIntervalInSeconds": 30,
+                "secureOutput": false,
+                "secureInput": false
+              },
+              "typeProperties": {
+                "fieldList": [
+                  "lastModified"
+                ],
+                "datasetSettings": {
+                  "annotations": [],
+                  "type": "DelimitedText",
+                  "typeProperties": {
+                    "location": {
+                      "type": "FileServerLocation",
+                      "fileName": {
+                        "value": "@item().name",
+                        "type": "Expression"
+                      }
+                    },
+                    "columnDelimiter": ",",
+                    "escapeChar": "\\",
+                    "firstRowAsHeader": true,
+                    "quoteChar": "\""
+                  },
+                  "schema": [],
+                  "externalReferences": {
+                    "connection": "@pipeline().libraryVariables.VL_LISE_LISE_256_Connection"
+                  }
+                },
+                "storeSettings": {
+                  "type": "FileServerReadSettings",
+                  "recursive": true,
+                  "enablePartitionDiscovery": false
+                },
+                "formatSettings": {
+                  "type": "DelimitedTextReadSettings"
+                }
+              }
+            },
+            {
+              "name": "IfFilesModified",
+              "type": "IfCondition",
+              "dependsOn": [
+                {
+                  "activity": "GetLastModified",
+                  "dependencyConditions": [
+                    "Succeeded"
+                  ]
+                }
+              ],
+              "typeProperties": {
+                "expression": {
+                  "value": "@greater(activity('GetLastModified').output.lastModified, activity('LookupWatermark').output.firstRow.lastModified)",
+                  "type": "Expression"
+                },
+                "ifFalseActivities": [],
+                "ifTrueActivities": [
+                  {
+                    "name": "CopyFiles",
+                    "type": "Copy",
+                    "dependsOn": [],
+                    "policy": {
+                      "timeout": "0.12:00:00",
+                      "retry": 0,
+                      "retryIntervalInSeconds": 30,
+                      "secureOutput": false,
+                      "secureInput": false
+                    },
+                    "typeProperties": {
+                      "source": {
+                        "type": "DelimitedTextSource",
+                        "storeSettings": {
+                          "type": "FileServerReadSettings",
+                          "recursive": true,
+                          "enablePartitionDiscovery": false
+                        },
+                        "formatSettings": {
+                          "type": "DelimitedTextReadSettings"
+                        },
+                        "datasetSettings": {
+                          "annotations": [],
+                          "type": "DelimitedText",
+                          "typeProperties": {
+                            "location": {
+                              "type": "FileServerLocation",
+                              "fileName": {
+                                "value": "@item().name",
+                                "type": "Expression"
+                              }
+                            },
+                            "columnDelimiter": ",",
+                            "escapeChar": "\\",
+                            "firstRowAsHeader": true,
+                            "quoteChar": "\""
+                          },
+                          "schema": [],
+                          "externalReferences": {
+                            "connection": "@pipeline().libraryVariables.VL_LISE_LISE_256_Connection"
+                          }
+                        }
+                      },
+                      "sink": {
+                        "type": "DelimitedTextSink",
+                        "storeSettings": {
+                          "type": "LakehouseWriteSettings"
+                        },
+                        "formatSettings": {
+                          "type": "DelimitedTextWriteSettings",
+                          "fileExtension": ".txt"
+                        },
+                        "datasetSettings": {
+                          "annotations": [],
+                          "linkedService": {
+                            "name": "885eedb3_0902_46df_ae79_ac5b6910615a",
+                            "properties": {
+                              "annotations": [],
+                              "type": "Lakehouse",
+                              "typeProperties": {
+                                "workspaceId": "@pipeline().libraryVariables.VL_LISE_Workspace_ID",
+                                "artifactId": "@pipeline().libraryVariables.VL_LISE_LH_Bronze_ID",
+                                "rootFolder": "Files"
+                              }
+                            }
+                          },
+                          "type": "DelimitedText",
+                          "typeProperties": {
+                            "location": {
+                              "type": "LakehouseLocation",
+                              "fileName": {
+                                "value": "@item().name",
+                                "type": "Expression"
+                              },
+                              "folderPath": "Lise_Data/2025-2026"
+                            },
+                            "columnDelimiter": ",",
+                            "escapeChar": "\\",
+                            "firstRowAsHeader": true,
+                            "quoteChar": "\""
+                          },
+                          "schema": []
+                        }
+                      },
+                      "enableStaging": false,
+                      "translator": {
+                        "type": "TabularTranslator",
+                        "typeConversion": true,
+                        "typeConversionSettings": {
+                          "allowDataTruncation": true,
+                          "treatBooleanAsNumber": false
+                        }
+                      }
+                    }
+                  },
+                  {
+                    "name": "SetCopyVariable",
+                    "type": "SetVariable",
+                    "dependsOn": [
+                      {
+                        "activity": "CopyFiles",
+                        "dependencyConditions": [
+                          "Succeeded"
+                        ]
+                      }
+                    ],
+                    "policy": {
+                      "secureOutput": false,
+                      "secureInput": false
+                    },
+                    "typeProperties": {
+                      "variableName": "copystatus",
+                      "value": "true"
+                    }
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      },
+      {
+        "name": "IfFilesCopied",
+        "type": "IfCondition",
+        "dependsOn": [
+          {
+            "activity": "ForEachFile",
+            "dependencyConditions": [
+              "Succeeded"
+            ]
+          }
+        ],
+        "typeProperties": {
+          "expression": {
+            "value": "@variables('copystatus')",
+            "type": "Expression"
+          },
+          "ifFalseActivities": [],
+          "ifTrueActivities": [
+            {
+              "name": "UpdateBronzeWatermark",
+              "type": "TridentNotebook",
+              "dependsOn": [],
+              "policy": {
+                "timeout": "0.12:00:00",
+                "retry": 0,
+                "retryIntervalInSeconds": 30,
+                "secureOutput": false,
+                "secureInput": false
+              },
+              "typeProperties": {
+                "notebookId": {
+                  "value": "@pipeline().libraryVariables.VL_LISE_NB_Watermark_Bronze_ID",
+                  "type": "Expression"
+                },
+                "workspaceId": "28e6a84a-1953-410e-8b52-272e6318afde"
+              }
+            }
+          ]
+        }
+      }
+    ],
+    "variables": {
+      "copystatus": {
+        "type": "String",
+        "defaultValue": "false"
+      }
+    },
+    "libraryVariables": {
+      "VL_LISE_LH_Bronze_ID": {
+        "type": "String",
+        "variableName": "LH_Bronze_ID",
+        "libraryName": "VL_LISE"
+      },
+      "VL_LISE_PL_Bronze_ID": {
+        "type": "String",
+        "variableName": "PL_Bronze_ID",
+        "libraryName": "VL_LISE"
+      },
+      "VL_LISE_NB_Watermark_Bronze_ID": {
+        "type": "String",
+        "variableName": "NB_Watermark_Bronze_ID",
+        "libraryName": "VL_LISE"
+      },
+      "VL_LISE_Workspace_ID": {
+        "type": "String",
+        "variableName": "Workspace_ID",
+        "libraryName": "VL_LISE"
+      },
+      "VL_LISE_LISE_256_Connection": {
+        "type": "String",
+        "variableName": "LISE_256_Connection",
+        "libraryName": "VL_LISE"
+      }
+    }
+  }
+}

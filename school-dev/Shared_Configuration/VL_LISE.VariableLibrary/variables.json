@@ -1,0 +1,101 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/variableLibrary/definition/variables/1.0.0/schema.json",
+  "variables": [
+    {
+      "name": "LH_Bronze_ID",
+      "note": "",
+      "type": "String",
+      "value": "bfe479b8-2f70-44bc-84d5-dfa2ec50d321"
+    },
+    {
+      "name": "PL_Bronze_ID",
+      "note": "",
+      "type": "String",
+      "value": "db9632d2-8ee6-47e7-ab58-9386d22ca2be"
+    },
+    {
+      "name": "NB_Watermark_Bronze_ID",
+      "note": "",
+      "type": "String",
+      "value": "b547f169-8eac-45b2-b799-63e2b113bd89"
+    },
+    {
+      "name": "LISE_256_Connection",
+      "note": "",
+      "type": "String",
+      "value": "ae5b318f-348c-4e21-8dd2-80a1a58e2cdd"
+    },
+    {
+      "name": "Workspace_ID",
+      "note": "",
+      "type": "String",
+      "value": "28e6a84a-1953-410e-8b52-272e6318afde"
+    },
+    {
+      "name": "LH_Silver_ID",
+      "note": "",
+      "type": "String",
+      "value": "b727fb41-33d0-41ec-90bd-dfc3c112f2b3"
+    },
+    {
+      "name": "PL_Silver_ID",
+      "note": "",
+      "type": "String",
+      "value": "bde0fe5b-3318-4550-a47a-da0bfec4795e"
+    },
+    {
+      "name": "NB_Watermark_Silver_ID",
+      "note": "",
+      "type": "String",
+      "value": "41b2763e-a9f5-4c0f-9152-776e700c54e4"
+    },
+    {
+      "name": "NB_Silver_ID",
+      "note": "",
+      "type": "String",
+      "value": "e56376d2-60e7-470a-b70b-88540925a50b"
+    },
+    {
+      "name": "BRONZE_BASE",
+      "note": "",
+      "type": "String",
+      "value": "abfss://LISE@onelake.dfs.fabric.microsoft.com/LH_BRONZE.Lakehouse/Files"
+    },
+    {
+      "name": "WH_Gold_ID",
+      "note": "",
+      "type": "String",
+      "value": "d86bd324-6717-4394-a68f-bcb9a744a991"
+    },
+    {
+      "name": "WH_Gold_SQL_Connection",
+      "note": "",
+      "type": "String",
+      "value": "xisdbyhsv57ubp3vvd3oymv5ou-jkuomkctdehedc2se4xgggfp3y.datawarehouse.fabric.microsoft.com"
+    },
+    {
+      "name": "PL_Gold_ID",
+      "note": "",
+      "type": "String",
+      "value": "97921c60-dfd4-48be-9512-28fcf3135f35"
+    },
+    {
+      "name": "Lakehouse_Connection",
+      "note": "",
+      "type": "String",
+      "value": "ec3c34b2-b09f-4125-be88-132d40401218"
+    },
+    {
+      "name": "DF_Gold_ID",
+      "note": "",
+      "type": "String",
+      "value": "e12ebfee-03f7-4d60-924a-475cb6550f79"
+    },
+    {
+      "name": "Warehouse_Connection",
+      "note": "",
+      "type": "String",
+      "value": "5e51ef87-d8d1-4be6-9ac1-e86e50f15688"
+    }
+  ]
+}

@@ -1,0 +1,12 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/gitIntegration/platformProperties/2.0.0/schema.json",
+  "metadata": {
+    "type": "Notebook",
+    "displayName": "NB_SILVER",
+    "description": "Notebook to clean and transform raw csv files from the bronze layer and write them as tables in the silver layer."
+  },
+  "config": {
+    "version": "2.0",
+    "logicalId": "0925a50b-8854-b70b-470a-60e7e56376d2"
+  }
+}

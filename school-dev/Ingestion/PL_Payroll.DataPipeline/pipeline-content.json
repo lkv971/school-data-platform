@@ -1,0 +1,424 @@
+{
+  "properties": {
+    "activities": [
+      {
+        "name": "SetPeriod",
+        "type": "SetVariable",
+        "dependsOn": [],
+        "policy": {
+          "secureOutput": false,
+          "secureInput": false
+        },
+        "typeProperties": {
+          "variableName": "varPeriod",
+          "value": {
+            "value": "@if(\n  not(empty(pipeline().parameters.pPeriodOverride)),\n  pipeline().parameters.pPeriodOverride,\n  if(\n    equals(toLower(coalesce(pipeline().parameters.pMode,'previous')),'current'),\n    formatDateTime(utcnow(),'yyyy-MM'),\n    formatDateTime(addToTime(utcnow(),-1,'Month'),'yyyy-MM')\n  )\n)\n",
+            "type": "Expression"
+          }
+        }
+      },
+      {
+        "name": "CheckFiles",
+        "type": "GetMetadata",
+        "dependsOn": [
+          {
+            "activity": "SetPeriod",
+            "dependencyConditions": [
+              "Succeeded"
+            ]
+          }
+        ],
+        "policy": {
+          "timeout": "0.12:00:00",
+          "retry": 0,
+          "retryIntervalInSeconds": 30,
+          "secureOutput": false,
+          "secureInput": false
+        },
+        "typeProperties": {
+          "fieldList": [
+            "exists",
+            "size"
+          ],
+          "datasetSettings": {
+            "annotations": [],
+            "connectionSettings": {
+              "name": "af4985d7_0cb3_4b2b_acda_b5d215a715b5",
+              "properties": {
+                "annotations": [],
+                "type": "Lakehouse",
+                "typeProperties": {
+                  "workspaceId": "@pipeline().libraryVariables.VL_LISE_Workspace_ID",
+                  "artifactId": "@pipeline().libraryVariables.VL_LISE_LH_Bronze_ID",
+                  "rootFolder": "Files"
+                },
+                "externalReferences": {
+                  "connection": "@pipeline().libraryVariables.VL_LISE_Lakehouse_Connection"
+                }
+              }
+            },
+            "type": "DelimitedText",
+            "typeProperties": {
+              "location": {
+                "type": "LakehouseLocation",
+                "fileName": {
+                  "value": "@concat('Payroll_', variables('varPeriod'), '.csv')\n",
+                  "type": "Expression"
+                },
+                "folderPath": "Payroll/dropzone"
+              },
+              "columnDelimiter": ",",
+              "escapeChar": "\\",
+              "firstRowAsHeader": true,
+              "quoteChar": "\""
+            },
+            "schema": []
+          },
+          "storeSettings": {
+            "type": "LakehouseReadSettings",
+            "recursive": true,
+            "enablePartitionDiscovery": false
+          },
+          "formatSettings": {
+            "type": "DelimitedTextReadSettings"
+          }
+        }
+      },
+      {
+        "name": "IfFilesReadyToProcess",
+        "type": "IfCondition",
+        "dependsOn": [
+          {
+            "activity": "CheckFiles",
+            "dependencyConditions": [
+              "Succeeded"
+            ]
+          }
+        ],
+        "typeProperties": {
+          "expression": {
+            "value": "@and(\n  equals(length(variables('varPeriod')), 7),\n  and(\n    equals(activity('CheckFiles').output.exists, true),\n    greater(activity('CheckFiles').output.size, 0)\n  )\n)\n",
+            "type": "Expression"
+          },
+          "ifFalseActivities": [],
+          "ifTrueActivities": [
+            {
+              "name": "DataFlowRefresh",
+              "type": "RefreshDataflow",
+              "dependsOn": [],
+              "policy": {
+                "timeout": "0.12:00:00",
+                "retry": 0,
+                "retryIntervalInSeconds": 30,
+                "secureOutput": false,
+                "secureInput": false
+              },
+              "typeProperties": {
+                "dataflowId": {
+                  "value": "@pipeline().libraryVariables.VL_LISE_DF_Gold_ID",
+                  "type": "Expression"
+                },
+                "workspaceId": {
+                  "value": "@pipeline().libraryVariables.VL_LISE_Workspace_ID",
+                  "type": "Expression"
+                },
+                "notifyOption": "NoNotification",
+                "dataflowType": "DataflowFabric",
+                "parameters": {
+                  "pPayPeriod": {
+                    "value": {
+                      "value": "@variables('varPeriod')",
+                      "type": "Expression"
+                    },
+                    "type": "String"
+                  }
+                }
+              }
+            },
+            {
+              "name": "UpsertPayroll",
+              "type": "SqlServerStoredProcedure",
+              "dependsOn": [
+                {
+                  "activity": "DataFlowRefresh",
+                  "dependencyConditions": [
+                    "Succeeded"
+                  ]
+                }
+              ],
+              "policy": {
+                "timeout": "0.12:00:00",
+                "retry": 0,
+                "retryIntervalInSeconds": 30,
+                "secureOutput": false,
+                "secureInput": false
+              },
+              "typeProperties": {
+                "storedProcedureName": "[LISE].[spc_upsert_payroll]"
+              },
+              "connectionSettings": {
+                "name": "fc9d4a1d_9b08_4153_96ff_1ac670b31df3",
+                "properties": {
+                  "annotations": [],
+                  "type": "DataWarehouse",
+                  "typeProperties": {
+                    "endpoint": "@pipeline().libraryVariables.VL_LISE_WH_Gold_SQL_Connection",
+                    "artifactId": "@pipeline().libraryVariables.VL_LISE_WH_Gold_ID",
+                    "workspaceId": "@pipeline().libraryVariables.VL_LISE_Workspace_ID"
+                  },
+                  "externalReferences": {
+                    "connection": "@pipeline().libraryVariables.VL_LISE_Warehouse_Connection"
+                  }
+                }
+              }
+            }
+          ]
+        }
+      },
+      {
+        "name": "IfDayIs30",
+        "type": "IfCondition",
+        "dependsOn": [
+          {
+            "activity": "IfFilesReadyToProcess",
+            "dependencyConditions": [
+              "Succeeded"
+            ]
+          }
+        ],
+        "typeProperties": {
+          "expression": {
+            "value": "@greaterOrEquals(\n  formatDateTime(utcNow(),'yyyy-MM-dd'),\n  concat(variables('varPeriod'), '-30')\n)\n",
+            "type": "Expression"
+          },
+          "ifFalseActivities": [],
+          "ifTrueActivities": [
+            {
+              "name": "MovePayrollData",
+              "type": "Copy",
+              "dependsOn": [],
+              "policy": {
+                "timeout": "0.12:00:00",
+                "retry": 0,
+                "retryIntervalInSeconds": 30,
+                "secureOutput": false,
+                "secureInput": false
+              },
+              "typeProperties": {
+                "source": {
+                  "type": "DelimitedTextSource",
+                  "storeSettings": {
+                    "type": "LakehouseReadSettings",
+                    "recursive": true,
+                    "enablePartitionDiscovery": false
+                  },
+                  "formatSettings": {
+                    "type": "DelimitedTextReadSettings"
+                  },
+                  "datasetSettings": {
+                    "annotations": [],
+                    "connectionSettings": {
+                      "name": "4890ac4d_32be_48b7_82bf_4ef95292d416",
+                      "properties": {
+                        "annotations": [],
+                        "type": "Lakehouse",
+                        "typeProperties": {
+                          "workspaceId": "@pipeline().libraryVariables.VL_LISE_Workspace_ID",
+                          "artifactId": "@pipeline().libraryVariables.VL_LISE_LH_Bronze_ID",
+                          "rootFolder": "Files"
+                        },
+                        "externalReferences": {
+                          "connection": "@pipeline().libraryVariables.VL_LISE_Lakehouse_Connection"
+                        }
+                      }
+                    },
+                    "type": "DelimitedText",
+                    "typeProperties": {
+                      "location": {
+                        "type": "LakehouseLocation",
+                        "fileName": {
+                          "value": "@concat('Payroll_', variables('varPeriod'), '.csv')",
+                          "type": "Expression"
+                        },
+                        "folderPath": "Payroll/dropzone"
+                      },
+                      "columnDelimiter": ",",
+                      "escapeChar": "\\",
+                      "firstRowAsHeader": true,
+                      "quoteChar": "\""
+                    },
+                    "schema": []
+                  }
+                },
+                "sink": {
+                  "type": "DelimitedTextSink",
+                  "storeSettings": {
+                    "type": "LakehouseWriteSettings"
+                  },
+                  "formatSettings": {
+                    "type": "DelimitedTextWriteSettings",
+                    "fileExtension": ".txt"
+                  },
+                  "datasetSettings": {
+                    "annotations": [],
+                    "connectionSettings": {
+                      "name": "9ee92bc1_6dbf_4d37_953b_1226b2796d6d",
+                      "properties": {
+                        "annotations": [],
+                        "type": "Lakehouse",
+                        "typeProperties": {
+                          "workspaceId": "@pipeline().libraryVariables.VL_LISE_Workspace_ID",
+                          "artifactId": "@pipeline().libraryVariables.VL_LISE_LH_Bronze_ID",
+                          "rootFolder": "Files"
+                        },
+                        "externalReferences": {
+                          "connection": "@pipeline().libraryVariables.VL_LISE_Lakehouse_Connection"
+                        }
+                      }
+                    },
+                    "type": "DelimitedText",
+                    "typeProperties": {
+                      "location": {
+                        "type": "LakehouseLocation",
+                        "fileName": {
+                          "value": "@concat('Payroll_', variables('varPeriod'), '.csv')",
+                          "type": "Expression"
+                        },
+                        "folderPath": {
+                          "value": "@concat(\n  'Payroll/processed/',\n  substring(variables('varPeriod'),0,4), '/',\n  substring(variables('varPeriod'),5,2) \n)",
+                          "type": "Expression"
+                        }
+                      },
+                      "columnDelimiter": ",",
+                      "escapeChar": "\\",
+                      "firstRowAsHeader": true,
+                      "quoteChar": "\""
+                    },
+                    "schema": []
+                  }
+                },
+                "enableStaging": false,
+                "translator": {
+                  "type": "TabularTranslator",
+                  "typeConversion": true,
+                  "typeConversionSettings": {
+                    "allowDataTruncation": true,
+                    "treatBooleanAsNumber": false
+                  }
+                }
+              }
+            },
+            {
+              "name": "DeleteDropzoneData_copy",
+              "type": "Delete",
+              "dependsOn": [
+                {
+                  "activity": "MovePayrollData",
+                  "dependencyConditions": [
+                    "Succeeded"
+                  ]
+                }
+              ],
+              "policy": {
+                "timeout": "0.12:00:00",
+                "retry": 0,
+                "retryIntervalInSeconds": 30,
+                "secureOutput": false,
+                "secureInput": false
+              },
+              "typeProperties": {
+                "datasetSettings": {
+                  "annotations": [],
+                  "connectionSettings": {
+                    "name": "556eecfa_20fa_4e73_b536_4b71598918e2",
+                    "properties": {
+                      "annotations": [],
+                      "type": "Lakehouse",
+                      "typeProperties": {
+                        "workspaceId": "@pipeline().libraryVariables.VL_LISE_Workspace_ID",
+                        "artifactId": "@pipeline().libraryVariables.VL_LISE_LH_Bronze_ID",
+                        "rootFolder": "Files"
+                      },
+                      "externalReferences": {
+                        "connection": "@pipeline().libraryVariables.VL_LISE_Lakehouse_Connection"
+                      }
+                    }
+                  },
+                  "type": "Binary",
+                  "typeProperties": {
+                    "location": {
+                      "type": "LakehouseLocation",
+                      "fileName": {
+                        "value": "@concat('Payroll_', variables('varPeriod'), '.csv')",
+                        "type": "Expression"
+                      },
+                      "folderPath": "Payroll/dropzone"
+                    }
+                  }
+                },
+                "enableLogging": false,
+                "storeSettings": {
+                  "type": "LakehouseReadSettings",
+                  "recursive": true,
+                  "enablePartitionDiscovery": false
+                }
+              }
+            }
+          ]
+        }
+      }
+    ],
+    "parameters": {
+      "pMode": {
+        "type": "string",
+        "defaultValue": "current"
+      },
+      "pPeriodOverride": {
+        "type": "string",
+        "defaultValue": "2025-11"
+      }
+    },
+    "variables": {
+      "varPeriod": {
+        "type": "String"
+      }
+    },
+    "libraryVariables": {
+      "VL_LISE_LH_Bronze_ID": {
+        "type": "String",
+        "variableName": "LH_Bronze_ID",
+        "libraryName": "VL_LISE"
+      },
+      "VL_LISE_Workspace_ID": {
+        "type": "String",
+        "variableName": "Workspace_ID",
+        "libraryName": "VL_LISE"
+      },
+      "VL_LISE_Lakehouse_Connection": {
+        "type": "String",
+        "variableName": "Lakehouse_Connection",
+        "libraryName": "VL_LISE"
+      },
+      "VL_LISE_WH_Gold_ID": {
+        "type": "String",
+        "variableName": "WH_Gold_ID",
+        "libraryName": "VL_LISE"
+      },
+      "VL_LISE_WH_Gold_SQL_Connection": {
+        "type": "String",
+        "variableName": "WH_Gold_SQL_Connection",
+        "libraryName": "VL_LISE"
+      },
+      "VL_LISE_DF_Gold_ID": {
+        "type": "String",
+        "variableName": "DF_Gold_ID",
+        "libraryName": "VL_LISE"
+      },
+      "VL_LISE_Warehouse_Connection": {
+        "type": "String",
+        "variableName": "Warehouse_Connection",
+        "libraryName": "VL_LISE"
+      }
+    }
+  }
+}

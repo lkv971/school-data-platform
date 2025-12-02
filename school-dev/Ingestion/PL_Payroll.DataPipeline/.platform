@@ -1,0 +1,11 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/gitIntegration/platformProperties/2.0.0/schema.json",
+  "metadata": {
+    "type": "DataPipeline",
+    "displayName": "PL_Payroll"
+  },
+  "config": {
+    "version": "2.0",
+    "logicalId": "5c062fb3-4080-b6ef-47f0-bae6322d184e"
+  }
+}

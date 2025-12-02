@@ -1,0 +1,37 @@
+{
+  "formatVersion": "202502",
+  "computeEngineSettings": {},
+  "name": "DF_GOLD",
+  "queryGroups": [],
+  "documentLocale": "en-US",
+  "queriesMetadata": {
+    "dropzone": {
+      "queryId": "2581acd6-63fb-4731-ac4d-71be4bb0115a",
+      "queryName": "dropzone"
+    },
+    "pPayPeriod": {
+      "queryId": "aa9bf907-8303-405f-8d1f-ff23c1727baa",
+      "queryName": "pPayPeriod",
+      "loadEnabled": false
+    },
+    "dropzone_DataDestination": {
+      "queryId": "19014573-8aba-44f9-b1db-f3e2cbab1962",
+      "queryName": "dropzone_DataDestination",
+      "isHidden": true,
+      "loadEnabled": false
+    }
+  },
+  "connections": [
+    {
+      "path": "Lakehouse",
+      "kind": "Lakehouse",
+      "connectionId": "{\"ClusterId\":\"ae47c086-b101-4f8d-b313-2c092532f01d\",\"DatasourceId\":\"ec3c34b2-b09f-4125-be88-132d40401218\"}"
+    },
+    {
+      "path": "Warehouse",
+      "kind": "Warehouse",
+      "connectionId": "{\"ClusterId\":\"ae47c086-b101-4f8d-b313-2c092532f01d\",\"DatasourceId\":\"5e51ef87-d8d1-4be6-9ac1-e86e50f15688\"}"
+    }
+  ],
+  "parametric": true
+}

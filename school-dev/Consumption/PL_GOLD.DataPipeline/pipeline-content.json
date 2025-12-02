@@ -1,0 +1,570 @@
+{
+  "properties": {
+    "activities": [
+      {
+        "name": "LookupSilverWatermark",
+        "type": "Lookup",
+        "dependsOn": [],
+        "policy": {
+          "timeout": "0.12:00:00",
+          "retry": 0,
+          "retryIntervalInSeconds": 30,
+          "secureOutput": false,
+          "secureInput": false
+        },
+        "typeProperties": {
+          "source": {
+            "type": "JsonSource",
+            "storeSettings": {
+              "type": "LakehouseReadSettings",
+              "recursive": true,
+              "enablePartitionDiscovery": false
+            },
+            "formatSettings": {
+              "type": "JsonReadSettings"
+            }
+          },
+          "datasetSettings": {
+            "annotations": [],
+            "linkedService": {
+              "name": "5bece301_87aa_46c0_b060_0ea4bd72aba2",
+              "properties": {
+                "annotations": [],
+                "type": "Lakehouse",
+                "typeProperties": {
+                  "workspaceId": "@pipeline().libraryVariables.VL_LISE_Workspace_ID",
+                  "artifactId": "@pipeline().libraryVariables.VL_LISE_LH_Silver_ID",
+                  "rootFolder": "Files"
+                }
+              }
+            },
+            "type": "Json",
+            "typeProperties": {
+              "location": {
+                "type": "LakehouseLocation",
+                "fileName": "watermark.json",
+                "folderPath": "Watermarks"
+              }
+            },
+            "schema": {}
+          }
+        }
+      },
+      {
+        "name": "LookupGoldIngestionLogs",
+        "type": "Lookup",
+        "dependsOn": [
+          {
+            "activity": "LookupSilverWatermark",
+            "dependencyConditions": [
+              "Succeeded"
+            ]
+          }
+        ],
+        "policy": {
+          "timeout": "0.12:00:00",
+          "retry": 0,
+          "retryIntervalInSeconds": 30,
+          "secureOutput": false,
+          "secureInput": false
+        },
+        "typeProperties": {
+          "source": {
+            "type": "DataWarehouseSource",
+            "sqlReaderQuery": "SELECT COALESCE(MAX(FinishedAtUTC),\nCAST('1970-01-01T00:00:00' AS DATETIME2(3)))\nAS last_modified\nFROM LISE.IngestionLogs\nWHERE Layer = 'Gold' AND TargetObject = 'Multiple' AND Status = 'Succeeded'\n;",
+            "queryTimeout": "02:00:00",
+            "partitionOption": "None"
+          },
+          "datasetSettings": {
+            "annotations": [],
+            "linkedService": {
+              "name": "abe179d2_e6b4_4e71_9d43_3752015fe28a",
+              "properties": {
+                "annotations": [],
+                "type": "DataWarehouse",
+                "typeProperties": {
+                  "endpoint": "@pipeline().libraryVariables.VL_LISE_WH_Gold_SQL_Connection",
+                  "artifactId": "@pipeline().libraryVariables.VL_LISE_WH_Gold_ID",
+                  "workspaceId": "@pipeline().libraryVariables.VL_LISE_Workspace_ID"
+                }
+              }
+            },
+            "type": "DataWarehouseTable",
+            "schema": [],
+            "typeProperties": {}
+          }
+        }
+      },
+      {
+        "name": "IfFilesChanged",
+        "type": "IfCondition",
+        "dependsOn": [
+          {
+            "activity": "LookupGoldIngestionLogs",
+            "dependencyConditions": [
+              "Succeeded"
+            ]
+          }
+        ],
+        "typeProperties": {
+          "expression": {
+            "value": "@greater(activity('LookupSilverWatermark').output.firstRow.lastModified, activity('LookupGoldIngestionLogs').output.firstRow.last_modified)",
+            "type": "Expression"
+          },
+          "ifFalseActivities": [
+            {
+              "name": "InsertNoChangeLogs",
+              "type": "SqlServerStoredProcedure",
+              "dependsOn": [],
+              "policy": {
+                "timeout": "0.12:00:00",
+                "retry": 0,
+                "retryIntervalInSeconds": 30,
+                "secureOutput": false,
+                "secureInput": false
+              },
+              "typeProperties": {
+                "storedProcedureName": "[LISE].[InsertIngestionLogs]",
+                "storedProcedureParameters": {
+                  "BatchID": {
+                    "value": {
+                      "value": "@{pipeline().TriggerTime}",
+                      "type": "Expression"
+                    },
+                    "type": "String"
+                  },
+                  "BytesWritten": {
+                    "value": null,
+                    "type": "Int64"
+                  },
+                  "DurationSec": {
+                    "value": null,
+                    "type": "Int32"
+                  },
+                  "ErrorMessage": {
+                    "value": null,
+                    "type": "String"
+                  },
+                  "FilesWritten": {
+                    "value": null,
+                    "type": "Int32"
+                  },
+                  "FinishedAtUTC": {
+                    "value": {
+                      "value": "@{utcnow()}",
+                      "type": "Expression"
+                    },
+                    "type": "DateTime"
+                  },
+                  "Layer": {
+                    "value": "Gold",
+                    "type": "String"
+                  },
+                  "PipelineName": {
+                    "value": {
+                      "value": "@{pipeline().Pipeline}",
+                      "type": "Expression"
+                    },
+                    "type": "String"
+                  },
+                  "RowsWritten": {
+                    "value": "0",
+                    "type": "Int64"
+                  },
+                  "RunID": {
+                    "value": {
+                      "value": "@{pipeline().RunId}",
+                      "type": "Expression"
+                    },
+                    "type": "String"
+                  },
+                  "Status": {
+                    "value": "NoChange",
+                    "type": "String"
+                  },
+                  "TargetObject": {
+                    "value": "Multiple",
+                    "type": "String"
+                  },
+                  "ThroughputMBps": {
+                    "value": null,
+                    "type": "Decimal"
+                  },
+                  "TriggerType": {
+                    "value": {
+                      "value": "@{pipeline().TriggerType}",
+                      "type": "Expression"
+                    },
+                    "type": "String"
+                  },
+                  "WatermarkAfter": {
+                    "value": null,
+                    "type": "String"
+                  },
+                  "WatermarkBefore": {
+                    "value": null,
+                    "type": "String"
+                  }
+                }
+              },
+              "linkedService": {
+                "name": "04e256d8_dac4_4cba_b028_26208417244d",
+                "properties": {
+                  "annotations": [],
+                  "type": "DataWarehouse",
+                  "typeProperties": {
+                    "endpoint": "@pipeline().libraryVariables.VL_LISE_WH_Gold_SQL_Connection",
+                    "artifactId": "@pipeline().libraryVariables.VL_LISE_WH_Gold_ID",
+                    "workspaceId": "@pipeline().libraryVariables.VL_LISE_Workspace_ID"
+                  }
+                }
+              }
+            }
+          ],
+          "ifTrueActivities": [
+            {
+              "name": "StagingViews",
+              "type": "Script",
+              "dependsOn": [],
+              "policy": {
+                "timeout": "0.12:00:00",
+                "retry": 0,
+                "retryIntervalInSeconds": 30,
+                "secureOutput": false,
+                "secureInput": false
+              },
+              "linkedService": {
+                "name": "19d1048d_577b_47c6_863e_30bc6ffc2abf",
+                "properties": {
+                  "annotations": [],
+                  "type": "DataWarehouse",
+                  "typeProperties": {
+                    "endpoint": "@pipeline().libraryVariables.VL_LISE_WH_Gold_SQL_Connection",
+                    "artifactId": "@pipeline().libraryVariables.VL_LISE_WH_Gold_ID",
+                    "workspaceId": "@pipeline().libraryVariables.VL_LISE_Workspace_ID"
+                  }
+                }
+              },
+              "typeProperties": {
+                "scripts": [
+                  {
+                    "type": "NonQuery",
+                    "text": {
+                      "value": "DROP VIEW IF EXISTS LISE.Staging_Regimes;\r\nEXEC('CREATE VIEW LISE.Staging_Regimes\r\nAS\r\nSELECT DISTINCT IDREGIME, REGIME\r\nFROM LH_SILVER.dbo.dim_regimes;')\r\n;\r\nDROP VIEW IF EXISTS LISE.Staging_Etablissements;\r\nEXEC('CREATE VIEW LISE.Staging_Etablissements\r\nAS\r\nSELECT DISTINCT IDETABLISSEMENT, ETABLISSEMENT\r\nFROM LH_SILVER.dbo.dim_etablissements;')\r\n;\r\nDROP VIEW IF EXISTS LISE.Staging_Niveaux;\r\nEXEC('CREATE VIEW LISE.Staging_Niveaux\r\nAS\r\nSELECT DISTINCT IDNIVEAU, NIVEAU, IDETABLISSEMENT\r\nFROM LH_SILVER.dbo.dim_niveaux;')\r\n;\r\nDROP VIEW IF EXISTS LISE.Staging_Classes;\r\nEXEC('CREATE VIEW LISE.Staging_Classes\r\nAS\r\nSELECT DISTINCT IDCLASSE, CLASSE, CLASSELIBELLE, IDNIVEAU, IDETABLISSEMENT\r\nFROM LH_SILVER.dbo.dim_classes;')\r\n;\r\nDROP VIEW IF EXISTS LISE.Staging_ClassesTargets\r\nEXEC('CREATE VIEW LISE.Staging_ClassesTargets\r\nAS\r\nSELECT DISTINCT KEYCLASSE, IDCLASSE, TARGETCOUNT, MAXIMUMCOUNT, SCHOOLYEAR\r\nfrom LH_SILVER.dbo.dim_classes_targets;')\r\n;\r\nDROP VIEW IF EXISTS LISE.Staging_Foyers;\r\nEXEC('CREATE VIEW LISE.Staging_Foyers\r\nAS\r\nSELECT DISTINCT IDFOYER, VILLE, IDVILLE\r\nFROM LH_SILVER.dbo.dim_foyers;')\r\n;\r\nDROP VIEW IF EXISTS LISE.Staging_Pays;\r\nEXEC('CREATE VIEW LISE.Staging_Pays\r\nAS \r\nSELECT DISTINCT IDPAYS, PAYS, NATIONALITE\r\nFROM LH_SILVER.dbo.dim_pays;')\r\n;\r\nDROP VIEW IF EXISTS LISE.Staging_Villes;\r\nEXEC('CREATE VIEW LISE.Staging_Villes\r\nAS\r\nSELECT DISTINCT IDVILLE, VILLE, CODEPOSTAL, LATITUDE, LONGITUDE, DEPARTEMENT, PAYS\r\nFROM LH_SILVER.dbo.dim_villes;')\r\n;\r\nDROP VIEW IF EXISTS LISE.Staging_Professions;\r\nEXEC('CREATE VIEW LISE.Staging_Professions\r\nAS \r\nSELECT DISTINCT IDPROFESSION, PROFESSION\r\nFROM LH_SILVER.dbo.dim_professions;')\r\n;\r\nDROP VIEW IF EXISTS LISE.Staging_Staff;\r\nEXEC('CREATE VIEW LISE.Staging_Staff\r\nAS\r\nSELECT DISTINCT KEYPERSONNEL, IDPERSONNEL, VILLE, DATEENTREE, DATESORTIE, TELEPHONE, EMAIL, DATENAISSANCE, AGE\r\nFROM LH_SILVER.dbo.dim_staff;')\r\n;\r\nDROP VIEW IF EXISTS LISE.Staging_Personnels;\r\nEXEC('CREATE VIEW LISE.Staging_Personnels\r\nAS\r\nSELECT DISTINCT IDPERSONNEL, NOM, PRENOM, NATIONALITE, SECURITESOCIALE, BADGE\r\nFROM LH_SILVER.dbo.dim_personnels;')\r\n;\r\nDROP VIEW IF EXISTS LISE.Staging_Professeurs;\r\nEXEC('CREATE VIEW LISE.Staging_Professeurs\r\nAS\r\nSELECT DISTINCT IDPROFESSEUR, IDPERSONNEL, IDCLASSE\r\nFROM LH_SILVER.dbo.dim_professeurs;')\r\n;\r\nDROP VIEW IF EXISTS LISE.Staging_Parents;\r\nEXEC('CREATE VIEW LISE.Staging_Parents\r\nAS\r\nSELECT DISTINCT IDRESPONSABLE, NOM, PRENOM, FULLNAME\r\nFROM LH_SILVER.dbo.dim_parents;')\r\n;\r\nDROP VIEW IF EXISTS LISE.Staging_Responsables;\r\nEXEC('CREATE VIEW LISE.Staging_Responsables\r\nAS\r\nSELECT DISTINCT KEYRESPONSABLE, IDRESPONSABLE, ENFANTSACHARGE, REGLEMENT, TELEPHONE, EMAIL, NUMEROCOMPTE, BANQUE\r\nFROM LH_SILVER.dbo.dim_responsables;')\r\n;\r\nDROP VIEW IF EXISTS LISE.Staging_Enfants;\r\nEXEC('CREATE VIEW LISE.Staging_Enfants\r\nAS\r\nSELECT DISTINCT IDELEVE, NOM, PRENOM, SEXE, DATENAISSANCE, AGE, NATIONALITE, IDENTITENATIONALE, FULLNAME\r\nFROM LH_SILVER.dbo.dim_enfants;')\r\n;\r\nDROP VIEW IF EXISTS LISE.Staging_Eleves;\r\nEXEC('CREATE VIEW LISE.Staging_Eleves\r\nAS\r\nSELECT DISTINCT KEYELEVE, IDELEVE, IDRESPONSABLE, DATEENTREE, DATESORTIE\r\nFROM LH_SILVER.dbo.dim_eleves;')\r\n;\r\nDROP VIEW IF EXISTS LISE.Staging_Services;\r\nEXEC('CREATE VIEW LISE.Staging_Services\r\nAS\r\nSELECT DISTINCT IDSERVICE, SERVICE\r\nFROM LH_SILVER.dbo.dim_services;')\r\n;\r\nDROP VIEW IF EXISTS LISE.Staging_Dates;\r\nEXEC('CREATE VIEW LISE.Staging_Dates\r\nAS\r\nSELECT DISTINCT IDDATE, DATE, CALENDARYEAR, CALENDARMONTH, CALENDARDAY, MONTHNAME, DAYNAME, SCHOOLYEAR, ISSCHOOLPERIOD\r\nFROM LH_SILVER.dbo.dim_dates;')\r\n;\r\nDROP VIEW IF EXISTS LISE.Staging_FacturesFamilles;\r\nEXEC('CREATE VIEW LISE.Staging_FacturesFamilles\r\nAS\r\nSELECT DISTINCT KEYRESPONSABLE, IDRESPONSABLE, KEYVALIDATION, IDVALIDATION, IDFOYER, IDPROFESSION, TOTALFAMILLE, DATEFACTURE \r\nFROM LH_SILVER.dbo.fact_factures_familles;')\r\n;\r\nDROP VIEW IF EXISTS LISE.Staging_FacturesEleves;\r\nEXEC('CREATE VIEW LISE.Staging_FacturesEleves\r\nAS \r\nSELECT DISTINCT KEYELEVE, IDELEVE, KEYRESPONSABLE, IDRESPONSABLE, KEYVALIDATION, IDVALIDATION, KEYCLASSE, IDCLASSE, IDREGIME, TOTALELEVE, DATEFACTURE\r\nFROM LH_SILVER.dbo.fact_factures_eleves;')\r\n;\r\nDROP VIEW IF EXISTS LISE.Staging_FacturesNiveaux;\r\nEXEC('CREATE VIEW LISE.Staging_FacturesNiveaux\r\nAS \r\nSELECT DISTINCT IDNIVEAU, KEYVALIDATION, IDVALIDATION, KEYRESPONSABLE, IDRESPONSABLE, TOTALNIVEAU, DATEFACTURE\r\nFROM LH_SILVER.dbo.fact_factures_niveaux;')\r\n;\r\nDROP VIEW IF EXISTS LISE.Staging_FacturesServices;\r\nEXEC('CREATE VIEW LISE.Staging_FacturesServices\r\nAS \r\nSELECT DISTINCT KEYELEVE, IDELEVE, KEYRESPONSABLE, IDRESPONSABLE, KEYVALIDATION, IDVALIDATION, IDSERVICE, QUANTITE, PRIX, REMISE, TOTALSERVICE, DATEFACTURE\r\nFROM LH_SILVER.dbo.fact_factures_services;')\r\n;\r\nDROP VIEW IF EXISTS LISE.Staging_FacturesValidations;\r\nEXEC('CREATE VIEW LISE.Staging_FacturesValidations\r\nAS\r\nSELECT DISTINCT KEYVALIDATION, IDVALIDATION, TYPEFACTURE, NOMBREFACTURE, DATEVALIDATION\r\nFROM LH_SILVER.dbo.fact_factures_validations;')\r\n;\r\nDROP VIEW IF EXISTS LISE.Staging_SchoolYears;\r\nEXEC('CREATE VIEW LISE.Staging_SchoolYears\r\nAS\r\nSELECT DISTINCT SCHOOLYEAR, SCHOOLYEARLIBELLE\r\nfrom LH_SILVER.dbo.dim_school_years;')\r\n;",
+                      "type": "Expression"
+                    }
+                  }
+                ],
+                "scriptBlockExecutionTimeout": "02:00:00"
+              }
+            },
+            {
+              "name": "UpsertData",
+              "type": "Script",
+              "dependsOn": [
+                {
+                  "activity": "StagingViews",
+                  "dependencyConditions": [
+                    "Succeeded"
+                  ]
+                }
+              ],
+              "policy": {
+                "timeout": "0.12:00:00",
+                "retry": 0,
+                "retryIntervalInSeconds": 30,
+                "secureOutput": false,
+                "secureInput": false
+              },
+              "linkedService": {
+                "name": "97d3f5ff_b117_4fe4_8ada_3c81c9ccfafb",
+                "properties": {
+                  "annotations": [],
+                  "type": "DataWarehouse",
+                  "typeProperties": {
+                    "endpoint": "@pipeline().libraryVariables.VL_LISE_WH_Gold_SQL_Connection",
+                    "artifactId": "@pipeline().libraryVariables.VL_LISE_WH_Gold_ID",
+                    "workspaceId": "@pipeline().libraryVariables.VL_LISE_Workspace_ID"
+                  }
+                }
+              },
+              "typeProperties": {
+                "scripts": [
+                  {
+                    "type": "Query",
+                    "text": {
+                      "value": "EXEC LISE.sp_UpdateInsertData ",
+                      "type": "Expression"
+                    }
+                  }
+                ],
+                "scriptBlockExecutionTimeout": "02:00:00"
+              }
+            },
+            {
+              "name": "InsertSuccessLogs",
+              "type": "SqlServerStoredProcedure",
+              "dependsOn": [
+                {
+                  "activity": "UpsertData",
+                  "dependencyConditions": [
+                    "Succeeded"
+                  ]
+                }
+              ],
+              "policy": {
+                "timeout": "0.12:00:00",
+                "retry": 0,
+                "retryIntervalInSeconds": 30,
+                "secureOutput": false,
+                "secureInput": false
+              },
+              "typeProperties": {
+                "storedProcedureName": "[LISE].[InsertIngestionLogs]",
+                "storedProcedureParameters": {
+                  "BatchID": {
+                    "value": {
+                      "value": "@{pipeline().TriggerTime}",
+                      "type": "Expression"
+                    },
+                    "type": "String"
+                  },
+                  "BytesWritten": {
+                    "value": null,
+                    "type": "Int64"
+                  },
+                  "DurationSec": {
+                    "value": null,
+                    "type": "Int32"
+                  },
+                  "ErrorMessage": {
+                    "value": null,
+                    "type": "String"
+                  },
+                  "FilesWritten": {
+                    "value": null,
+                    "type": "Int32"
+                  },
+                  "FinishedAtUTC": {
+                    "value": {
+                      "value": "@{utcnow()}",
+                      "type": "Expression"
+                    },
+                    "type": "Datetime"
+                  },
+                  "Layer": {
+                    "value": "Gold",
+                    "type": "String"
+                  },
+                  "PipelineName": {
+                    "value": {
+                      "value": "@{pipeline().PipelineName}",
+                      "type": "Expression"
+                    },
+                    "type": "String"
+                  },
+                  "RowsWritten": {
+                    "value": {
+                      "value": "@{activity('UpsertData').output.resultSets[0].rows[0].TotalRowsWritten}",
+                      "type": "Expression"
+                    },
+                    "type": "Int64"
+                  },
+                  "RunID": {
+                    "value": {
+                      "value": "@{pipeline().RunId}",
+                      "type": "Expression"
+                    },
+                    "type": "String"
+                  },
+                  "Status": {
+                    "value": "Succeeded",
+                    "type": "String"
+                  },
+                  "TargetObject": {
+                    "value": "Multiple",
+                    "type": "String"
+                  },
+                  "ThroughputMBps": {
+                    "value": null,
+                    "type": "Decimal"
+                  },
+                  "TriggerType": {
+                    "value": {
+                      "value": "@{pipeline().TriggerType}",
+                      "type": "Expression"
+                    },
+                    "type": "String"
+                  },
+                  "WatermarkAfter": {
+                    "value": null,
+                    "type": "String"
+                  },
+                  "WatermarkBefore": {
+                    "value": null,
+                    "type": "String"
+                  }
+                }
+              },
+              "linkedService": {
+                "name": "5fc21a10_5c1d_421d_866e_accda479cd26",
+                "properties": {
+                  "annotations": [],
+                  "type": "DataWarehouse",
+                  "typeProperties": {
+                    "endpoint": "@pipeline().libraryVariables.VL_LISE_WH_Gold_SQL_Connection",
+                    "artifactId": "@pipeline().libraryVariables.VL_LISE_WH_Gold_ID",
+                    "workspaceId": "@pipeline().libraryVariables.VL_LISE_Workspace_ID"
+                  }
+                }
+              }
+            },
+            {
+              "name": "InsertFailedLogs",
+              "type": "SqlServerStoredProcedure",
+              "dependsOn": [
+                {
+                  "activity": "UpsertData",
+                  "dependencyConditions": [
+                    "Failed"
+                  ]
+                },
+                {
+                  "activity": "StagingViews",
+                  "dependencyConditions": [
+                    "Failed"
+                  ]
+                }
+              ],
+              "policy": {
+                "timeout": "0.12:00:00",
+                "retry": 0,
+                "retryIntervalInSeconds": 30,
+                "secureOutput": false,
+                "secureInput": false
+              },
+              "typeProperties": {
+                "storedProcedureName": "[LISE].[InsertIngestionLogs]",
+                "storedProcedureParameters": {
+                  "BatchID": {
+                    "value": {
+                      "value": "@{pipeline().TriggerTime}",
+                      "type": "Expression"
+                    },
+                    "type": "String"
+                  },
+                  "BytesWritten": {
+                    "value": null,
+                    "type": "Int64"
+                  },
+                  "DurationSec": {
+                    "value": null,
+                    "type": "Int32"
+                  },
+                  "ErrorMessage": {
+                    "value": "See Monitor Errors",
+                    "type": "String"
+                  },
+                  "FilesWritten": {
+                    "value": null,
+                    "type": "Int32"
+                  },
+                  "FinishedAtUTC": {
+                    "value": {
+                      "value": "@{utcNow()}",
+                      "type": "Expression"
+                    },
+                    "type": "DateTime"
+                  },
+                  "Layer": {
+                    "value": "Gold",
+                    "type": "String"
+                  },
+                  "PipelineName": {
+                    "value": {
+                      "value": "@{pipeline().PipelineName}",
+                      "type": "Expression"
+                    },
+                    "type": "String"
+                  },
+                  "RowsWritten": {
+                    "value": "0",
+                    "type": "Int64"
+                  },
+                  "RunID": {
+                    "value": {
+                      "value": "@{pipeline().RunId}",
+                      "type": "Expression"
+                    },
+                    "type": "String"
+                  },
+                  "Status": {
+                    "value": "Failed",
+                    "type": "String"
+                  },
+                  "TargetObject": {
+                    "value": "Multiple",
+                    "type": "String"
+                  },
+                  "ThroughputMBps": {
+                    "value": null,
+                    "type": "Decimal"
+                  },
+                  "TriggerType": {
+                    "value": {
+                      "value": "@{pipeline().TriggerType}",
+                      "type": "Expression"
+                    },
+                    "type": "String"
+                  },
+                  "WatermarkAfter": {
+                    "value": null,
+                    "type": "String"
+                  },
+                  "WatermarkBefore": {
+                    "value": null,
+                    "type": "String"
+                  }
+                }
+              },
+              "linkedService": {
+                "name": "e153f6e9_51a3_436e_a236_ba77ed1d1eb0",
+                "properties": {
+                  "annotations": [],
+                  "type": "DataWarehouse",
+                  "typeProperties": {
+                    "endpoint": "@pipeline().libraryVariables.VL_LISE_WH_Gold_SQL_Connection",
+                    "artifactId": "@pipeline().libraryVariables.VL_LISE_WH_Gold_ID",
+                    "workspaceId": "@pipeline().libraryVariables.VL_LISE_Workspace_ID"
+                  }
+                }
+              }
+            }
+          ]
+        }
+      }
+    ],
+    "libraryVariables": {
+      "VL_LISE_LH_Silver_ID": {
+        "type": "String",
+        "variableName": "LH_Silver_ID",
+        "libraryName": "VL_LISE"
+      },
+      "VL_LISE_WH_Gold_ID": {
+        "type": "String",
+        "variableName": "WH_Gold_ID",
+        "libraryName": "VL_LISE"
+      },
+      "VL_LISE_Workspace_ID": {
+        "type": "String",
+        "variableName": "Workspace_ID",
+        "libraryName": "VL_LISE"
+      },
+      "VL_LISE_WH_Gold_SQL_Connection": {
+        "type": "String",
+        "variableName": "WH_Gold_SQL_Connection",
+        "libraryName": "VL_LISE"
+      }
+    }
+  }
+}

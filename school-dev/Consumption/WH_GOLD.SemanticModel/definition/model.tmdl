@@ -1,0 +1,15 @@
+model 6eb1a8cb-b7e2-40a4-8ee6-94c3e65fd065
+	culture: en-US
+	collation: Latin1_General_100_BIN2_UTF8
+	defaultPowerBIDataSourceVersion: powerBI_V3
+	sourceQueryCulture: en-US
+	dataAccessOptions
+		legacyRedirects
+		returnErrorValuesAsNull
+
+annotation __PBI_TimeIntelligenceEnabled = 0
+
+annotation PBI_QueryOrder = ["exec_requests_history","long_running_queries","frequently_run_queries","exec_sessions_history","Staging_Regimes","Staging_Etablissements","Staging_Niveaux","Staging_Classes","Staging_ClassesTargets","Staging_Foyers","Staging_Villes","Staging_Professions","Staging_Parents","Staging_Responsables","Staging_Enfants","Staging_Eleves","Staging_Services","Staging_Dates","Staging_FacturesFamilles","Staging_FacturesEleves","Staging_FacturesNiveaux","Staging_FacturesServices","Staging_FacturesValidations","Staging_SchoolYears","FacturesValidations","FacturesServices","FacturesFamilles","FacturesEleves","FacturesNiveaux","Dates","SchoolYears","IngestionLogs","Regimes","Etablissements","Niveaux","Classes","ClassesTargets","Foyers","Services","Villes","Professions","Responsables","Parents","Eleves","Enfants"]
+
+annotation SourceLineageTagType = DatabaseFullyQualifiedName
+

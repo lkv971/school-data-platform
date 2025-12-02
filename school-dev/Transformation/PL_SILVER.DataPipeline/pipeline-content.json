@@ -1,0 +1,226 @@
+{
+  "properties": {
+    "activities": [
+      {
+        "name": "LookupBronzeWatermark",
+        "type": "Lookup",
+        "dependsOn": [],
+        "policy": {
+          "timeout": "0.12:00:00",
+          "retry": 0,
+          "retryIntervalInSeconds": 30,
+          "secureOutput": false,
+          "secureInput": false
+        },
+        "typeProperties": {
+          "source": {
+            "type": "JsonSource",
+            "storeSettings": {
+              "type": "LakehouseReadSettings",
+              "recursive": true,
+              "enablePartitionDiscovery": false
+            },
+            "formatSettings": {
+              "type": "JsonReadSettings"
+            }
+          },
+          "datasetSettings": {
+            "annotations": [],
+            "linkedService": {
+              "name": "4e405310_7b11_4319_a7ac_2ac2fbe4490a",
+              "properties": {
+                "annotations": [],
+                "type": "Lakehouse",
+                "typeProperties": {
+                  "workspaceId": "@pipeline().libraryVariables.VL_LISE_Workspace_ID",
+                  "artifactId": "@pipeline().libraryVariables.VL_LISE_LH_Bronze_ID",
+                  "rootFolder": "Files"
+                }
+              }
+            },
+            "type": "Json",
+            "typeProperties": {
+              "location": {
+                "type": "LakehouseLocation",
+                "fileName": "watermark.json",
+                "folderPath": "Watermarks"
+              }
+            },
+            "schema": {}
+          }
+        }
+      },
+      {
+        "name": "LookupSilverWatermark",
+        "type": "Lookup",
+        "dependsOn": [
+          {
+            "activity": "LookupBronzeWatermark",
+            "dependencyConditions": [
+              "Succeeded"
+            ]
+          }
+        ],
+        "policy": {
+          "timeout": "0.12:00:00",
+          "retry": 0,
+          "retryIntervalInSeconds": 30,
+          "secureOutput": false,
+          "secureInput": false
+        },
+        "typeProperties": {
+          "source": {
+            "type": "JsonSource",
+            "storeSettings": {
+              "type": "LakehouseReadSettings",
+              "recursive": true,
+              "enablePartitionDiscovery": false
+            },
+            "formatSettings": {
+              "type": "JsonReadSettings"
+            }
+          },
+          "datasetSettings": {
+            "annotations": [],
+            "linkedService": {
+              "name": "80084c2e_7cbd_4a84_9318_0f3657ef4a7b",
+              "properties": {
+                "annotations": [],
+                "type": "Lakehouse",
+                "typeProperties": {
+                  "workspaceId": "@pipeline().libraryVariables.VL_LISE_Workspace_ID",
+                  "artifactId": "@pipeline().libraryVariables.VL_LISE_LH_Silver_ID",
+                  "rootFolder": "Files"
+                }
+              }
+            },
+            "type": "Json",
+            "typeProperties": {
+              "location": {
+                "type": "LakehouseLocation",
+                "fileName": "watermark.json",
+                "folderPath": "Watermarks"
+              }
+            },
+            "schema": {}
+          }
+        }
+      },
+      {
+        "name": "IfFilesChanges",
+        "type": "IfCondition",
+        "dependsOn": [
+          {
+            "activity": "LookupSilverWatermark",
+            "dependencyConditions": [
+              "Succeeded"
+            ]
+          }
+        ],
+        "typeProperties": {
+          "expression": {
+            "value": "@greater(activity('LookupBronzeWatermark').output.firstRow.lastModified, activity('LookupSilverWatermark').output.firstRow.lastModified)",
+            "type": "Expression"
+          },
+          "ifFalseActivities": [],
+          "ifTrueActivities": [
+            {
+              "name": "TransformData",
+              "type": "TridentNotebook",
+              "dependsOn": [],
+              "policy": {
+                "timeout": "0.12:00:00",
+                "retry": 0,
+                "retryIntervalInSeconds": 30,
+                "secureOutput": false,
+                "secureInput": false
+              },
+              "typeProperties": {
+                "notebookId": {
+                  "value": "@pipeline().libraryVariables.VL_LISE_NB_Silver_ID",
+                  "type": "Expression"
+                },
+                "workspaceId": {
+                  "value": "@pipeline().libraryVariables.VL_LISE_Workspace_ID",
+                  "type": "Expression"
+                },
+                "parameters": {
+                  "BRONZE_BASE": {
+                    "value": "abfss://LISE@onelake.dfs.fabric.microsoft.com/LH_BRONZE.Lakehouse/Files",
+                    "type": "string"
+                  }
+                }
+              }
+            },
+            {
+              "name": "UpdateSilverWatermark",
+              "type": "TridentNotebook",
+              "dependsOn": [
+                {
+                  "activity": "TransformData",
+                  "dependencyConditions": [
+                    "Succeeded"
+                  ]
+                }
+              ],
+              "policy": {
+                "timeout": "0.12:00:00",
+                "retry": 0,
+                "retryIntervalInSeconds": 30,
+                "secureOutput": false,
+                "secureInput": false
+              },
+              "typeProperties": {
+                "notebookId": {
+                  "value": "@pipeline().libraryVariables.VL_LISE_NB_Watermark_Silver_ID",
+                  "type": "Expression"
+                },
+                "workspaceId": {
+                  "value": "@pipeline().libraryVariables.VL_LISE_Workspace_ID",
+                  "type": "Expression"
+                }
+              }
+            }
+          ]
+        }
+      }
+    ],
+    "libraryVariables": {
+      "VL_LISE_Workspace_ID": {
+        "type": "String",
+        "variableName": "Workspace_ID",
+        "libraryName": "VL_LISE"
+      },
+      "VL_LISE_LH_Silver_ID": {
+        "type": "String",
+        "variableName": "LH_Silver_ID",
+        "libraryName": "VL_LISE"
+      },
+      "VL_LISE_PL_Silver_ID": {
+        "type": "String",
+        "variableName": "PL_Silver_ID",
+        "libraryName": "VL_LISE"
+      },
+      "VL_LISE_NB_Watermark_Silver_ID": {
+        "type": "String",
+        "variableName": "NB_Watermark_Silver_ID",
+        "libraryName": "VL_LISE"
+      },
+      "VL_LISE_NB_Silver_ID": {
+        "type": "String",
+        "variableName": "NB_Silver_ID",
+        "libraryName": "VL_LISE"
+      },
+      "VL_LISE_BRONZE_BASE": {
+        "type": "String",
+        "variableName": "BRONZE_BASE",
+        "libraryName": "VL_LISE"
+      },
+      "VL_LISE_LH_Bronze_ID": {
+        "type": "String",
+        "variableName": "LH_Bronze_ID",
+        "libraryName": "VL_LISE"
+      }
+    }
+  }
+}

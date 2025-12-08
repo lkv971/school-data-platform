@@ -2444,20 +2444,6 @@
             ]
           },
           {
-            "name": "SecuriteSociale",
-            "dataType": "string",
-            "sourceColumn": "SecuriteSociale",
-            "sourceProviderType": "varchar",
-            "sourceLineageTag": "SecuriteSociale",
-            "summarizeBy": "none",
-            "annotations": [
-              {
-                "name": "SummarizationSetBy",
-                "value": "Automatic"
-              }
-            ]
-          },
-          {
             "name": "Badge",
             "dataType": "int64",
             "sourceColumn": "Badge",
@@ -4886,21 +4872,6 @@
             "sourceProviderType": "varchar",
             "sourceLineageTag": "NATIONALITE",
             "summarizeBy": "none",
-            "annotations": [
-              {
-                "name": "SummarizationSetBy",
-                "value": "Automatic"
-              }
-            ]
-          },
-          {
-            "name": "SECURITESOCIALE",
-            "dataType": "int64",
-            "sourceColumn": "SECURITESOCIALE",
-            "formatString": "0",
-            "sourceProviderType": "bigint",
-            "sourceLineageTag": "SECURITESOCIALE",
-            "summarizeBy": "sum",
             "annotations": [
               {
                 "name": "SummarizationSetBy",

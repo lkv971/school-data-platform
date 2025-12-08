@@ -4,8 +4,8 @@ section Section1;
 shared dropzone = let
   // --- navigation inchangée ---
   Source = Lakehouse.Contents(null),
-  Navigation = Source{[workspaceId = "28e6a84a-1953-410e-8b52-272e6318afde"]}[Data],
-  #"Navigation 1" = Navigation{[lakehouseId = "bfe479b8-2f70-44bc-84d5-dfa2ec50d321"]}[Data],
+  Navigation = Source{[workspaceId = WorkspaceId]}[Data],
+  #"Navigation 1" = Navigation{[lakehouseId = LakehouseId]}[Data],
   #"Navigation 2" = #"Navigation 1"{[Id = "Files", ItemKind = "Folder"]}[Data],
   #"Navigation 3" = #"Navigation 2"{[Name = "Payroll"]}[Content],
   Dropzone = #"Navigation 3"{[Name = "dropzone"]}[Content],
@@ -90,7 +90,7 @@ shared dropzone = let
   #"Replaced value" = Table.ReplaceValue(TypedFinal, null, 0, Replacer.ReplaceValue, {"Montant"})
 in
   #"Replaced value";
-shared pPayPeriod = "2025-09" meta [IsParameterQuery = true, IsParameterQueryRequired = false, Type = type text, DefaultValue = ""];
+shared pPayPeriod = "2025-12" meta [IsParameterQuery = true, IsParameterQueryRequired = false, Type = type text, DefaultValue = ""];
 shared dropzone_DataDestination = let
   Pattern = Fabric.Warehouse([HierarchicalNavigation = null, CreateNavigationProperties = false]),
   Navigation_1 = Pattern{[workspaceId = "28e6a84a-1953-410e-8b52-272e6318afde"]}[Data],
@@ -98,3 +98,5 @@ shared dropzone_DataDestination = let
   TableNavigation = Navigation_2{[Schema = "LISE", Item = "Payroll_Incoming"]}[Data]
 in
   TableNavigation;
+shared WorkspaceId = "28e6a84a-1953-410e-8b52-272e6318afde" meta [IsParameterQuery = true, IsParameterQueryRequired = false, Type = type any, DefaultValue = ""];
+shared LakehouseId = "bfe479b8-2f70-44bc-84d5-dfa2ec50d321" meta [IsParameterQuery = true, IsParameterQueryRequired = false, Type = type any, DefaultValue = ""];

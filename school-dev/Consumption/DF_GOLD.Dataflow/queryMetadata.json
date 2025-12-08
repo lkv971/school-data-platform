@@ -19,6 +19,16 @@
       "queryName": "dropzone_DataDestination",
       "isHidden": true,
       "loadEnabled": false
+    },
+    "WorkspaceId": {
+      "queryId": "4d908107-ae2e-4434-a2cb-782fa57d323e",
+      "queryName": "WorkspaceId",
+      "loadEnabled": false
+    },
+    "LakehouseId": {
+      "queryId": "7429f0a0-1bd7-46ae-957c-aa9534bb867c",
+      "queryName": "LakehouseId",
+      "loadEnabled": false
     }
   },
   "connections": [

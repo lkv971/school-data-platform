@@ -1,0 +1,131 @@
+table Villes
+	lineageTag: 19556783-578e-4f6a-a939-78fa977b19d2
+	sourceLineageTag: [LISE].[Villes]
+
+	column 'Ville ID'
+		dataType: int64
+		formatString: 0
+		lineageTag: 23b814a2-a777-4125-afbf-a1e4170e6fd3
+		sourceLineageTag: VilleID
+		summarizeBy: none
+		sourceColumn: VilleID
+
+		changedProperty = Name
+
+		changedProperty = SummarizeBy
+
+		annotation SummarizationSetBy = User
+
+	column Ville
+		dataType: string
+		lineageTag: 6fdfa118-e57d-4d0c-946b-13aede1fae2d
+		sourceLineageTag: Ville
+		dataCategory: City
+		summarizeBy: none
+		sourceColumn: Ville
+
+		changedProperty = DataCategory
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Code Postal'
+		dataType: int64
+		formatString: 0
+		lineageTag: 4a3d64cb-3d3a-4256-9b9c-160832b763e6
+		sourceLineageTag: CodePostal
+		dataCategory: PostalCode
+		summarizeBy: none
+		sourceColumn: CodePostal
+
+		changedProperty = SummarizeBy
+
+		changedProperty = Name
+
+		changedProperty = DataCategory
+
+		annotation SummarizationSetBy = User
+
+	column Latitude
+		dataType: double
+		lineageTag: df09cef6-726f-4c9b-ba28-435aa928ce95
+		sourceLineageTag: Latitude
+		dataCategory: Latitude
+		summarizeBy: none
+		sourceColumn: Latitude
+
+		changedProperty = SummarizeBy
+
+		changedProperty = DataCategory
+
+		annotation SummarizationSetBy = User
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column Longitude
+		dataType: double
+		lineageTag: d71a9039-0fd3-4787-9b6e-8f5178679080
+		sourceLineageTag: Longitude
+		dataCategory: Longitude
+		summarizeBy: none
+		sourceColumn: Longitude
+
+		changedProperty = SummarizeBy
+
+		changedProperty = DataCategory
+
+		annotation SummarizationSetBy = User
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column Departement
+		dataType: string
+		lineageTag: 8039c75d-2bd2-43f6-9327-16036976aee2
+		sourceLineageTag: Departement
+		dataCategory: County
+		summarizeBy: none
+		sourceColumn: Departement
+
+		changedProperty = DataCategory
+
+		annotation SummarizationSetBy = Automatic
+
+	column Pays
+		dataType: string
+		lineageTag: 109d5b2c-7f7d-4b5c-a81a-134d9767077f
+		sourceLineageTag: Pays
+		dataCategory: Country
+		summarizeBy: none
+		sourceColumn: Pays
+
+		changedProperty = DataCategory
+
+		annotation SummarizationSetBy = Automatic
+
+	hierarchy 'Geography Hierachy'
+		lineageTag: 3fc8f7ee-09c1-4d55-afce-e8c2e84151ed
+
+		level Pays
+			lineageTag: d11c8c85-41cb-47f9-9deb-871ea47038b0
+			column: Pays
+
+		level Ville
+			lineageTag: e8c4aeef-2ea7-44cf-952b-75a8bbfe501b
+			column: Ville
+
+		level Departement
+			lineageTag: f2c097f0-caec-4c42-bda7-ba13d7750786
+			column: Departement
+
+		level 'Code Postal'
+			lineageTag: f5154d65-bdba-4a9f-8ebe-c96bbfb8bcb7
+			column: 'Code Postal'
+
+		changedProperty = Name
+
+	partition Villes = entity
+		mode: directLake
+		source
+			entityName: Villes
+			schemaName: LISE
+			expressionSource: 'DirectLake - WH_GOLD'
+

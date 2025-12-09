@@ -552,7 +552,7 @@ df_professeurs = df_professeurs.join(df_classes, on = "IDCLASSE", how = "left") 
                                .withColumnRenamed("IDPROFSPRINCIPAUX", "IDPROFESSEUR") \
                                .select(col("IDPROFESSEUR").cast(IntegerType()),
                                        col("IDPERSONNEL").cast(IntegerType()),
-                                       col("IDCLASSE").cast(IntegerType()))
+                                        col("IDCLASSE").cast(IntegerType()))
 
 # METADATA ********************
 

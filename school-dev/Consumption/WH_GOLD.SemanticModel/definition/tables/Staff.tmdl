@@ -1,0 +1,134 @@
+table Staff
+	lineageTag: ba633bd8-1d8c-428a-a6f6-fa914e361ac4
+	sourceLineageTag: [LISE].[Staff]
+
+	column 'Personnel Key'
+		dataType: string
+		lineageTag: 87edc36a-000f-408f-a13c-ef061b1e960f
+		sourceLineageTag: PersonnelKey
+		summarizeBy: none
+		sourceColumn: PersonnelKey
+
+		changedProperty = Name
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Personnel ID'
+		dataType: int64
+		formatString: 0
+		lineageTag: eee37198-00e8-490b-a631-83467c113da5
+		sourceLineageTag: PersonnelID
+		summarizeBy: none
+		sourceColumn: PersonnelID
+
+		changedProperty = Name
+
+		annotation SummarizationSetBy = Automatic
+
+	column Ville
+		dataType: string
+		lineageTag: 8275a811-2677-4f6f-a571-5d768af1cff0
+		sourceLineageTag: Ville
+		dataCategory: City
+		summarizeBy: none
+		sourceColumn: Ville
+
+		changedProperty = DataCategory
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Date Entree'
+		dataType: dateTime
+		formatString: dd/mm/yy
+		lineageTag: e283e1f0-7198-440a-9398-e187d061b830
+		sourceLineageTag: DateEntree
+		summarizeBy: none
+		sourceColumn: DateEntree
+
+		changedProperty = Name
+
+		changedProperty = DataType
+
+		changedProperty = FormatString
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+		annotation PBI_FormatHint = {"isCustom":true}
+
+	column 'Date Sortie'
+		dataType: dateTime
+		formatString: dd/mm/yy
+		lineageTag: 9244ccf8-b354-4fc4-b45e-4f23289d1e2e
+		sourceLineageTag: DateSortie
+		summarizeBy: none
+		sourceColumn: DateSortie
+
+		changedProperty = Name
+
+		changedProperty = DataType
+
+		changedProperty = FormatString
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+		annotation PBI_FormatHint = {"isCustom":true}
+
+	column Telephone
+		dataType: string
+		lineageTag: 8152c046-e24a-4134-aba9-26dc148d295b
+		sourceLineageTag: Telephone
+		summarizeBy: none
+		sourceColumn: Telephone
+
+		annotation SummarizationSetBy = Automatic
+
+	column Email
+		dataType: string
+		lineageTag: 4aa16573-6474-4037-adfe-cca717b77237
+		sourceLineageTag: Email
+		summarizeBy: none
+		sourceColumn: Email
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Date Naissance'
+		dataType: dateTime
+		formatString: dd/mm/yy
+		lineageTag: a5e00358-15db-46c2-9141-1eba3cf2c459
+		sourceLineageTag: DateNaissance
+		summarizeBy: none
+		sourceColumn: DateNaissance
+
+		changedProperty = Name
+
+		changedProperty = DataType
+
+		changedProperty = FormatString
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+		annotation PBI_FormatHint = {"isCustom":true}
+
+	column Age
+		dataType: int64
+		formatString: 0
+		lineageTag: cb6e197e-3b20-4173-9fab-3c23bc555876
+		sourceLineageTag: Age
+		summarizeBy: none
+		sourceColumn: Age
+
+		annotation SummarizationSetBy = Automatic
+
+	partition Staff = entity
+		mode: directLake
+		source
+			entityName: Staff
+			schemaName: LISE
+			expressionSource: 'DirectLake - WH_GOLD'
+

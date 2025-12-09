@@ -1,0 +1,36 @@
+table 'Profession Types'
+	lineageTag: bbac30a1-1695-4733-901b-2b12d38b60e8
+	sourceLineageTag: [LISE].[ProfessionTypes]
+
+	column 'Profession Type ID'
+		dataType: int64
+		formatString: 0
+		lineageTag: 8dd797bc-73ca-4183-b9fc-19a13e6eee92
+		sourceLineageTag: ProfessionTypeID
+		summarizeBy: none
+		sourceColumn: ProfessionTypeID
+
+		changedProperty = Name
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Profession Type'
+		dataType: string
+		lineageTag: 47caa668-c1db-4700-829a-6220b9202d8a
+		sourceLineageTag: ProfessionType
+		summarizeBy: none
+		sourceColumn: ProfessionType
+
+		changedProperty = Name
+
+		annotation SummarizationSetBy = Automatic
+
+	partition 'Profession Types' = entity
+		mode: directLake
+		source
+			entityName: ProfessionTypes
+			schemaName: LISE
+			expressionSource: 'DirectLake - WH_GOLD'
+
+	changedProperty = Name
+

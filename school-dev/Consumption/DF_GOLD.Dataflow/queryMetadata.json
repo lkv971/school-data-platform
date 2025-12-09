@@ -14,12 +14,6 @@
       "queryName": "pPayPeriod",
       "loadEnabled": false
     },
-    "dropzone_DataDestination": {
-      "queryId": "19014573-8aba-44f9-b1db-f3e2cbab1962",
-      "queryName": "dropzone_DataDestination",
-      "isHidden": true,
-      "loadEnabled": false
-    },
     "WorkspaceId": {
       "queryId": "4d908107-ae2e-4434-a2cb-782fa57d323e",
       "queryName": "WorkspaceId",
@@ -28,6 +22,12 @@
     "LakehouseId": {
       "queryId": "7429f0a0-1bd7-46ae-957c-aa9534bb867c",
       "queryName": "LakehouseId",
+      "loadEnabled": false
+    },
+    "dropzone_DataDestination": {
+      "queryId": "1e9a6ce2-33c7-4e7e-8220-cdf05e85444b",
+      "queryName": "dropzone_DataDestination",
+      "isHidden": true,
       "loadEnabled": false
     }
   },

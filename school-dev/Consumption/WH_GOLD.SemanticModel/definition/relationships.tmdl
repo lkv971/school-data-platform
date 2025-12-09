@@ -1,0 +1,134 @@
+relationship 7c683b6b-55d2-70cd-56d0-3a2ff3a2ec46
+	fromColumn: Classes.'Etablissement ID'
+	toColumn: Etablissements.'Etablissement ID'
+
+relationship 5b59355a-aad1-f284-d4c0-8c775b04d9f4
+	fromColumn: 'Classes Targets'.'Classe ID'
+	toColumn: Classes.'Classe ID'
+
+relationship 94f4b3b9-13d1-ea8d-7fc1-b777ea5b2126
+	fromColumn: Classes.'Niveau ID'
+	toColumn: Niveaux.'Niveau ID'
+
+relationship 1d5e0ffe-afb2-c0b9-52aa-174b0211bf33
+	fromColumn: Eleves.'Eleve ID'
+	toColumn: Enfants.'Eleve ID'
+
+relationship 8ae8c6b1-3869-c099-8f0a-513b5fe76238
+	fromColumn: 'Factures Eleves'.'Eleve Key'
+	toColumn: Eleves.'Eleve Key'
+
+relationship e80388c4-5932-537e-6323-7248ca4ff02e
+	fromColumn: 'Factures Eleves'.'Regime ID'
+	toColumn: Regimes.'Regime ID'
+
+relationship d8426311-f407-36dc-e632-0eb6d2ccd910
+	fromColumn: 'Factures Familles'.'Responsable Key'
+	toColumn: Responsables.'Responsable Key'
+
+relationship 2fe18534-309c-e08b-5b16-284dd740cf45
+	fromColumn: Responsables.'Responsable ID'
+	toColumn: Parents.'Responsable ID'
+
+relationship ae896843-78fb-a230-5bd4-ac31822dc0f8
+	fromColumn: 'Factures Familles'.'Foyer ID'
+	toColumn: Foyers.'Foyer ID'
+
+relationship d019b5ea-5873-1c0e-0ce0-664916a1e3c1
+	fromColumn: 'Factures Services'.'Service ID'
+	toColumn: Services.'Service ID'
+
+relationship ee3e31ba-3f25-fc43-ef14-e461d384273c
+	fromColumn: Dates.'School Year'
+	toColumn: 'School Years'.'School Year'
+
+relationship d854ac00-4ca7-1063-925c-521968bb2e3f
+	fromColumn: 'Factures Niveaux'.'Niveau ID'
+	toColumn: Niveaux.'Niveau ID'
+
+relationship 91898cc3-bcf8-1697-533b-1f47f33a15ac
+	fromColumn: 'Factures Eleves'.'Responsable Key'
+	toColumn: Responsables.'Responsable Key'
+
+relationship 98832bbb-3b79-0595-66cb-6e683587143d
+	fromColumn: 'Factures Familles'.'Profession ID'
+	toColumn: Professions.'Profession ID'
+
+relationship d81377d2-26f7-7cbf-3a26-a48a49bd651a
+	fromColumn: Payroll.'Classe ID'
+	toColumn: 'Classes Targets'.'Classe ID'
+
+relationship 39a329fe-cf24-2457-bee9-54e84d903cb8
+	isActive: false
+	fromColumn: Payroll.'Etablissement ID'
+	toColumn: Etablissements.'Etablissement ID'
+
+relationship 237edb4f-259e-654f-ebf9-1e6c9be9a9c4
+	isActive: false
+	fromColumn: Payroll.'Niveau ID'
+	toColumn: Niveaux.'Niveau ID'
+
+relationship 192a92ef-9fa1-0830-35b8-1a134ecd8d2c
+	fromColumn: Payroll.'Personnel ID'
+	toColumn: Personnels.'Personnel ID'
+
+relationship baa20682-1003-9b8d-1f4b-0b5f842162e9
+	fromColumn: Payroll.'Profession Type ID'
+	toColumn: 'Profession Types'.'Profession Type ID'
+
+relationship c2bd4437-2192-a977-a3d2-a932761ed6fa
+	fromColumn: 'Factures Niveaux'.'Responsable Key'
+	toColumn: Responsables.'Responsable Key'
+
+relationship ad5c239e-4294-fac7-4844-8bae338ec57d
+	fromColumn: 'Factures Services'.'Responsable Key'
+	toColumn: Responsables.'Responsable Key'
+
+relationship d01222e3-e411-af17-055f-03449e78d4bb
+	fromColumn: 'Factures Services'.'Date Facture'
+	toColumn: Dates.Date
+
+relationship 871d86f7-8793-1cf8-8b7e-f85d16728783
+	fromColumn: 'Factures Niveaux'.'Date Facture'
+	toColumn: Dates.Date
+
+relationship abf53da5-18e6-5381-803f-6733d4e7fadd
+	fromColumn: Payroll.Date
+	toColumn: Dates.Date
+
+relationship 3514d918-69b8-c987-59b2-ff9380211f33
+	fromColumn: 'Factures Familles'.'Date Facture'
+	toColumn: Dates.Date
+
+relationship 28e1773f-e57f-e84f-39ce-c6d564bf9db8
+	fromColumn: 'Factures Eleves'.'Date Facture'
+	toColumn: Dates.Date
+
+relationship d29effe5-d962-a373-90e7-a3323b57176f
+	fromColumn: Villes.Pays
+	toColumn: Pays.Pays
+
+relationship c07451c1-758e-e5a3-7af8-db4ce12a358e
+	fromColumn: Enfants.Nationalite
+	toColumn: Pays.Nationalite
+
+relationship 6a30af0b-b9fd-9711-f42e-09cc65bd1158
+	fromColumn: Personnels.Nationalite
+	toColumn: Pays.Nationalite
+
+relationship 23e499b5-0bff-b8d3-4fd2-0704ad09c9e2
+	fromColumn: Payroll.'Personnel Key'
+	toColumn: Staff.'Personnel Key'
+
+relationship fceaf565-8919-7f15-0ebb-cf951de4e7a2
+	fromColumn: 'Dim Classes'.'Etablissement ID'
+	toColumn: Etablissements.'Etablissement ID'
+
+relationship 3d374059-1ffa-cffc-bce3-2d149db45aab
+	fromColumn: 'Dim Classes'.'Niveau ID'
+	toColumn: Niveaux.'Niveau ID'
+
+relationship d9c0c8e9-1898-4d05-efb0-65d1ebb65eae
+	fromColumn: 'Factures Eleves'.'Classe ID'
+	toColumn: Classes.'Classe ID'
+

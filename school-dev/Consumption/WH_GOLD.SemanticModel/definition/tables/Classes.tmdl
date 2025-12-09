@@ -1,0 +1,100 @@
+table Classes
+	lineageTag: afc77b7c-c834-4210-8cce-4f8ca5ad9cf2
+	sourceLineageTag: [LISE].[Classes]
+
+	measure 'Average Tuition per Student' = ```
+			
+			DIVIDE ( [Total Tuition Revenue], [Students Count] )
+			
+			```
+		formatString: #,0.00\ "€";-#,0.00\ "€";#,0.00\ "€"
+		displayFolder: Revenue
+		lineageTag: 5b145f4c-f461-4a52-9035-06056e1133e4
+
+		changedProperty = Name
+
+		changedProperty = DisplayFolder
+
+		changedProperty = FormatString
+
+	measure 'Payroll as % of Revenue' = ```
+			
+			DIVIDE ( [Total Payroll], [Total Tuition Revenue])
+			
+			```
+		formatString: 0.00%;-0.00%;0.00%
+		displayFolder: Cost & Payroll
+		lineageTag: 9ec4b56a-98c8-4fab-b1c0-784f96ef632c
+
+		changedProperty = Name
+
+		changedProperty = DisplayFolder
+
+		changedProperty = FormatString
+
+	column 'Classe ID'
+		dataType: int64
+		formatString: 0
+		lineageTag: 78fc2f0e-a74a-4d6d-b5a9-6cf6a4b8a85d
+		sourceLineageTag: ClasseID
+		summarizeBy: none
+		sourceColumn: ClasseID
+
+		changedProperty = Name
+
+		annotation SummarizationSetBy = Automatic
+
+	column Classe
+		dataType: string
+		lineageTag: aa71053e-48c4-40b7-8695-00b1dd721685
+		sourceLineageTag: Classe
+		summarizeBy: none
+		sourceColumn: Classe
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Classe Libelle'
+		dataType: string
+		isHidden
+		lineageTag: ec66a049-9bbd-405f-9a0a-016357136e6e
+		sourceLineageTag: ClasseLibelle
+		summarizeBy: none
+		sourceColumn: ClasseLibelle
+
+		changedProperty = IsHidden
+
+		changedProperty = Name
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Niveau ID'
+		dataType: int64
+		formatString: 0
+		lineageTag: b2f9fd91-f1b1-4a7d-956c-6f50221d46aa
+		sourceLineageTag: NiveauID
+		summarizeBy: none
+		sourceColumn: NiveauID
+
+		changedProperty = Name
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Etablissement ID'
+		dataType: int64
+		formatString: 0
+		lineageTag: 5d9558bc-5221-4163-af7f-35dbc09c7fa3
+		sourceLineageTag: EtablissementID
+		summarizeBy: none
+		sourceColumn: EtablissementID
+
+		changedProperty = Name
+
+		annotation SummarizationSetBy = Automatic
+
+	partition Classes = entity
+		mode: directLake
+		source
+			entityName: Classes
+			schemaName: LISE
+			expressionSource: 'DirectLake - WH_GOLD'
+

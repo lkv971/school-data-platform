@@ -1,0 +1,205 @@
+table 'Factures Services'
+	lineageTag: 11303f09-7c76-4049-bcb2-8b7fcc68cb56
+	sourceLineageTag: [LISE].[FacturesServices]
+
+	measure 'Total Services Revenue' = SUM('Factures Services'[Total Service])
+		formatString: #,0.00\ "€";-#,0.00\ "€";#,0.00\ "€"
+		displayFolder: Revenue
+		lineageTag: 64b8d0ce-0086-47c9-8aec-31fc518c9fe8
+
+		changedProperty = Name
+
+		changedProperty = DisplayFolder
+
+		changedProperty = FormatString
+
+	measure 'Total Discounts' = SUM('Factures Services'[Remise])
+		formatString: #,0.00\ "€";-#,0.00\ "€";#,0.00\ "€"
+		displayFolder: Revenue
+		lineageTag: 1c1d2dc0-8870-4a37-8bff-edcb1c4053be
+
+		changedProperty = Name
+
+		changedProperty = DisplayFolder
+
+		changedProperty = FormatString
+
+	column 'Eleve Key'
+		dataType: string
+		lineageTag: 87a7d1e2-89c3-49a8-bf4b-91cfdd030256
+		sourceLineageTag: EleveKey
+		summarizeBy: none
+		sourceColumn: EleveKey
+
+		changedProperty = Name
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Eleve ID'
+		dataType: int64
+		formatString: 0
+		lineageTag: f0d29378-54d7-4407-b9b3-c637f8a011ad
+		sourceLineageTag: EleveID
+		summarizeBy: none
+		sourceColumn: EleveID
+
+		changedProperty = Name
+
+		changedProperty = SummarizeBy
+
+		annotation SummarizationSetBy = User
+
+	column 'Responsable Key'
+		dataType: string
+		lineageTag: 0e1a677b-7fa8-4870-9b90-62399717f58b
+		sourceLineageTag: ResponsableKey
+		summarizeBy: none
+		sourceColumn: ResponsableKey
+
+		changedProperty = Name
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Responsable ID'
+		dataType: int64
+		formatString: 0
+		lineageTag: 6952c4c9-1b52-4d79-aaf3-035716f142b9
+		sourceLineageTag: ResponsableID
+		summarizeBy: none
+		sourceColumn: ResponsableID
+
+		changedProperty = Name
+
+		changedProperty = SummarizeBy
+
+		annotation SummarizationSetBy = User
+
+	column 'Validation Key'
+		dataType: string
+		isHidden
+		lineageTag: e3ea3fc7-080c-411e-8df4-6434c4acdbae
+		sourceLineageTag: ValidationKey
+		summarizeBy: none
+		sourceColumn: ValidationKey
+
+		changedProperty = IsHidden
+
+		changedProperty = Name
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Validation ID'
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 587e42db-7bd4-4be0-82ce-91d73c7fa10b
+		sourceLineageTag: ValidationID
+		summarizeBy: none
+		sourceColumn: ValidationID
+
+		changedProperty = IsHidden
+
+		changedProperty = SummarizeBy
+
+		changedProperty = Name
+
+		annotation SummarizationSetBy = User
+
+	column 'Service ID'
+		dataType: int64
+		formatString: 0
+		lineageTag: e0d917cb-1c0d-4ecf-8eed-d8ae5a55805b
+		sourceLineageTag: ServiceID
+		summarizeBy: none
+		sourceColumn: ServiceID
+
+		changedProperty = Name
+
+		annotation SummarizationSetBy = Automatic
+
+	column Quantite
+		dataType: double
+		lineageTag: 42920ba1-db4e-4bbc-b21b-876e04530771
+		sourceLineageTag: Quantite
+		summarizeBy: none
+		sourceColumn: Quantite
+
+		changedProperty = SummarizeBy
+
+		annotation SummarizationSetBy = User
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column Prix
+		dataType: double
+		formatString: #,0.00\ "€";-#,0.00\ "€";#,0.00\ "€"
+		lineageTag: 959801f2-ecff-4ef8-a475-4a2e448c3bbb
+		sourceLineageTag: Prix
+		summarizeBy: none
+		sourceColumn: Prix
+
+		changedProperty = SummarizeBy
+
+		changedProperty = FormatString
+
+		annotation SummarizationSetBy = User
+
+	column Remise
+		dataType: double
+		formatString: #,0.00\ "€";-#,0.00\ "€";#,0.00\ "€"
+		lineageTag: 8ad85e43-d9d9-45be-9d44-e5543f6da510
+		sourceLineageTag: Remise
+		summarizeBy: none
+		sourceColumn: Remise
+
+		changedProperty = SummarizeBy
+
+		changedProperty = FormatString
+
+		annotation SummarizationSetBy = User
+
+	column 'Total Service'
+		dataType: double
+		formatString: #,0.00\ "€";-#,0.00\ "€";#,0.00\ "€"
+		lineageTag: f5aa31a9-0986-4eda-b5fd-e041ad7fdc7d
+		sourceLineageTag: TotalService
+		summarizeBy: none
+		sourceColumn: TotalService
+
+		changedProperty = Name
+
+		changedProperty = SummarizeBy
+
+		changedProperty = FormatString
+
+		annotation SummarizationSetBy = User
+
+	column 'Date Facture'
+		dataType: dateTime
+		formatString: dd/mm/yy
+		lineageTag: 3a3e59f2-6bf0-4133-a11a-feb5e0831a09
+		sourceLineageTag: DateFacture
+		summarizeBy: none
+		sourceColumn: DateFacture
+
+		changedProperty = Name
+
+		changedProperty = DataType
+
+		changedProperty = FormatString
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+		annotation PBI_FormatHint = {"isCustom":true}
+
+	partition 'Factures Services' = entity
+		mode: directLake
+		source
+			entityName: FacturesServices
+			schemaName: LISE
+			expressionSource: 'DirectLake - WH_GOLD'
+
+	changedProperty = Name
+

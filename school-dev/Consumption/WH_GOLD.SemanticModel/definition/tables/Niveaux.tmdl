@@ -1,0 +1,46 @@
+table Niveaux
+	lineageTag: 08c04fb7-0109-42b4-bffd-d000a04c23f0
+	sourceLineageTag: [LISE].[Niveaux]
+
+	column 'Niveau ID'
+		dataType: int64
+		formatString: 0
+		lineageTag: 65afc2a2-20b9-4018-ac36-52e96a614dc8
+		sourceLineageTag: NiveauID
+		summarizeBy: none
+		sourceColumn: NiveauID
+
+		changedProperty = Name
+
+		annotation SummarizationSetBy = Automatic
+
+	column Niveau
+		dataType: string
+		lineageTag: 174a6f32-9463-42db-961c-1711133f3299
+		sourceLineageTag: Niveau
+		summarizeBy: none
+		sourceColumn: Niveau
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Etablissement ID'
+		dataType: int64
+		formatString: 0
+		lineageTag: ef0e7ba1-e756-4cda-b433-5e3411c6c3d8
+		sourceLineageTag: EtablissementID
+		summarizeBy: none
+		sourceColumn: EtablissementID
+
+		changedProperty = Name
+
+		changedProperty = SummarizeBy
+
+		annotation SummarizationSetBy = User
+
+	partition Niveaux = entity
+		mode: directLake
+		source
+			entityName: Niveaux
+			schemaName: LISE
+			expressionSource: 'DirectLake - WH_GOLD'
+

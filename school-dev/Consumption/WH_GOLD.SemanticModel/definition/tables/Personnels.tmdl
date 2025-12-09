@@ -1,0 +1,62 @@
+table Personnels
+	lineageTag: fa8cb80e-4c29-4208-9896-e1eb737d0747
+	sourceLineageTag: [LISE].[Personnels]
+
+	column 'Personnel ID'
+		dataType: int64
+		formatString: 0
+		lineageTag: 28d2e1fe-0b89-4f57-af61-679ef22a1d45
+		sourceLineageTag: PersonnelID
+		summarizeBy: none
+		sourceColumn: PersonnelID
+
+		changedProperty = Name
+
+		annotation SummarizationSetBy = Automatic
+
+	column Nom
+		dataType: string
+		lineageTag: e69f75dd-962a-49ce-93f0-372aa012f14b
+		sourceLineageTag: Nom
+		summarizeBy: none
+		sourceColumn: Nom
+
+		annotation SummarizationSetBy = Automatic
+
+	column Prenom
+		dataType: string
+		lineageTag: 5ac627c1-35ff-4077-996a-db7d11087fcd
+		sourceLineageTag: Prenom
+		summarizeBy: none
+		sourceColumn: Prenom
+
+		annotation SummarizationSetBy = Automatic
+
+	column Nationalite
+		dataType: string
+		lineageTag: 855ac7b3-1eb7-4845-acba-410a64baffd0
+		sourceLineageTag: Nationalite
+		summarizeBy: none
+		sourceColumn: Nationalite
+
+		annotation SummarizationSetBy = Automatic
+
+	column Badge
+		dataType: int64
+		formatString: 0
+		lineageTag: a414d4ba-e822-4748-bb67-d3dc533b7ca6
+		sourceLineageTag: Badge
+		summarizeBy: none
+		sourceColumn: Badge
+
+		changedProperty = SummarizeBy
+
+		annotation SummarizationSetBy = User
+
+	partition Personnels = entity
+		mode: directLake
+		source
+			entityName: Personnels
+			schemaName: LISE
+			expressionSource: 'DirectLake - WH_GOLD'
+

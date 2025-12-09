@@ -1,0 +1,460 @@
+table 'Factures Eleves'
+	lineageTag: 596e0177-361d-425c-b877-23abfb0f156f
+	sourceLineageTag: [LISE].[FacturesEleves]
+
+	measure 'Total Eleve Revenue' = SUM('Factures Eleves'[Total Eleve])
+		formatString: #,0.00\ "€";-#,0.00\ "€";#,0.00\ "€"
+		displayFolder: Revenue
+		lineageTag: e8e0538d-5616-4ad6-9feb-d38cc580a5e9
+
+		changedProperty = Name
+
+		changedProperty = DisplayFolder
+
+		changedProperty = FormatString
+
+	measure 'Total Tuition Revenue' = sum('Factures Eleves'[Total Eleve])
+		formatString: #,0.00\ "€";-#,0.00\ "€";#,0.00\ "€"
+		displayFolder: Revenue
+		lineageTag: 59d158e3-1d0f-40ee-94b2-ae7d6c79cfd8
+
+		changedProperty = Name
+
+		changedProperty = DisplayFolder
+
+		changedProperty = FormatString
+
+	measure EBITDAR = [Total Eleve Revenue] - [Total Costs (excl Rent)]
+		formatString: #,0.00\ "€";-#,0.00\ "€";#,0.00\ "€"
+		displayFolder: Profitability (P&L)
+		lineageTag: ade18074-4c4a-478e-962f-5df49b0b150d
+
+		changedProperty = Name
+
+		changedProperty = DisplayFolder
+
+		changedProperty = FormatString
+
+	measure 'EBITDAR Margin %' = DIVIDE([EBITDAR],[Total Eleve Revenue])
+		formatString: 0.00%;-0.00%;0.00%
+		displayFolder: Profitability (P&L)
+		lineageTag: 32f38f57-f1cc-472a-b556-4d99e9b9838b
+
+		changedProperty = Name
+
+		changedProperty = DisplayFolder
+
+		changedProperty = FormatString
+
+	measure 'Rent Monthly' = 25000
+		formatString: #,0.00\ "€";-#,0.00\ "€";#,0.00\ "€"
+		displayFolder: Profitability (P&L)
+		lineageTag: 2d806590-6349-4716-a8e0-36fe6c8ed248
+
+		changedProperty = Name
+
+		changedProperty = DisplayFolder
+
+		changedProperty = FormatString
+
+	measure EBITDA = [EBITDAR] - [Rent Annually]
+		formatString: #,0.00\ "€";-#,0.00\ "€";#,0.00\ "€"
+		displayFolder: Profitability (P&L)
+		lineageTag: 6336fc43-5952-40da-8352-da10363935e9
+
+		changedProperty = Name
+
+		changedProperty = DisplayFolder
+
+		changedProperty = FormatString
+
+	measure 'Rent Annually' = [Rent Monthly] * 12
+		formatString: #,0.00\ "€";-#,0.00\ "€";#,0.00\ "€"
+		displayFolder: Profitability (P&L)
+		lineageTag: 959e7d14-a8be-4f9e-8247-62da5dfa4308
+
+		changedProperty = Name
+
+		changedProperty = DisplayFolder
+
+		changedProperty = FormatString
+
+	measure 'Total Revenues YTD' = ```
+			
+			TOTALYTD (
+			    [Total Eleve Revenue],
+			    Dates[Date]
+			)
+			 
+			```
+		formatString: #,0.00\ "€";-#,0.00\ "€";#,0.00\ "€"
+		displayFolder: Time Intelligence
+		lineageTag: 8128f4b1-b324-4d21-bac8-b412ae0b9344
+
+		changedProperty = Name
+
+		changedProperty = DisplayFolder
+
+		changedProperty = FormatString
+
+	measure 'Total Revenues PY' = ```
+			
+			CALCULATE (
+			    [Total Eleve Revenue],
+			    SAMEPERIODLASTYEAR ( Dates[Date] )
+			)
+			
+			
+			```
+		formatString: #,0.00\ "€";-#,0.00\ "€";#,0.00\ "€"
+		displayFolder: Time Intelligence
+		lineageTag: 29ec2873-c1e7-4be2-9b3c-ce59522245df
+
+		changedProperty = Name
+
+		changedProperty = DisplayFolder
+
+		changedProperty = FormatString
+
+	measure 'Total Revenues YoY' = ```
+			
+			[Total Eleve Revenue] - [Total Revenues PY]
+			
+			```
+		formatString: #,0.00\ "€";-#,0.00\ "€";#,0.00\ "€"
+		displayFolder: Time Intelligence
+		lineageTag: 86ce6f0c-6478-4b1b-b53a-f0747d0c8bcd
+
+		changedProperty = Name
+
+		changedProperty = DisplayFolder
+
+		changedProperty = FormatString
+
+	measure 'Total Revenues YoY %' = ```
+			
+			DIVIDE ( [Total Revenues YoY], [Total Revenues PY] )
+			
+			```
+		formatString: 0.00%;-0.00%;0.00%
+		displayFolder: Time Intelligence
+		lineageTag: 9c16233a-9445-4140-a4cb-cd694ebcd33b
+
+		changedProperty = Name
+
+		changedProperty = DisplayFolder
+
+		changedProperty = FormatString
+
+	measure 'Total Payroll YTD' = ```
+			
+			TOTALYTD (
+			    [Total Payroll],
+			    Dates[Date]
+			)
+			
+			```
+		formatString: #,0.00\ "€";-#,0.00\ "€";#,0.00\ "€"
+		displayFolder: Time Intelligence
+		lineageTag: cc430c33-5500-48a2-973d-4f937b977d35
+
+		changedProperty = Name
+
+		changedProperty = DisplayFolder
+
+		changedProperty = FormatString
+
+	measure 'Total Payroll PY' = ```
+			
+			CALCULATE (
+			    [Total Payroll],
+			    SAMEPERIODLASTYEAR ( Dates[Date] )
+			)
+			
+			```
+		formatString: \$#,0.###############;(\$#,0.###############);\$#,0.###############
+		displayFolder: Time Intelligence
+		lineageTag: 74aab95f-4c08-4ab6-9953-c516378c8a7b
+
+		changedProperty = Name
+
+		changedProperty = DisplayFolder
+
+		changedProperty = FormatString
+
+		annotation PBI_FormatHint = {"currencyCulture":"en-US"}
+
+	measure 'Total Payroll YoY' = ```
+			
+			[Total Payroll] - [Total Payroll PY]
+			
+			```
+		formatString: \$#,0.###############;(\$#,0.###############);\$#,0.###############
+		displayFolder: Time Intelligence
+		lineageTag: bddcd94a-4353-45d1-ada6-92a4f6204100
+
+		changedProperty = Name
+
+		changedProperty = DisplayFolder
+
+		changedProperty = FormatString
+
+		annotation PBI_FormatHint = {"currencyCulture":"en-US"}
+
+	measure 'Total Payroll YoY %' = ```
+			
+			DIVIDE ( [Total Payroll YoY], [Total Payroll PY] )
+			
+			```
+		formatString: 0.00%;-0.00%;0.00%
+		displayFolder: Time Intelligence
+		lineageTag: d09c4053-5009-4f32-8022-77d248f53194
+
+		changedProperty = Name
+
+		changedProperty = DisplayFolder
+
+		changedProperty = FormatString
+
+	measure 'EBITDA YTD' = ```
+			
+			TOTALYTD (
+			    [EBITDA],
+			    Dates[Date]
+			)
+			
+			```
+		formatString: \$#,0.###############;(\$#,0.###############);\$#,0.###############
+		displayFolder: Time Intelligence
+		lineageTag: 608c3245-9e64-4b06-aa03-756f6aac6632
+
+		changedProperty = Name
+
+		changedProperty = DisplayFolder
+
+		changedProperty = FormatString
+
+		annotation PBI_FormatHint = {"currencyCulture":"en-US"}
+
+	measure 'EBITDA PY' = ```
+			
+			CALCULATE (
+			    [EBITDA],
+			    SAMEPERIODLASTYEAR ( Dates[Date] )
+			)
+			
+			```
+		formatString: #,0.00\ "€";-#,0.00\ "€";#,0.00\ "€"
+		displayFolder: Time Intelligence
+		lineageTag: ff961e60-4c8c-4f97-a854-bb52c73499f1
+
+		changedProperty = Name
+
+		changedProperty = DisplayFolder
+
+		changedProperty = FormatString
+
+	measure 'EBITDA YoY' = ```
+			
+			[EBITDA] - [EBITDA PY]
+			
+			```
+		formatString: #,0.00\ "€";-#,0.00\ "€";#,0.00\ "€"
+		displayFolder: Time Intelligence
+		lineageTag: a53f41a2-087b-4678-bf0d-b91a2fe4c909
+
+		changedProperty = Name
+
+		changedProperty = DisplayFolder
+
+		changedProperty = FormatString
+
+	measure 'EBITDA YoY %' = ```
+			
+			DIVIDE ( [EBITDA YoY], [EBITDA PY] )
+			
+			```
+		formatString: 0.00%;-0.00%;0.00%
+		displayFolder: Time Intelligence
+		lineageTag: d171c9ae-3a76-4b04-ab32-a44baf6042ce
+
+		changedProperty = Name
+
+		changedProperty = DisplayFolder
+
+		changedProperty = FormatString
+
+	measure 'EBITDAR Margin % LY' = CALCULATE([EBITDAR Margin %], SAMEPERIODLASTYEAR(Dates[Date]))
+		formatString: 0.00%;-0.00%;0.00%
+		displayFolder: Profitability (P&L)
+		lineageTag: b2f6c7e4-e7e4-407f-a565-105684fc9641
+
+		changedProperty = Name
+
+		changedProperty = DisplayFolder
+
+		changedProperty = FormatString
+
+	column 'Eleve Key'
+		dataType: string
+		lineageTag: 303d55ce-ae84-465e-84d2-3d3177d2de26
+		sourceLineageTag: EleveKey
+		summarizeBy: none
+		sourceColumn: EleveKey
+
+		changedProperty = Name
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Eleve ID'
+		dataType: int64
+		formatString: 0
+		lineageTag: b4ccd90d-5185-40a6-9db0-44c6266bd855
+		sourceLineageTag: EleveID
+		summarizeBy: none
+		sourceColumn: EleveID
+
+		changedProperty = Name
+
+		changedProperty = SummarizeBy
+
+		annotation SummarizationSetBy = User
+
+	column 'Responsable Key'
+		dataType: string
+		lineageTag: c9503624-c24a-4108-bdb8-c94de334a89a
+		sourceLineageTag: ResponsableKey
+		summarizeBy: none
+		sourceColumn: ResponsableKey
+
+		changedProperty = Name
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Responsable ID'
+		dataType: int64
+		formatString: 0
+		lineageTag: de87f9ce-4034-4696-b46f-88aa447c1d5d
+		sourceLineageTag: ResponsableID
+		summarizeBy: none
+		sourceColumn: ResponsableID
+
+		changedProperty = Name
+
+		changedProperty = SummarizeBy
+
+		annotation SummarizationSetBy = User
+
+	column 'Validation Key'
+		dataType: string
+		isHidden
+		lineageTag: 297b4434-26a6-42de-9c04-8e34da6e3b57
+		sourceLineageTag: ValidationKey
+		summarizeBy: none
+		sourceColumn: ValidationKey
+
+		changedProperty = IsHidden
+
+		changedProperty = Name
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Validation ID'
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: e86be198-c498-484c-9c07-cbd8a1f86242
+		sourceLineageTag: ValidationID
+		summarizeBy: none
+		sourceColumn: ValidationID
+
+		changedProperty = IsHidden
+
+		changedProperty = Name
+
+		changedProperty = SummarizeBy
+
+		annotation SummarizationSetBy = User
+
+	column 'Classe Key'
+		dataType: string
+		lineageTag: 70c94eb7-ba23-491f-9744-12fc244592bb
+		sourceLineageTag: ClasseKey
+		summarizeBy: none
+		sourceColumn: ClasseKey
+
+		changedProperty = Name
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Classe ID'
+		dataType: int64
+		formatString: 0
+		lineageTag: 4b44507c-f40e-4649-bbd7-6ca4461e77ca
+		sourceLineageTag: ClasseID
+		summarizeBy: none
+		sourceColumn: ClasseID
+
+		changedProperty = Name
+
+		changedProperty = SummarizeBy
+
+		annotation SummarizationSetBy = User
+
+	column 'Regime ID'
+		dataType: int64
+		formatString: 0
+		lineageTag: d365242c-5d00-4d16-9499-6e2d8806e3e8
+		sourceLineageTag: RegimeID
+		summarizeBy: none
+		sourceColumn: RegimeID
+
+		changedProperty = Name
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Total Eleve'
+		dataType: double
+		formatString: #,0.00\ "€";-#,0.00\ "€";#,0.00\ "€"
+		lineageTag: 55326e59-7ca7-4525-9f75-40c815d90ced
+		sourceLineageTag: TotalEleve
+		summarizeBy: none
+		sourceColumn: TotalEleve
+
+		changedProperty = Name
+
+		changedProperty = SummarizeBy
+
+		changedProperty = FormatString
+
+		annotation SummarizationSetBy = User
+
+	column 'Date Facture'
+		dataType: dateTime
+		formatString: dd/mm/yy
+		lineageTag: b5816ee3-93ad-4d16-aad5-e0cc8795f2c6
+		sourceLineageTag: DateFacture
+		summarizeBy: none
+		sourceColumn: DateFacture
+
+		changedProperty = Name
+
+		changedProperty = DataType
+
+		changedProperty = FormatString
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+		annotation PBI_FormatHint = {"isCustom":true}
+
+	partition 'Factures Eleves' = entity
+		mode: directLake
+		source
+			entityName: FacturesEleves
+			schemaName: LISE
+			expressionSource: 'DirectLake - WH_GOLD'
+
+	changedProperty = Name
+

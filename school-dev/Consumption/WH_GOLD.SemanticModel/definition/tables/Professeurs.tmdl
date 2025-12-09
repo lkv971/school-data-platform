@@ -1,0 +1,83 @@
+table Professeurs
+	lineageTag: 4859470d-7b93-45a2-ae27-73bafb19c6ef
+	sourceLineageTag: [LISE].[Professeurs]
+
+	measure 'Teachers Count' = ```
+			
+			CALCULATE (
+			    DISTINCTCOUNT ( Payroll[Personnel ID]),
+			    Payroll[Profession Type ID]= 1
+			)
+			
+			```
+		formatString: 0
+		displayFolder: Key Stats
+		lineageTag: 8f3d229b-d60c-4067-976d-4a32d454c929
+
+		changedProperty = Name
+
+		changedProperty = DisplayFolder
+
+	measure 'Non-teaching Staff Count' =
+			
+			CALCULATE (
+			    DISTINCTCOUNT ( Payroll[Personnel ID]),
+			    Payroll[Profession Type ID] <> 1
+			)
+		formatString: 0
+		displayFolder: Key Stats
+		lineageTag: be0c7919-0892-4077-9644-341f47609c9c
+
+		changedProperty = Name
+
+		changedProperty = DisplayFolder
+
+	column 'Professeur ID'
+		dataType: int64
+		formatString: 0
+		lineageTag: 1e344665-bac4-4c4c-903e-2e05a6d43213
+		sourceLineageTag: ProfesseurID
+		summarizeBy: none
+		sourceColumn: ProfesseurID
+
+		changedProperty = Name
+
+		changedProperty = SummarizeBy
+
+		annotation SummarizationSetBy = User
+
+	column 'Personnel ID'
+		dataType: int64
+		formatString: 0
+		lineageTag: 208f2996-5bbe-4b8e-adbf-a3f49d22a06f
+		sourceLineageTag: PersonnelID
+		summarizeBy: none
+		sourceColumn: PersonnelID
+
+		changedProperty = Name
+
+		changedProperty = SummarizeBy
+
+		annotation SummarizationSetBy = User
+
+	column 'Classe ID'
+		dataType: int64
+		formatString: 0
+		lineageTag: 5e9fd9d8-4ac8-4269-abf8-b1651b5e0745
+		sourceLineageTag: ClasseID
+		summarizeBy: none
+		sourceColumn: ClasseID
+
+		changedProperty = SummarizeBy
+
+		changedProperty = Name
+
+		annotation SummarizationSetBy = User
+
+	partition Professeurs = entity
+		mode: directLake
+		source
+			entityName: Professeurs
+			schemaName: LISE
+			expressionSource: 'DirectLake - WH_GOLD'
+

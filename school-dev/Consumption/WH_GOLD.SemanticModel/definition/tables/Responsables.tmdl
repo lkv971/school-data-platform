@@ -1,0 +1,96 @@
+table Responsables
+	lineageTag: b3efb027-e1de-4c1b-ad08-5e17efda20ea
+	sourceLineageTag: [LISE].[Responsables]
+
+	column 'Responsable Key'
+		dataType: string
+		lineageTag: bbcabd5e-f522-4bfd-a4b2-dd5fdf7588ac
+		sourceLineageTag: ResponsableKey
+		summarizeBy: none
+		sourceColumn: ResponsableKey
+
+		changedProperty = Name
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Responsable ID'
+		dataType: int64
+		formatString: 0
+		lineageTag: 45c2a4dc-47a3-49f6-9a7d-3282ce2b94b6
+		sourceLineageTag: ResponsableID
+		summarizeBy: none
+		sourceColumn: ResponsableID
+
+		changedProperty = Name
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Enfants Charge'
+		dataType: double
+		lineageTag: e3fcc850-67ed-408b-a98d-9dd2833de100
+		sourceLineageTag: EnfantsCharge
+		summarizeBy: none
+		sourceColumn: EnfantsCharge
+
+		changedProperty = Name
+
+		changedProperty = SummarizeBy
+
+		annotation SummarizationSetBy = User
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column Reglement
+		dataType: string
+		lineageTag: cb741167-b0da-4914-9130-127169abd721
+		sourceLineageTag: Reglement
+		summarizeBy: none
+		sourceColumn: Reglement
+
+		annotation SummarizationSetBy = Automatic
+
+	column Telephone
+		dataType: string
+		lineageTag: 8fc5027b-186e-4205-bc8e-08640db52e8a
+		sourceLineageTag: Telephone
+		summarizeBy: none
+		sourceColumn: Telephone
+
+		annotation SummarizationSetBy = Automatic
+
+	column Email
+		dataType: string
+		lineageTag: 7a96e872-69d2-498c-8b5b-5627fa322a8a
+		sourceLineageTag: Email
+		summarizeBy: none
+		sourceColumn: Email
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Numero Compte'
+		dataType: string
+		lineageTag: 135000e8-1d0e-438e-84af-fc0b123c8520
+		sourceLineageTag: NumeroCompte
+		summarizeBy: none
+		sourceColumn: NumeroCompte
+
+		changedProperty = Name
+
+		annotation SummarizationSetBy = Automatic
+
+	column Banque
+		dataType: string
+		lineageTag: 6905fa9e-956b-4d21-9639-c36e97889342
+		sourceLineageTag: Banque
+		summarizeBy: none
+		sourceColumn: Banque
+
+		annotation SummarizationSetBy = Automatic
+
+	partition Responsables = entity
+		mode: directLake
+		source
+			entityName: Responsables
+			schemaName: LISE
+			expressionSource: 'DirectLake - WH_GOLD'
+

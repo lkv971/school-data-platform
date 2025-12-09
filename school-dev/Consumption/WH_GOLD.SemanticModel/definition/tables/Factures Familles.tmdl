@@ -1,0 +1,129 @@
+table 'Factures Familles'
+	lineageTag: 54b61a9f-65b2-4978-8fbc-312123467148
+	sourceLineageTag: [LISE].[FacturesFamilles]
+
+	column 'Responsable Key'
+		dataType: string
+		lineageTag: 2bc3db1f-db58-4d1a-8f3e-3c034a8e8255
+		sourceLineageTag: ResponsableKey
+		summarizeBy: none
+		sourceColumn: ResponsableKey
+
+		changedProperty = Name
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Responsable ID'
+		dataType: int64
+		formatString: 0
+		lineageTag: 698bd9d3-b59b-4532-820c-1354b7bea4d5
+		sourceLineageTag: ResponsableID
+		summarizeBy: none
+		sourceColumn: ResponsableID
+
+		changedProperty = Name
+
+		changedProperty = SummarizeBy
+
+		annotation SummarizationSetBy = User
+
+	column 'Validation Key'
+		dataType: string
+		isHidden
+		lineageTag: cc130943-0699-4b8f-ac02-52a0257e7914
+		sourceLineageTag: ValidationKey
+		summarizeBy: none
+		sourceColumn: ValidationKey
+
+		changedProperty = IsHidden
+
+		changedProperty = Name
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Validation ID'
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 3f708819-0385-4f57-866c-cc5c0c11905f
+		sourceLineageTag: ValidationID
+		summarizeBy: none
+		sourceColumn: ValidationID
+
+		changedProperty = IsHidden
+
+		changedProperty = SummarizeBy
+
+		changedProperty = Name
+
+		annotation SummarizationSetBy = User
+
+	column 'Foyer ID'
+		dataType: int64
+		formatString: 0
+		lineageTag: 8fd287d8-c38b-41e1-aed9-7c36e03b24b9
+		sourceLineageTag: FoyerID
+		summarizeBy: none
+		sourceColumn: FoyerID
+
+		changedProperty = Name
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Profession ID'
+		dataType: int64
+		formatString: 0
+		lineageTag: 3c05ccab-3fd4-4d61-9793-1af4c2a9546a
+		sourceLineageTag: ProfessionID
+		summarizeBy: none
+		sourceColumn: ProfessionID
+
+		changedProperty = Name
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Total Famille'
+		dataType: double
+		formatString: #,0.00\ "€";-#,0.00\ "€";#,0.00\ "€"
+		lineageTag: bd8447f0-1f90-418e-91b7-32f12c60555b
+		sourceLineageTag: TotalFamille
+		summarizeBy: none
+		sourceColumn: TotalFamille
+
+		changedProperty = SummarizeBy
+
+		changedProperty = Name
+
+		changedProperty = FormatString
+
+		annotation SummarizationSetBy = User
+
+	column 'Date Facture'
+		dataType: dateTime
+		formatString: dd/mm/yy
+		lineageTag: 9e057c27-fd0d-435e-a132-d9f8b59ef926
+		sourceLineageTag: DateFacture
+		summarizeBy: none
+		sourceColumn: DateFacture
+
+		changedProperty = Name
+
+		changedProperty = DataType
+
+		changedProperty = FormatString
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+		annotation PBI_FormatHint = {"isCustom":true}
+
+	partition 'Factures Familles' = entity
+		mode: directLake
+		source
+			entityName: FacturesFamilles
+			schemaName: LISE
+			expressionSource: 'DirectLake - WH_GOLD'
+
+	changedProperty = Name
+

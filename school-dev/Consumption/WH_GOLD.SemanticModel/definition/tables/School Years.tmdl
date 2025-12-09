@@ -1,0 +1,35 @@
+table 'School Years'
+	lineageTag: 1eef4e9c-6ad0-492d-9e82-0a841e8516cb
+	sourceLineageTag: [LISE].[SchoolYears]
+
+	column 'School Year'
+		dataType: string
+		lineageTag: 627dbfb3-64e6-4144-ae71-2ddbe7d3ad0c
+		sourceLineageTag: SchoolYear
+		summarizeBy: none
+		sourceColumn: SchoolYear
+
+		changedProperty = Name
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'School Year Libelle'
+		dataType: string
+		lineageTag: 9b96478b-24be-4734-9cee-129dc8c103d1
+		sourceLineageTag: SchoolYearLibelle
+		summarizeBy: none
+		sourceColumn: SchoolYearLibelle
+
+		changedProperty = Name
+
+		annotation SummarizationSetBy = Automatic
+
+	partition 'School Years' = entity
+		mode: directLake
+		source
+			entityName: SchoolYears
+			schemaName: LISE
+			expressionSource: 'DirectLake - WH_GOLD'
+
+	changedProperty = Name
+

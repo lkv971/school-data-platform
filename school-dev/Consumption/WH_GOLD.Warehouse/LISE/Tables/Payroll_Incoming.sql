@@ -10,5 +10,6 @@ CREATE TABLE [LISE].[Payroll_Incoming] (
 	[ProfessionTypeID] int NULL, 
 	[EtablissementID] int NULL, 
 	[ClasseID] int NULL, 
-	[NiveauID] int NULL
+	[NiveauID] int NULL, 
+	[PersonnelKey] varchar(50) NULL
 );

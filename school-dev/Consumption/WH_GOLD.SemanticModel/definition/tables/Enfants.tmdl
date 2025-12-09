@@ -1,0 +1,113 @@
+table Enfants
+	lineageTag: 59d5f1a8-9a59-4ea5-bd00-fcb4d9d28ca3
+	sourceLineageTag: [LISE].[Enfants]
+
+	column 'Eleve ID'
+		dataType: int64
+		formatString: 0
+		lineageTag: 569321e3-5f57-4c10-93e0-b9ea8396887d
+		sourceLineageTag: EleveID
+		summarizeBy: none
+		sourceColumn: EleveID
+
+		changedProperty = Name
+
+		annotation SummarizationSetBy = Automatic
+
+	column Nom
+		dataType: string
+		lineageTag: dfd91527-4982-48bc-a9ae-dd2a1e897b02
+		sourceLineageTag: Nom
+		summarizeBy: none
+		sourceColumn: Nom
+
+		annotation SummarizationSetBy = Automatic
+
+	column Prenom
+		dataType: string
+		lineageTag: 79f04ba7-8529-4729-ab00-662c5ca25fe7
+		sourceLineageTag: Prenom
+		summarizeBy: none
+		sourceColumn: Prenom
+
+		annotation SummarizationSetBy = Automatic
+
+	column Sexe
+		dataType: string
+		lineageTag: 1fd5e91a-b968-45ae-974a-30465fc5e57d
+		sourceLineageTag: Sexe
+		summarizeBy: none
+		sourceColumn: Sexe
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Date Naissance'
+		dataType: dateTime
+		formatString: dd/mm/yy
+		lineageTag: ed3a975f-8766-4463-8923-4d2464665ea1
+		sourceLineageTag: DateNaissance
+		summarizeBy: none
+		sourceColumn: DateNaissance
+
+		changedProperty = Name
+
+		changedProperty = DataType
+
+		changedProperty = FormatString
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+		annotation PBI_FormatHint = {"isCustom":true}
+
+	column Age
+		dataType: int64
+		formatString: 0
+		lineageTag: 5e26f39f-e698-4954-be7d-32c46708c27f
+		sourceLineageTag: Age
+		summarizeBy: none
+		sourceColumn: Age
+
+		changedProperty = SummarizeBy
+
+		annotation SummarizationSetBy = User
+
+	column Nationalite
+		dataType: string
+		lineageTag: 8be85944-06f0-4aa0-83e4-e638b34e81e3
+		sourceLineageTag: Nationalite
+		summarizeBy: none
+		sourceColumn: Nationalite
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Identite Nationale'
+		dataType: string
+		lineageTag: 5eeb9008-2837-4475-8836-8b6576282bae
+		sourceLineageTag: IdentiteNationale
+		summarizeBy: none
+		sourceColumn: IdentiteNationale
+
+		changedProperty = Name
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Full Name'
+		dataType: string
+		lineageTag: c8ff0d6b-6f6b-467b-ab4c-f85513ba51d1
+		sourceLineageTag: FullName
+		summarizeBy: none
+		sourceColumn: FullName
+
+		changedProperty = Name
+
+		annotation SummarizationSetBy = Automatic
+
+	partition Enfants = entity
+		mode: directLake
+		source
+			entityName: Enfants
+			schemaName: LISE
+			expressionSource: 'DirectLake - WH_GOLD'
+

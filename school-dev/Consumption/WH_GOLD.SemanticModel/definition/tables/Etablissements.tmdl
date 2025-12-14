@@ -1,0 +1,32 @@
+table Etablissements
+	lineageTag: 81acd107-642c-4e12-952b-a6c088bd4702
+	sourceLineageTag: [LISE].[Etablissements]
+
+	column 'Etablissement ID'
+		dataType: int64
+		formatString: 0
+		lineageTag: c7bbc31a-d821-4db8-991d-22129b66a52c
+		sourceLineageTag: EtablissementID
+		summarizeBy: none
+		sourceColumn: EtablissementID
+
+		changedProperty = Name
+
+		annotation SummarizationSetBy = Automatic
+
+	column Etablissement
+		dataType: string
+		lineageTag: 0981a324-e040-44e7-a994-c903c2dc8a67
+		sourceLineageTag: Etablissement
+		summarizeBy: none
+		sourceColumn: Etablissement
+
+		annotation SummarizationSetBy = Automatic
+
+	partition Etablissements = entity
+		mode: directLake
+		source
+			entityName: Etablissements
+			schemaName: LISE
+			expressionSource: 'DirectLake - WH_GOLD'
+

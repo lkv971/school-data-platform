@@ -1,0 +1,171 @@
+table Dates
+	lineageTag: 87d563db-60aa-49c9-ad7c-ad892d00a8c1
+	sourceLineageTag: [LISE].[Dates]
+	dataCategory: Time
+
+	column 'Date ID'
+		dataType: int64
+		formatString: 0
+		lineageTag: 6a092608-fc0c-4ca4-8f52-aafe9aab2c5a
+		sourceLineageTag: DateID
+		summarizeBy: none
+		sourceColumn: DateID
+
+		changedProperty = Name
+
+		changedProperty = SummarizeBy
+
+		annotation SummarizationSetBy = User
+
+	column Date
+		dataType: dateTime
+		isKey
+		formatString: dd/mm/yy
+		lineageTag: 43037d85-e092-4bc2-a493-4b097f050175
+		sourceLineageTag: Date
+		summarizeBy: none
+		sourceColumn: Date
+
+		changedProperty = DataType
+
+		changedProperty = FormatString
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+		annotation PBI_FormatHint = {"isCustom":true}
+
+	column 'Calendar Year'
+		dataType: int64
+		formatString: 0
+		lineageTag: 5b6d76f5-6d79-4a9f-b54d-52ddc309decc
+		sourceLineageTag: CalendarYear
+		summarizeBy: none
+		sourceColumn: CalendarYear
+
+		changedProperty = Name
+
+		changedProperty = SummarizeBy
+
+		annotation SummarizationSetBy = User
+
+	column 'Calendar Month'
+		dataType: int64
+		formatString: 0
+		lineageTag: e7e32255-fe2c-4c64-a421-2453b7e10c63
+		sourceLineageTag: CalendarMonth
+		summarizeBy: none
+		sourceColumn: CalendarMonth
+
+		changedProperty = Name
+
+		changedProperty = SummarizeBy
+
+		annotation SummarizationSetBy = User
+
+	column 'Calendar Day'
+		dataType: int64
+		formatString: 0
+		lineageTag: 08b5ece8-49ee-4991-9492-54f499f073e3
+		sourceLineageTag: CalendarDay
+		summarizeBy: none
+		sourceColumn: CalendarDay
+
+		changedProperty = Name
+
+		changedProperty = SummarizeBy
+
+		annotation SummarizationSetBy = User
+
+	column 'Month Name'
+		dataType: string
+		lineageTag: 94afcba4-6995-4472-82ee-43d6d7ba33db
+		sourceLineageTag: MonthName
+		summarizeBy: none
+		sourceColumn: MonthName
+		sortByColumn: 'Calendar Month'
+
+		changedProperty = Name
+
+		changedProperty = SortByColumn
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Day Name'
+		dataType: string
+		lineageTag: 89966e09-2a03-4041-9666-73ffb381ece1
+		sourceLineageTag: DayName
+		summarizeBy: none
+		sourceColumn: DayName
+
+		changedProperty = Name
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'School Year'
+		dataType: string
+		lineageTag: 8faaf818-7513-4389-8307-26ad1d3cbcf5
+		sourceLineageTag: SchoolYear
+		summarizeBy: none
+		sourceColumn: SchoolYear
+
+		changedProperty = Name
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Is School Period'
+		dataType: int64
+		formatString: 0
+		lineageTag: cdd76335-1eb8-44f7-b17e-a68f823cbcb3
+		sourceLineageTag: IsSchoolPeriod
+		summarizeBy: none
+		sourceColumn: IsSchoolPeriod
+
+		changedProperty = Name
+
+		changedProperty = SummarizeBy
+
+		annotation SummarizationSetBy = User
+
+	hierarchy 'Calendar Hierarchy'
+		lineageTag: 42103454-866a-4848-a1fa-90a0d62e091d
+
+		level 'Calendar Year'
+			lineageTag: 62e63984-2765-4b1c-8bda-f04429113cf0
+			column: 'Calendar Year'
+
+		level 'Month Name'
+			lineageTag: e67e31e9-b01d-464d-b360-f5440420d621
+			column: 'Month Name'
+
+		level Date
+			lineageTag: 9ca06537-043b-43fb-830b-97ce20116bdc
+			column: Date
+
+		changedProperty = Name
+
+	hierarchy 'School Year Calendar Hierarchy'
+		lineageTag: ad546d16-6987-4ac0-941e-9075212ebb91
+
+		level 'School Year'
+			lineageTag: 553164a0-899a-4876-867d-b15cd500a1e2
+			column: 'School Year'
+
+		level 'Calendar Year'
+			lineageTag: 00758eaa-5758-499a-8cba-475b31c3cf18
+			column: 'Calendar Year'
+
+		level 'Month Name'
+			lineageTag: 37ba9956-b702-4834-b2b0-34baa9cc4b4c
+			column: 'Month Name'
+
+		changedProperty = Name
+
+	partition Dates = entity
+		mode: directLake
+		source
+			entityName: Dates
+			schemaName: LISE
+			expressionSource: 'DirectLake - WH_GOLD'
+

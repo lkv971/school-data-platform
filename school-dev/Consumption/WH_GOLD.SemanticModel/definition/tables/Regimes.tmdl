@@ -1,0 +1,32 @@
+table Regimes
+	lineageTag: c3a91b0b-ec57-4bf6-b736-72a9b61efb60
+	sourceLineageTag: [LISE].[Regimes]
+
+	column 'Regime ID'
+		dataType: int64
+		formatString: 0
+		lineageTag: 0972b6aa-1398-4f8e-b001-201ee2752578
+		sourceLineageTag: RegimeID
+		summarizeBy: none
+		sourceColumn: RegimeID
+
+		changedProperty = Name
+
+		annotation SummarizationSetBy = Automatic
+
+	column Regime
+		dataType: string
+		lineageTag: 8d8d7a70-5bdb-4391-b9a9-28ff6e5c7272
+		sourceLineageTag: Regime
+		summarizeBy: none
+		sourceColumn: Regime
+
+		annotation SummarizationSetBy = Automatic
+
+	partition Regimes = entity
+		mode: directLake
+		source
+			entityName: Regimes
+			schemaName: LISE
+			expressionSource: 'DirectLake - WH_GOLD'
+

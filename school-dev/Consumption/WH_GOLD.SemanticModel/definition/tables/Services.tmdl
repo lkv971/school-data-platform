@@ -1,0 +1,32 @@
+table Services
+	lineageTag: 2d0f7e01-0007-4b05-9fbd-3a5638f3d75c
+	sourceLineageTag: [LISE].[Services]
+
+	column 'Service ID'
+		dataType: int64
+		formatString: 0
+		lineageTag: b6b87d7d-0c94-4c6e-824d-6d6c8aea7687
+		sourceLineageTag: ServiceID
+		summarizeBy: none
+		sourceColumn: ServiceID
+
+		changedProperty = Name
+
+		annotation SummarizationSetBy = Automatic
+
+	column Service
+		dataType: string
+		lineageTag: 90782208-5267-47c7-9085-365677f9ce7b
+		sourceLineageTag: Service
+		summarizeBy: none
+		sourceColumn: Service
+
+		annotation SummarizationSetBy = Automatic
+
+	partition Services = entity
+		mode: directLake
+		source
+			entityName: Services
+			schemaName: LISE
+			expressionSource: 'DirectLake - WH_GOLD'
+

@@ -1,0 +1,110 @@
+table 'Dim Classes'
+	lineageTag: dfb24628-361e-4af0-8702-9fc165777aec
+	sourceLineageTag: [LISE].[DimClasses]
+
+	column 'Classe ID'
+		dataType: int64
+		formatString: 0
+		lineageTag: 80153765-1691-4ba7-9159-f7caf489b542
+		sourceLineageTag: ClasseID
+		summarizeBy: none
+		sourceColumn: ClasseID
+
+		changedProperty = SummarizeBy
+
+		changedProperty = Name
+
+		annotation SummarizationSetBy = User
+
+	column Classe
+		dataType: string
+		lineageTag: 0247d87b-a2f8-4bf3-be11-467faa171f71
+		sourceLineageTag: Classe
+		summarizeBy: none
+		sourceColumn: Classe
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Classe Libelle'
+		dataType: string
+		lineageTag: ea87c82f-6bcb-4954-94e0-5c5a8242d827
+		sourceLineageTag: ClasseLibelle
+		summarizeBy: none
+		sourceColumn: ClasseLibelle
+
+		changedProperty = Name
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Niveau ID'
+		dataType: int64
+		formatString: 0
+		lineageTag: 5315d80d-4751-4a1b-98f4-a12fcb774ec6
+		sourceLineageTag: NiveauID
+		summarizeBy: none
+		sourceColumn: NiveauID
+
+		changedProperty = SummarizeBy
+
+		changedProperty = Name
+
+		annotation SummarizationSetBy = User
+
+	column Niveau
+		dataType: string
+		lineageTag: cb3f0447-ad3a-485f-be23-4f4bc1264146
+		sourceLineageTag: Niveau
+		summarizeBy: none
+		sourceColumn: Niveau
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Etablissement ID'
+		dataType: int64
+		formatString: 0
+		lineageTag: 63651897-9c8d-406b-b84e-a4a4df3bb9fb
+		sourceLineageTag: EtablissementID
+		summarizeBy: none
+		sourceColumn: EtablissementID
+
+		changedProperty = SummarizeBy
+
+		changedProperty = Name
+
+		annotation SummarizationSetBy = User
+
+	column Etablissement
+		dataType: string
+		lineageTag: 891a84f7-2c20-4351-918d-846b0384106d
+		sourceLineageTag: Etablissement
+		summarizeBy: none
+		sourceColumn: Etablissement
+
+		annotation SummarizationSetBy = Automatic
+
+	hierarchy 'School Structure Hierarchy'
+		lineageTag: 8e856c37-8f7d-4a4d-9379-2f6422b62184
+
+		level Etablissement
+			lineageTag: b959c249-3ff7-4d71-8071-96cdd35bd2a5
+			column: Etablissement
+
+		level Niveau
+			lineageTag: 48fa98f3-3e49-42a0-8fed-a1d4f78e516b
+			column: Niveau
+
+		level Classe
+			lineageTag: 49ced057-c5c8-4e6d-813c-0becad9f978b
+			column: Classe
+
+		changedProperty = Name
+
+	partition 'Dim Classes' = entity
+		mode: directLake
+		source
+			entityName: DimClasses
+			schemaName: LISE
+			expressionSource: 'DirectLake - WH_GOLD'
+
+	changedProperty = Name
+

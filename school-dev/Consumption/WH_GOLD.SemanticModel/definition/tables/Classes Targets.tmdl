@@ -1,0 +1,92 @@
+table 'Classes Targets'
+	lineageTag: c67fe485-ec25-42d7-975b-657dd5c43027
+	sourceLineageTag: [LISE].[ClassesTargets]
+
+	measure 'Total Student Capacity' = SUM('Classes Targets'[Maximum Count])
+		formatString: 0
+		displayFolder: Key Stats
+		lineageTag: 96a9e3b3-e00c-49ae-b9ba-1a3aac66bbd7
+
+		changedProperty = Name
+
+		changedProperty = DisplayFolder
+
+	measure 'Total Student Capacity LY' = CALCULATE([Total Student Capacity], SAMEPERIODLASTYEAR(Dates[Date]))
+		formatString: 0
+		lineageTag: 8accee4e-9b0b-447a-9c50-8e8614172f74
+
+		changedProperty = Name
+
+	column 'Classe Key'
+		dataType: string
+		lineageTag: 57ec273a-6df8-488c-8f97-9e88d76a5f13
+		sourceLineageTag: ClasseKey
+		summarizeBy: none
+		sourceColumn: ClasseKey
+
+		changedProperty = Name
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Classe ID'
+		dataType: int64
+		formatString: 0
+		lineageTag: f65e7d36-a0fa-4df7-a800-4f324c6318a4
+		sourceLineageTag: ClasseID
+		summarizeBy: none
+		sourceColumn: ClasseID
+
+		changedProperty = Name
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Target Count'
+		dataType: int64
+		formatString: 0
+		lineageTag: 41766791-d860-43d8-8510-45956cdda686
+		sourceLineageTag: TargetCount
+		summarizeBy: none
+		sourceColumn: TargetCount
+
+		changedProperty = Name
+
+		changedProperty = SummarizeBy
+
+		annotation SummarizationSetBy = User
+
+	column 'Maximum Count'
+		dataType: int64
+		formatString: 0
+		lineageTag: 698c65df-498f-4dff-8a27-20437fef8c3d
+		sourceLineageTag: MaximumCount
+		summarizeBy: none
+		sourceColumn: MaximumCount
+
+		changedProperty = Name
+
+		changedProperty = SummarizeBy
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = User
+
+	column 'School Year'
+		dataType: string
+		lineageTag: f9f66797-17b7-4bba-8edc-2d65aadedef6
+		sourceLineageTag: SchoolYear
+		summarizeBy: none
+		sourceColumn: SchoolYear
+
+		changedProperty = Name
+
+		annotation SummarizationSetBy = Automatic
+
+	partition 'Classes Targets' = entity
+		mode: directLake
+		source
+			entityName: ClassesTargets
+			schemaName: LISE
+			expressionSource: 'DirectLake - WH_GOLD'
+
+	changedProperty = Name
+

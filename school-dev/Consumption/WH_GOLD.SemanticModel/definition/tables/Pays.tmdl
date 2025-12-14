@@ -1,0 +1,46 @@
+table Pays
+	lineageTag: 81ffc029-6811-44ae-b692-e713fc03678f
+	sourceLineageTag: [LISE].[Pays]
+
+	column 'Pays ID'
+		dataType: int64
+		formatString: 0
+		lineageTag: 276e5f60-df15-4281-9aef-d39785017718
+		sourceLineageTag: PaysID
+		summarizeBy: none
+		sourceColumn: PaysID
+
+		changedProperty = Name
+
+		changedProperty = SummarizeBy
+
+		annotation SummarizationSetBy = User
+
+	column Pays
+		dataType: string
+		lineageTag: c4c08e9e-7d56-494c-8841-034b21da6fdf
+		sourceLineageTag: Pays
+		dataCategory: Country
+		summarizeBy: none
+		sourceColumn: Pays
+
+		changedProperty = DataCategory
+
+		annotation SummarizationSetBy = Automatic
+
+	column Nationalite
+		dataType: string
+		lineageTag: cae4e847-1222-4a0c-a492-65bf2543e37f
+		sourceLineageTag: Nationalite
+		summarizeBy: none
+		sourceColumn: Nationalite
+
+		annotation SummarizationSetBy = Automatic
+
+	partition Pays = entity
+		mode: directLake
+		source
+			entityName: Pays
+			schemaName: LISE
+			expressionSource: 'DirectLake - WH_GOLD'
+

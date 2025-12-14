@@ -1,0 +1,198 @@
+table Payroll
+	lineageTag: be4cee3e-45ed-488c-8ee0-7751dfe49072
+	sourceLineageTag: [LISE].[Payroll]
+
+	measure 'Total Payroll' = SUM(Payroll[Montant])
+		formatString: #,0.00\ "€";-#,0.00\ "€";#,0.00\ "€"
+		displayFolder: Cost & Payroll
+		lineageTag: c26cb595-fcdf-4bba-a474-da9cc71dd817
+
+		changedProperty = Name
+
+		changedProperty = DisplayFolder
+
+		changedProperty = FormatString
+
+	measure 'Teaching Staff Costs' = CALCULATE([Total Payroll], 'Profession Types'[Profession Type ID] = 1)
+		formatString: #,0.00\ "€";-#,0.00\ "€";#,0.00\ "€"
+		displayFolder: Cost & Payroll
+		lineageTag: 1959834b-fdfa-4726-94ab-1641bfbc4e1d
+
+		changedProperty = Name
+
+		changedProperty = DisplayFolder
+
+		changedProperty = FormatString
+
+	measure 'Non-Teaching Staff Costs' = CALCULATE([Total Payroll], 'Profession Types'[Profession Type ID] <> 1)
+		formatString: #,0.00\ "€";-#,0.00\ "€";#,0.00\ "€"
+		displayFolder: Cost & Payroll
+		lineageTag: 37857d92-2e77-4deb-8a8b-efbf5941fc5f
+
+		changedProperty = Name
+
+		changedProperty = DisplayFolder
+
+		changedProperty = FormatString
+
+	measure 'Total Costs (excl Rent)' = [Teaching Staff Costs] + [Non-Teaching Staff Costs]
+		formatString: #,0.00\ "€";-#,0.00\ "€";#,0.00\ "€"
+		displayFolder: Cost & Payroll
+		lineageTag: 9ee23612-d58c-49d2-89f1-9713937814c1
+
+		changedProperty = Name
+
+		changedProperty = DisplayFolder
+
+		changedProperty = FormatString
+
+	column 'Personnel ID'
+		dataType: int64
+		formatString: 0
+		lineageTag: 2f1e7890-53ca-4226-8b89-62fa80f5b6be
+		sourceLineageTag: PersonnelID
+		summarizeBy: none
+		sourceColumn: PersonnelID
+
+		changedProperty = Name
+
+		annotation SummarizationSetBy = Automatic
+
+	column Nom
+		dataType: string
+		lineageTag: 7d28845d-d5b0-4687-8618-f039ac8f3b85
+		sourceLineageTag: Nom
+		summarizeBy: none
+		sourceColumn: Nom
+
+		annotation SummarizationSetBy = Automatic
+
+	column Prenom
+		dataType: string
+		lineageTag: dbb50171-36da-4e17-8ad2-7362498b4b20
+		sourceLineageTag: Prenom
+		summarizeBy: none
+		sourceColumn: Prenom
+
+		annotation SummarizationSetBy = Automatic
+
+	column Periode
+		dataType: string
+		lineageTag: ece9e911-0387-4c81-b35b-fd1e8dc67a42
+		sourceLineageTag: Periode
+		summarizeBy: none
+		sourceColumn: Periode
+
+		annotation SummarizationSetBy = Automatic
+
+	column Date
+		dataType: dateTime
+		formatString: dd/mm/yy
+		lineageTag: 794f9ca0-bbc6-4c2b-895f-7a06aca55ef2
+		sourceLineageTag: Date
+		summarizeBy: none
+		sourceColumn: Date
+
+		changedProperty = DataType
+
+		changedProperty = FormatString
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+		annotation PBI_FormatHint = {"isCustom":true}
+
+	column Montant
+		dataType: double
+		formatString: #,0.00\ "€";-#,0.00\ "€";#,0.00\ "€"
+		lineageTag: ab67e093-7197-4234-9ec9-ef81e8dd812c
+		sourceLineageTag: Montant
+		summarizeBy: none
+		sourceColumn: Montant
+
+		changedProperty = SummarizeBy
+
+		changedProperty = FormatString
+
+		annotation SummarizationSetBy = User
+
+	column Devise
+		dataType: string
+		lineageTag: cf07c47d-11cc-4502-8ded-0bf550f318e5
+		sourceLineageTag: Devise
+		summarizeBy: none
+		sourceColumn: Devise
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Profession Type ID'
+		dataType: int64
+		formatString: 0
+		lineageTag: 7fea02f5-fecd-4137-904d-d5d6f5bb0df9
+		sourceLineageTag: ProfessionTypeID
+		summarizeBy: none
+		sourceColumn: ProfessionTypeID
+
+		changedProperty = Name
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Etablissement ID'
+		dataType: int64
+		formatString: 0
+		lineageTag: 70c313a0-f062-41ea-bade-4112e5600904
+		sourceLineageTag: EtablissementID
+		summarizeBy: none
+		sourceColumn: EtablissementID
+
+		changedProperty = Name
+
+		changedProperty = SummarizeBy
+
+		annotation SummarizationSetBy = User
+
+	column 'Classe ID'
+		dataType: int64
+		formatString: 0
+		lineageTag: 95e97d3b-fa8c-4bc7-880a-63c85d511238
+		sourceLineageTag: ClasseID
+		summarizeBy: none
+		sourceColumn: ClasseID
+
+		changedProperty = Name
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Niveau ID'
+		dataType: int64
+		formatString: 0
+		lineageTag: a6db4db7-26ca-47c1-9ee2-4c066b7da2e2
+		sourceLineageTag: NiveauID
+		summarizeBy: none
+		sourceColumn: NiveauID
+
+		changedProperty = Name
+
+		changedProperty = SummarizeBy
+
+		annotation SummarizationSetBy = User
+
+	column 'Personnel Key'
+		dataType: string
+		lineageTag: 3701b1af-d8c8-478c-9a99-994f09ff7b65
+		sourceLineageTag: PersonnelKey
+		summarizeBy: none
+		sourceColumn: PersonnelKey
+
+		changedProperty = Name
+
+		annotation SummarizationSetBy = Automatic
+
+	partition Payroll = entity
+		mode: directLake
+		source
+			entityName: Payroll
+			schemaName: LISE
+			expressionSource: 'DirectLake - WH_GOLD'
+

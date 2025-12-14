@@ -42,6 +42,7 @@
           },
           "storeSettings": {
             "type": "FileServerReadSettings",
+            "recursive": true,
             "enablePartitionDiscovery": false
           },
           "formatSettings": {
@@ -75,7 +76,7 @@
           "datasetSettings": {
             "annotations": [],
             "linkedService": {
-              "name": "b2b21be1_89e4_4895_bb82_950e43f8e3ac",
+              "name": "4879e248_4c59_4ff9_9556_4eec0877e106",
               "properties": {
                 "annotations": [],
                 "type": "Lakehouse",
@@ -257,7 +258,7 @@
                         "datasetSettings": {
                           "annotations": [],
                           "linkedService": {
-                            "name": "885eedb3_0902_46df_ae79_ac5b6910615a",
+                            "name": "28810a7d_e60b_4cda_a6e6_ea5051210617",
                             "properties": {
                               "annotations": [],
                               "type": "Lakehouse",
@@ -357,7 +358,10 @@
                   "value": "@pipeline().libraryVariables.VL_LISE_NB_Watermark_Bronze_ID",
                   "type": "Expression"
                 },
-                "workspaceId": "28e6a84a-1953-410e-8b52-272e6318afde"
+                "workspaceId": {
+                  "value": "@pipeline().libraryVariables.VL_LISE_Workspace_ID",
+                  "type": "Expression"
+                }
               }
             }
           ]

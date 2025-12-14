@@ -1,0 +1,47 @@
+table Foyers
+	lineageTag: 36cbe691-e76b-47cd-a0f9-a3ea81b592a6
+	sourceLineageTag: [LISE].[Foyers]
+
+	column 'Foyer ID'
+		dataType: int64
+		formatString: 0
+		lineageTag: 4c4a4958-97f4-425f-8005-0431735c4370
+		sourceLineageTag: FoyerID
+		summarizeBy: none
+		sourceColumn: FoyerID
+
+		changedProperty = Name
+
+		annotation SummarizationSetBy = Automatic
+
+	column Ville
+		dataType: string
+		lineageTag: d1dd5719-384c-4126-8811-33d87b280d79
+		sourceLineageTag: Ville
+		dataCategory: City
+		summarizeBy: none
+		sourceColumn: Ville
+
+		changedProperty = DataCategory
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Ville ID'
+		dataType: int64
+		formatString: 0
+		lineageTag: cdf89554-7923-40b7-b3d2-1460e88a9fe8
+		sourceLineageTag: VilleID
+		summarizeBy: none
+		sourceColumn: VilleID
+
+		changedProperty = Name
+
+		annotation SummarizationSetBy = Automatic
+
+	partition Foyers = entity
+		mode: directLake
+		source
+			entityName: Foyers
+			schemaName: LISE
+			expressionSource: 'DirectLake - WH_GOLD'
+

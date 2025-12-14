@@ -1,0 +1,132 @@
+table Eleves
+	lineageTag: 6ae56eb0-6a73-41d4-8777-f352fd204def
+	sourceLineageTag: [LISE].[Eleves]
+
+	measure 'Students Count' = DISTINCTCOUNT('Factures Eleves'[Eleve ID])
+		formatString: 0
+		displayFolder: Keys Stats
+		lineageTag: 76aad8f7-4c9c-4390-a191-271c56a14bc3
+
+		changedProperty = Name
+
+		changedProperty = DisplayFolder
+
+	measure 'Students Count LY' = CALCULATE([Students Count], SAMEPERIODLASTYEAR(Dates[Date]))
+		formatString: 0
+		displayFolder: Keys Stats
+		lineageTag: 9c83c239-745d-44f5-9147-5cccf52d91d5
+
+		changedProperty = Name
+
+		changedProperty = DisplayFolder
+
+	measure '% Utilization' =
+			
+			VAR Capacity = [Total Student Capacity]
+			VAR Enrolled = [Students Count]
+			RETURN DIVIDE (Enrolled, Capacity)
+		formatString: 0.00%;-0.00%;0.00%
+		displayFolder: Keys Stats
+		lineageTag: bd4cdb44-f6cd-414d-9c75-9100cd082fa0
+
+		changedProperty = Name
+
+		changedProperty = DisplayFolder
+
+		changedProperty = FormatString
+
+	measure '% Utilization LY' = CALCULATE([% Utilization], SAMEPERIODLASTYEAR(Dates[Date]))
+		formatString: 0.00%;-0.00%;0.00%
+		displayFolder: Keys Stats
+		lineageTag: ea9fcf42-f7d4-4344-bb00-87f2a1c81186
+
+		changedProperty = Name
+
+		changedProperty = DisplayFolder
+
+		changedProperty = FormatString
+
+	column 'Eleve Key'
+		dataType: string
+		lineageTag: b23da153-eaab-40fa-9966-9cd0e75cb588
+		sourceLineageTag: EleveKey
+		summarizeBy: none
+		sourceColumn: EleveKey
+
+		changedProperty = Name
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Eleve ID'
+		dataType: int64
+		formatString: 0
+		lineageTag: 1192970b-6661-4c34-b9b4-247f3a9fb888
+		sourceLineageTag: EleveID
+		summarizeBy: none
+		sourceColumn: EleveID
+
+		changedProperty = Name
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Responsable ID'
+		dataType: int64
+		formatString: 0
+		lineageTag: e0f6df99-5b08-496a-bae4-30f460c8944b
+		sourceLineageTag: ResponsableID
+		summarizeBy: none
+		sourceColumn: ResponsableID
+
+		changedProperty = Name
+
+		changedProperty = SummarizeBy
+
+		annotation SummarizationSetBy = User
+
+	column 'Date Entree'
+		dataType: dateTime
+		formatString: dd/mm/yy
+		lineageTag: 3d28a55b-0f82-402e-841d-2141435a6a8c
+		sourceLineageTag: DateEntree
+		summarizeBy: none
+		sourceColumn: DateEntree
+
+		changedProperty = Name
+
+		changedProperty = DataType
+
+		changedProperty = FormatString
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+		annotation PBI_FormatHint = {"isCustom":true}
+
+	column 'Date Sortie'
+		dataType: dateTime
+		formatString: dd/mm/yy
+		lineageTag: 801fb323-e48d-4728-855b-c489182dabe5
+		sourceLineageTag: DateSortie
+		summarizeBy: none
+		sourceColumn: DateSortie
+
+		changedProperty = Name
+
+		changedProperty = DataType
+
+		changedProperty = FormatString
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+		annotation PBI_FormatHint = {"isCustom":true}
+
+	partition Eleves = entity
+		mode: directLake
+		source
+			entityName: Eleves
+			schemaName: LISE
+			expressionSource: 'DirectLake - WH_GOLD'
+

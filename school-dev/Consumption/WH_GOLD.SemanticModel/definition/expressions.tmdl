@@ -5,4 +5,16 @@ expression DatabaseQuery = ```
 		    database
 		
 		```
+	lineageTag: 90ad9f82-2bf9-4faa-842b-95d5e2496ac7
+
+expression 'DirectLake - WH_GOLD' =
+		let
+		    Source = AzureStorage.DataLake("https://onelake.dfs.fabric.microsoft.com/28e6a84a-1953-410e-8b52-272e6318afde/d86bd324-6717-4394-a68f-bcb9a744a991", [HierarchicalNavigation=true])
+		in
+		    Source
+	lineageTag: f1ae0372-3f52-4f95-86cb-33cd7207b60d
+
+	annotation PBI_IncludeFutureArtifacts = False
+
+	annotation PBI_RemovedChildren = [{"remoteItemId":{"analysisServicesObject":{"sourceName":null,"sourceLineageTag":"[LISE].[IngestionLogs]"}},"objectType":"Table"},{"remoteItemId":{"analysisServicesObject":{"sourceName":null,"sourceLineageTag":"[LISE].[Payroll_Incoming]"}},"objectType":"Table"},{"remoteItemId":{"analysisServicesObject":{"sourceName":null,"sourceLineageTag":"[LISE].[FacturesValidations]"}},"objectType":"Table"}]
 

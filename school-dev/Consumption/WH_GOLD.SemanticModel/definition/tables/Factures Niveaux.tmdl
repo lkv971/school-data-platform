@@ -1,0 +1,115 @@
+table 'Factures Niveaux'
+	lineageTag: 2e423123-b300-425b-b9ee-3ce33f1e91ca
+	sourceLineageTag: [LISE].[FacturesNiveaux]
+
+	column 'Niveau ID'
+		dataType: int64
+		formatString: 0
+		lineageTag: ac960de2-8d12-4dd1-963a-88a6b24992bc
+		sourceLineageTag: NiveauID
+		summarizeBy: none
+		sourceColumn: NiveauID
+
+		changedProperty = Name
+
+		annotation SummarizationSetBy = Automatic
+
+	column ValidationKey
+		dataType: string
+		isHidden
+		lineageTag: a5d23524-843e-4fe6-95f0-13012fcf3482
+		sourceLineageTag: ValidationKey
+		summarizeBy: none
+		sourceColumn: ValidationKey
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Validation ID'
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 769c32f4-776a-4ce3-80c3-ef8d7f725aa3
+		sourceLineageTag: ValidationID
+		summarizeBy: none
+		sourceColumn: ValidationID
+
+		changedProperty = IsHidden
+
+		changedProperty = Name
+
+		changedProperty = SummarizeBy
+
+		annotation SummarizationSetBy = User
+
+	column 'Responsable Key'
+		dataType: string
+		lineageTag: 54535f7d-cefd-454b-97e6-58d50a1f994f
+		sourceLineageTag: ResponsableKey
+		summarizeBy: none
+		sourceColumn: ResponsableKey
+
+		changedProperty = Name
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Responsable ID'
+		dataType: int64
+		formatString: 0
+		lineageTag: d6ba8b1f-81f3-4f01-ab73-78af4b11320b
+		sourceLineageTag: ResponsableID
+		summarizeBy: none
+		sourceColumn: ResponsableID
+
+		changedProperty = SummarizeBy
+
+		changedProperty = Name
+
+		annotation SummarizationSetBy = User
+
+	column 'Total Niveau'
+		dataType: double
+		formatString: #,0.00\ "€";-#,0.00\ "€";#,0.00\ "€"
+		lineageTag: cec09280-a66a-47da-a415-4cce5c69ddc7
+		sourceLineageTag: TotalNiveau
+		summarizeBy: none
+		sourceColumn: TotalNiveau
+
+		changedProperty = SummarizeBy
+
+		changedProperty = FormatString
+
+		changedProperty = Name
+
+		annotation SummarizationSetBy = User
+
+	column 'Date Facture'
+		dataType: dateTime
+		formatString: dd/mm/yy
+		lineageTag: ca9be282-d418-431b-bfda-706da2ef2042
+		sourceLineageTag: DateFacture
+		summarizeBy: none
+		sourceColumn: DateFacture
+
+		changedProperty = Name
+
+		changedProperty = DataType
+
+		changedProperty = FormatString
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+		annotation PBI_FormatHint = {"isCustom":true}
+
+	partition 'Factures Niveaux' = entity
+		mode: directLake
+		source
+			entityName: FacturesNiveaux
+			schemaName: LISE
+			expressionSource: 'DirectLake - WH_GOLD'
+
+	changedProperty = Name
+

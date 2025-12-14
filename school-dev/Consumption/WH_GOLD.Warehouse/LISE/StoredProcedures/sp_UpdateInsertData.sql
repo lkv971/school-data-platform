@@ -183,7 +183,6 @@ BEGIN
     SET LPS.Nom = LSPS.NOM,
         LPS.Prenom = LSPS.PRENOM,
         LPS.Nationalite = LSPS.NATIONALITE,
-        LPS.SecuriteSociale = LSPS.SECURITESOCIALE,
         LPS.Badge = LSPS.BADGE
     FROM LISE.Personnels AS LPS
     INNER JOIN LISE.Staging_Personnels AS LSPS
@@ -191,13 +190,12 @@ BEGIN
     WHERE ISNULL(LPS.Nom, '') <> ISNULL(LSPS.NOM, '')
           OR ISNULL(LPS.Prenom, '') <> ISNULL(LSPS.PRENOM, '')
           OR ISNULL(LPS.Nationalite, '') <> ISNULL(LSPS.NATIONALITE, '')
-          OR ISNULL(LPS.SecuriteSociale, '') <> ISNULL(LSPS.SECURITESOCIALE, '')
           OR ISNULL(LPS.Badge, '') <> ISNULL(LSPS.BADGE, '')
     ;
     SET @upersonnels = @@ROWCOUNT;
 
-    INSERT INTO LISE.Personnels (PersonnelID, Nom, Prenom, Nationalite, SecuriteSociale, Badge)
-    SELECT LSPS.IDPERSONNEL, LSPS.NOM, LSPS.PRENOM, LSPS.NATIONALITE, LSPS.SECURITESOCIALE, LSPS.BADGE
+    INSERT INTO LISE.Personnels (PersonnelID, Nom, Prenom, Nationalite, Badge)
+    SELECT LSPS.IDPERSONNEL, LSPS.NOM, LSPS.PRENOM, LSPS.NATIONALITE, LSPS.BADGE
     FROM LISE.Staging_Personnels AS LSPS
     WHERE NOT EXISTS (
       SELECT 1 FROM LISE.Personnels AS LPS

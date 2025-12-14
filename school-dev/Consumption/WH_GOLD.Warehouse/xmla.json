@@ -363,6 +363,131 @@
         ]
       },
       {
+        "name": "DimClasses",
+        "sourceLineageTag": "[LISE].[DimClasses]",
+        "columns": [
+          {
+            "name": "ClasseID",
+            "dataType": "int64",
+            "sourceColumn": "ClasseID",
+            "formatString": "0",
+            "sourceProviderType": "int",
+            "sourceLineageTag": "ClasseID",
+            "summarizeBy": "sum",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "Classe",
+            "dataType": "string",
+            "sourceColumn": "Classe",
+            "sourceProviderType": "varchar",
+            "sourceLineageTag": "Classe",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "ClasseLibelle",
+            "dataType": "string",
+            "sourceColumn": "ClasseLibelle",
+            "sourceProviderType": "varchar",
+            "sourceLineageTag": "ClasseLibelle",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "NiveauID",
+            "dataType": "int64",
+            "sourceColumn": "NiveauID",
+            "formatString": "0",
+            "sourceProviderType": "int",
+            "sourceLineageTag": "NiveauID",
+            "summarizeBy": "sum",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "Niveau",
+            "dataType": "string",
+            "sourceColumn": "Niveau",
+            "sourceProviderType": "varchar",
+            "sourceLineageTag": "Niveau",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "EtablissementID",
+            "dataType": "int64",
+            "sourceColumn": "EtablissementID",
+            "formatString": "0",
+            "sourceProviderType": "int",
+            "sourceLineageTag": "EtablissementID",
+            "summarizeBy": "sum",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "Etablissement",
+            "dataType": "string",
+            "sourceColumn": "Etablissement",
+            "sourceProviderType": "varchar",
+            "sourceLineageTag": "Etablissement",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          }
+        ],
+        "partitions": [
+          {
+            "name": "{{Partition_Name}}",
+            "mode": "directLake",
+            "source": {
+              "type": "entity",
+              "entityName": "DimClasses",
+              "expressionSource": "DatabaseQuery",
+              "schemaName": "LISE"
+            }
+          }
+        ],
+        "annotations": [
+          {
+            "name": "IsTableInBiModel",
+            "value": "False"
+          }
+        ]
+      },
+      {
         "name": "Eleves",
         "sourceLineageTag": "[LISE].[Eleves]",
         "columns": [
@@ -2106,6 +2231,20 @@
                 "value": "Automatic"
               }
             ]
+          },
+          {
+            "name": "PersonnelKey",
+            "dataType": "string",
+            "sourceColumn": "PersonnelKey",
+            "sourceProviderType": "varchar",
+            "sourceLineageTag": "PersonnelKey",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
           }
         ],
         "partitions": [
@@ -2294,6 +2433,20 @@
                 "value": "Automatic"
               }
             ]
+          },
+          {
+            "name": "PersonnelKey",
+            "dataType": "string",
+            "sourceColumn": "PersonnelKey",
+            "sourceProviderType": "varchar",
+            "sourceLineageTag": "PersonnelKey",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
           }
         ],
         "partitions": [
@@ -2435,20 +2588,6 @@
             "sourceColumn": "Nationalite",
             "sourceProviderType": "varchar",
             "sourceLineageTag": "Nationalite",
-            "summarizeBy": "none",
-            "annotations": [
-              {
-                "name": "SummarizationSetBy",
-                "value": "Automatic"
-              }
-            ]
-          },
-          {
-            "name": "SecuriteSociale",
-            "dataType": "string",
-            "sourceColumn": "SecuriteSociale",
-            "sourceProviderType": "varchar",
-            "sourceLineageTag": "SecuriteSociale",
             "summarizeBy": "none",
             "annotations": [
               {
@@ -4894,21 +5033,6 @@
             ]
           },
           {
-            "name": "SECURITESOCIALE",
-            "dataType": "int64",
-            "sourceColumn": "SECURITESOCIALE",
-            "formatString": "0",
-            "sourceProviderType": "bigint",
-            "sourceLineageTag": "SECURITESOCIALE",
-            "summarizeBy": "sum",
-            "annotations": [
-              {
-                "name": "SummarizationSetBy",
-                "value": "Automatic"
-              }
-            ]
-          },
-          {
             "name": "BADGE",
             "dataType": "int64",
             "sourceColumn": "BADGE",
@@ -5772,6 +5896,131 @@
             "source": {
               "type": "entity",
               "entityName": "Villes",
+              "expressionSource": "DatabaseQuery",
+              "schemaName": "LISE"
+            }
+          }
+        ],
+        "annotations": [
+          {
+            "name": "IsTableInBiModel",
+            "value": "False"
+          }
+        ]
+      },
+      {
+        "name": "vDimClasses",
+        "sourceLineageTag": "[LISE].[vDimClasses]",
+        "columns": [
+          {
+            "name": "ClasseID",
+            "dataType": "int64",
+            "sourceColumn": "ClasseID",
+            "formatString": "0",
+            "sourceProviderType": "int",
+            "sourceLineageTag": "ClasseID",
+            "summarizeBy": "sum",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "Classe",
+            "dataType": "string",
+            "sourceColumn": "Classe",
+            "sourceProviderType": "varchar",
+            "sourceLineageTag": "Classe",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "ClasseLibelle",
+            "dataType": "string",
+            "sourceColumn": "ClasseLibelle",
+            "sourceProviderType": "varchar",
+            "sourceLineageTag": "ClasseLibelle",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "NiveauID",
+            "dataType": "int64",
+            "sourceColumn": "NiveauID",
+            "formatString": "0",
+            "sourceProviderType": "int",
+            "sourceLineageTag": "NiveauID",
+            "summarizeBy": "sum",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "Niveau",
+            "dataType": "string",
+            "sourceColumn": "Niveau",
+            "sourceProviderType": "varchar",
+            "sourceLineageTag": "Niveau",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "EtablissementID",
+            "dataType": "int64",
+            "sourceColumn": "EtablissementID",
+            "formatString": "0",
+            "sourceProviderType": "int",
+            "sourceLineageTag": "EtablissementID",
+            "summarizeBy": "sum",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "Etablissement",
+            "dataType": "string",
+            "sourceColumn": "Etablissement",
+            "sourceProviderType": "varchar",
+            "sourceLineageTag": "Etablissement",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          }
+        ],
+        "partitions": [
+          {
+            "name": "{{Partition_Name}}",
+            "mode": "directLake",
+            "source": {
+              "type": "entity",
+              "entityName": "vDimClasses",
               "expressionSource": "DatabaseQuery",
               "schemaName": "LISE"
             }

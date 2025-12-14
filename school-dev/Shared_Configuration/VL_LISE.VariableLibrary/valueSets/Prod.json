@@ -1,5 +1,54 @@
 {
   "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/variableLibrary/definition/valueSet/1.0.0/schema.json",
   "name": "Prod",
-  "variableOverrides": []
+  "variableOverrides": [
+    {
+      "name": "LH_Bronze_ID",
+      "value": "e8f7655a-7d30-4c32-b29b-3b79bde75488"
+    },
+    {
+      "name": "PL_Bronze_ID",
+      "value": "15aa2951-f4e6-4a0a-aaf8-9a9a2d9cf7be"
+    },
+    {
+      "name": "NB_Watermark_Bronze_ID",
+      "value": "a863e5aa-691a-4c01-8d12-d577df62680e"
+    },
+    {
+      "name": "Workspace_ID",
+      "value": "55973ba1-95a0-4b89-b784-306ed738d3af"
+    },
+    {
+      "name": "LH_Silver_ID",
+      "value": "6a3e047f-f629-4b32-8a5d-6565b96d1b6e"
+    },
+    {
+      "name": "NB_Silver_ID",
+      "value": "58a99e11-0f79-4452-bbc4-0d6cc8685dbe"
+    },
+    {
+      "name": "PL_Silver_ID",
+      "value": "af7f1469-2e02-4fd3-afe5-ef26abab868"
+    },
+    {
+      "name": "NB_Watermark_Silver_ID",
+      "value": "ed5f289d-55bc-4465-be90-c5643db3ca57"
+    },
+    {
+      "name": "BRONZE_BASE",
+      "value": "abfss://LISE_PROD@onelake.dfs.fabric.microsoft.com/LH_BRONZE.Lakehouse/Files"
+    },
+    {
+      "name": "WH_Gold_ID",
+      "value": "7aed8e6f-c8eb-40f7-834e-f00a95979154"
+    },
+    {
+      "name": "WH_Gold_SQL_Connection",
+      "value": "xisdbyhsv57ubp3vvd3oymv5ou-ue5zovnasweuxn4egbxnoogtv4.datawarehouse.fabric.microsoft.com"
+    },
+    {
+      "name": "DF_Gold_ID",
+      "value": "36a2b4cd-75c2-4b01-8bfb-fb50dcef27b9"
+    }
+  ]
 }

@@ -1,11 +1,11 @@
 [StagingDefinition = [Kind = "FastCopy"]]
 section Section1;
-[DataDestinations = {[Definition = [Kind = "Reference", QueryName = "dropzone_DataDestination", IsNewTarget = false], Settings = [Kind = "Manual", AllowCreation = false, ColumnSettings = [Mappings = {[SourceColumnName = "PersonnelID", DestinationColumnName = "PersonnelID"], [SourceColumnName = "Nom", DestinationColumnName = "Nom"], [SourceColumnName = "Prenom", DestinationColumnName = "Prenom"], [SourceColumnName = "Periode", DestinationColumnName = "Periode"], [SourceColumnName = "Date", DestinationColumnName = "Date"], [SourceColumnName = "Montant", DestinationColumnName = "Montant"], [SourceColumnName = "Devise", DestinationColumnName = "Devise"], [SourceColumnName = "ProfessionTypeID", DestinationColumnName = "ProfessionTypeID"], [SourceColumnName = "EtablissementID", DestinationColumnName = "EtablissementID"], [SourceColumnName = "ClasseID", DestinationColumnName = "ClasseID"], [SourceColumnName = "NiveauID", DestinationColumnName = "NiveauID"]}], DynamicSchema = false, UpdateMethod = [Kind = "Replace"], TypeSettings = [Kind = "Table"]]]}]
+[DataDestinations = {[Definition = [Kind = "Reference", QueryName = "dropzone_DataDestination", IsNewTarget = false], Settings = [Kind = "Manual", AllowCreation = false, ColumnSettings = [Mappings = {[SourceColumnName = "PersonnelID", DestinationColumnName = "PersonnelID"], [SourceColumnName = "Nom", DestinationColumnName = "Nom"], [SourceColumnName = "Prenom", DestinationColumnName = "Prenom"], [SourceColumnName = "Periode", DestinationColumnName = "Periode"], [SourceColumnName = "Date", DestinationColumnName = "Date"], [SourceColumnName = "Montant", DestinationColumnName = "Montant"], [SourceColumnName = "Devise", DestinationColumnName = "Devise"], [SourceColumnName = "ProfessionTypeID", DestinationColumnName = "ProfessionTypeID"], [SourceColumnName = "EtablissementID", DestinationColumnName = "EtablissementID"], [SourceColumnName = "ClasseID", DestinationColumnName = "ClasseID"], [SourceColumnName = "NiveauID", DestinationColumnName = "NiveauID"], [SourceColumnName = "PersonnelKey", DestinationColumnName = "PersonnelKey"]}], DynamicSchema = false, UpdateMethod = [Kind = "Replace"], TypeSettings = [Kind = "Table"]]]}]
 shared dropzone = let
   // --- navigation inchangée ---
   Source = Lakehouse.Contents(null),
-  Navigation = Source{[workspaceId = "28e6a84a-1953-410e-8b52-272e6318afde"]}[Data],
-  #"Navigation 1" = Navigation{[lakehouseId = "bfe479b8-2f70-44bc-84d5-dfa2ec50d321"]}[Data],
+  Navigation = Source{[workspaceId = WorkspaceId]}[Data],
+  #"Navigation 1" = Navigation{[lakehouseId = LakehouseId]}[Data],
   #"Navigation 2" = #"Navigation 1"{[Id = "Files", ItemKind = "Folder"]}[Data],
   #"Navigation 3" = #"Navigation 2"{[Name = "Payroll"]}[Content],
   Dropzone = #"Navigation 3"{[Name = "dropzone"]}[Content],
@@ -30,6 +30,7 @@ shared dropzone = let
   // Montant en décimale FR + Date en texte pour parse yyyyMMdd
   Types1 = Table.TransformColumnTypes(TrimCols,{
       {"PersonnelID", type text},
+      {"PersonnelKey", type text},
       {"Nom", type text},
       {"Prenom", type text},
       {"Periode", type text},
@@ -81,7 +82,7 @@ shared dropzone = let
 
   // --- sortir les colonnes dans l'ordre de dbo.Paie_Incoming, sans renommer ---
   Reordered = Table.SelectColumns(DeviseTrim, {
-      "PersonnelID","Nom","Prenom","Periode",
+      "PersonnelID", "PersonnelKey", "Nom","Prenom","Periode",
       "DateParsee","PeriodeCle",
       "Montant","Devise","ProfessionTypeID","EtablissementID","ClasseID","NiveauID"
   }),
@@ -91,6 +92,8 @@ shared dropzone = let
 in
   #"Replaced value";
 shared pPayPeriod = "2025-09" meta [IsParameterQuery = true, IsParameterQueryRequired = false, Type = type text, DefaultValue = ""];
+shared WorkspaceId = "28e6a84a-1953-410e-8b52-272e6318afde" meta [IsParameterQuery = true, IsParameterQueryRequired = false, Type = type any, DefaultValue = ""];
+shared LakehouseId = "bfe479b8-2f70-44bc-84d5-dfa2ec50d321" meta [IsParameterQuery = true, IsParameterQueryRequired = false, Type = type any, DefaultValue = ""];
 shared dropzone_DataDestination = let
   Pattern = Fabric.Warehouse([HierarchicalNavigation = null, CreateNavigationProperties = false]),
   Navigation_1 = Pattern{[workspaceId = "28e6a84a-1953-410e-8b52-272e6318afde"]}[Data],

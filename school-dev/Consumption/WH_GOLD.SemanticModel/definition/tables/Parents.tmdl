@@ -1,0 +1,52 @@
+table Parents
+	lineageTag: 19a46d07-198c-4e8f-afb6-49f7f0c0483b
+	sourceLineageTag: [LISE].[Parents]
+
+	column 'Responsable ID'
+		dataType: int64
+		formatString: 0
+		lineageTag: 230310c2-619d-4336-9262-74403ee767d7
+		sourceLineageTag: ResponsableID
+		summarizeBy: none
+		sourceColumn: ResponsableID
+
+		changedProperty = Name
+
+		annotation SummarizationSetBy = Automatic
+
+	column Nom
+		dataType: string
+		lineageTag: 5b52aa4a-01d3-4264-9231-fa074923195f
+		sourceLineageTag: Nom
+		summarizeBy: none
+		sourceColumn: Nom
+
+		annotation SummarizationSetBy = Automatic
+
+	column Prenom
+		dataType: string
+		lineageTag: 0c2a696d-bedd-4281-a755-138a5cea9e04
+		sourceLineageTag: Prenom
+		summarizeBy: none
+		sourceColumn: Prenom
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Full Name'
+		dataType: string
+		lineageTag: 6252a232-8427-4cf8-a740-f95b9f22c13b
+		sourceLineageTag: FullName
+		summarizeBy: none
+		sourceColumn: FullName
+
+		changedProperty = Name
+
+		annotation SummarizationSetBy = Automatic
+
+	partition Parents = entity
+		mode: directLake
+		source
+			entityName: Parents
+			schemaName: LISE
+			expressionSource: 'DirectLake - WH_GOLD'
+

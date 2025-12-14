@@ -43,7 +43,7 @@
           "datasetSettings": {
             "annotations": [],
             "connectionSettings": {
-              "name": "af4985d7_0cb3_4b2b_acda_b5d215a715b5",
+              "name": "dbbe6cdd_3ec2_4255_9a6d_d77fbad1a2a4",
               "properties": {
                 "annotations": [],
                 "type": "Lakehouse",
@@ -218,7 +218,7 @@
                   "datasetSettings": {
                     "annotations": [],
                     "connectionSettings": {
-                      "name": "4890ac4d_32be_48b7_82bf_4ef95292d416",
+                      "name": "5094bdde_56f2_4e25_a680_45629c738d49",
                       "properties": {
                         "annotations": [],
                         "type": "Lakehouse",
@@ -262,7 +262,7 @@
                   "datasetSettings": {
                     "annotations": [],
                     "connectionSettings": {
-                      "name": "9ee92bc1_6dbf_4d37_953b_1226b2796d6d",
+                      "name": "d1fd47ad_de59_43d3_b74c_65322d74badc",
                       "properties": {
                         "annotations": [],
                         "type": "Lakehouse",
@@ -330,7 +330,7 @@
                 "datasetSettings": {
                   "annotations": [],
                   "connectionSettings": {
-                    "name": "556eecfa_20fa_4e73_b536_4b71598918e2",
+                    "name": "99d2a712_46b6_4170_b2ca_4dfffb012a43",
                     "properties": {
                       "annotations": [],
                       "type": "Lakehouse",
@@ -375,7 +375,7 @@
       },
       "pPeriodOverride": {
         "type": "string",
-        "defaultValue": "2025-11"
+        "defaultValue": "2025-12"
       }
     },
     "variables": {

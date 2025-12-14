@@ -27,7 +27,7 @@
           "datasetSettings": {
             "annotations": [],
             "linkedService": {
-              "name": "4e405310_7b11_4319_a7ac_2ac2fbe4490a",
+              "name": "c7c3241f_cf26_4f2b_966e_80fdf4036ffd",
               "properties": {
                 "annotations": [],
                 "type": "Lakehouse",
@@ -83,7 +83,7 @@
           "datasetSettings": {
             "annotations": [],
             "linkedService": {
-              "name": "80084c2e_7cbd_4a84_9318_0f3657ef4a7b",
+              "name": "9965e57a_1be3_4c69_aece_fbb1452b44f9",
               "properties": {
                 "annotations": [],
                 "type": "Lakehouse",
@@ -146,7 +146,10 @@
                 },
                 "parameters": {
                   "BRONZE_BASE": {
-                    "value": "abfss://LISE@onelake.dfs.fabric.microsoft.com/LH_BRONZE.Lakehouse/Files",
+                    "value": {
+                      "value": "@pipeline().libraryVariables.VL_LISE_BRONZE_BASE",
+                      "type": "Expression"
+                    },
                     "type": "string"
                   }
                 }

@@ -223,7 +223,7 @@ if (-not $stageItems -or $stageItems.Count -eq 0) {
   $itemsFrom = "workspace"
 }
 
-Write-Host "Items discovered from $itemsFrom:" -ForegroundColor Cyan
+Write-Host "Items discovered from $itemsFrom :" -ForegroundColor Cyan
 $stageItems | ForEach-Object {
   Write-Host " - $($_.itemDisplayName) [$($_.itemType)] from $($_.source)"
 }

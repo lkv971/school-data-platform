@@ -22,7 +22,7 @@ jobs:
       FABRIC_TENANT_ID:     ${{ secrets.FABRIC_TENANT_ID }}
       FABRIC_CLIENT_ID:     ${{ secrets.FABRIC_CLIENT_ID }}
       FABRIC_CLIENT_SECRET: ${{ secrets.FABRIC_CLIENT_SECRET }}
-      FABRIC_PIPELINE_NAME: 'LISE Deployment'
+      FABRIC_PIPELINE_NAME: 'DP_LISE'
       FABRIC_SOURCE_STAGE:  'Development'
       FABRIC_TARGET_STAGE:  'Test'
 

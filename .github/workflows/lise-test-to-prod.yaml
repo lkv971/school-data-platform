@@ -17,13 +17,13 @@ on:
 jobs:
   deploy-test-to-prod:
     runs-on: windows-latest
-    environment: prod   # we’ll create this environment in GitHub later
+    environment: prod   # Uses the 'prod' environment you configured (with approval)
 
     env:
       FABRIC_TENANT_ID:     ${{ secrets.FABRIC_TENANT_ID }}
       FABRIC_CLIENT_ID:     ${{ secrets.FABRIC_CLIENT_ID }}
       FABRIC_CLIENT_SECRET: ${{ secrets.FABRIC_CLIENT_SECRET }}
-      FABRIC_PIPELINE_NAME: 'LISE Deployment'
+      FABRIC_PIPELINE_NAME: 'DP_LISE'
       FABRIC_SOURCE_STAGE:  'Test'
       FABRIC_TARGET_STAGE:  'Production'
 

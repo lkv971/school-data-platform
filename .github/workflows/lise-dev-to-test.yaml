@@ -17,14 +17,15 @@ on:
 jobs:
   deploy-dev-to-test:
     runs-on: windows-latest
+    environment: test   # 👈 use the 'test' environment
 
     env:
       FABRIC_TENANT_ID:     ${{ secrets.FABRIC_TENANT_ID }}
       FABRIC_CLIENT_ID:     ${{ secrets.FABRIC_CLIENT_ID }}
       FABRIC_CLIENT_SECRET: ${{ secrets.FABRIC_CLIENT_SECRET }}
-      FABRIC_PIPELINE_NAME: 'DP_LISE'
-      FABRIC_SOURCE_STAGE:  'Development'
-      FABRIC_TARGET_STAGE:  'Test'
+      FABRIC_PIPELINE_NAME: ${{ vars.FABRIC_PIPELINE_NAME }}
+      FABRIC_SOURCE_STAGE:  ${{ vars.FABRIC_SOURCE_STAGE }}
+      FABRIC_TARGET_STAGE:  ${{ vars.FABRIC_TARGET_STAGE }}
 
     steps:
       - name: Checkout repository

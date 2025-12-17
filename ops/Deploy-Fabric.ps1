@@ -4,9 +4,10 @@ Deploy Dev/Test/Prod using Fabric REST:
 - Resolves the deployment pipeline by name or ID.
 - Resolves stages by name ("Development", "Test", "Production") via /stages.
 - Discovers items from the source stage, falling back to the workspace if needed.
-- Filters to deployable item types.
-- Excludes item types that the REST deploy API currently doesn't support well
+- Filters to deployable item types (Lakehouse, DataPipeline, Notebook, Dataflow, etc.).
+- Excludes item types that the REST deploy API doesn't support or that we don't want to move
   (SemanticModel, Report, VariableLibrary, SQLEndpoint, Dashboard, Warehouse).
+- Also excludes internal staging artifacts by name, like StagingLakehouseForDataflows_*.
 - Can optionally deploy only a subset via -ItemsJson.
 #>
 
@@ -37,7 +38,13 @@ param(
     "VariableLibrary",
     "SQLEndpoint",
     "Dashboard",
-    "Warehouse"   # <-- Important: avoid PrincipalTypeNotSupported for Warehouse
+    "Warehouse"   # avoid PrincipalTypeNotSupported for Warehouse
+  ),
+
+  # Name patterns to exclude (internal/staging artifacts, etc.)
+  [string[]]$ExcludeNamePatterns = @(
+    "StagingLakehouseForDataflows_",
+    "StagingWarehouseForDataflows_"
   )
 )
 
@@ -94,10 +101,9 @@ function PostLro {
   Write-Host "POST $Uri"
   $json = $Body | ConvertTo-Json -Depth 50
 
-  # Let errors bubble up so we see error details (like BadRequest, etc.)
   $resp = Invoke-WebRequest -Method POST -Uri $Uri -Headers $Headers -Body $json -ContentType "application/json" -MaximumRedirection 0
 
-  # If the API returns 200/201 with a body and no LRO, just return it
+  # If the API returns 2xx with a body and no LRO, just return it
   if ($resp.StatusCode -ge 200 -and $resp.StatusCode -lt 300 -and -not $resp.Headers["Operation-Location"]) {
     if ($resp.Content) {
       return ($resp.Content | ConvertFrom-Json)
@@ -108,7 +114,6 @@ function PostLro {
   # Long-running operation pattern (202 + Operation-Location)
   $opUrl = $resp.Headers["Operation-Location"]
   if (-not $opUrl) {
-    # Some services use lowercase header name
     $opUrl = $resp.Headers["operation-location"]
   }
   if (-not $opUrl) {
@@ -130,11 +135,9 @@ function PostLro {
       continue
     }
 
-    # Expecting properties like 'status'
     if ($lro -and $lro.status) {
       Write-Host "LRO status: $($lro.status)"
       if ($lro.status -ieq "Succeeded") {
-        # Some services require an extra GET /result; others include it inline
         try {
           $result = Invoke-RestMethod -Method GET -Uri ($opUrl.TrimEnd('/') + "/result") -Headers $Headers
           return $result
@@ -156,15 +159,34 @@ function PostLro {
 function Filter-Excluded {
   param(
     [object[]]$Items,
-    [string[]]$Exclude
+    [string[]]$Exclude,
+    [string[]]$ExcludeNamePatterns
   )
 
   $kept = @()
   foreach ($i in $Items) {
-    if ($Exclude -contains $i.itemType) {
-      Write-Host "Skipping item due to ExcludeItemTypes: $($i.itemDisplayName ?? $i.sourceItemId) [$($i.itemType)]"
+    $name = $i.itemDisplayName
+    $type = $i.itemType
+
+    # Type-based exclusion
+    if ($Exclude -contains $type) {
+      Write-Host "Skipping item due to ExcludeItemTypes: $name [$type]"
       continue
     }
+
+    # Name-based exclusion (patterns)
+    if ($name -and $ExcludeNamePatterns -and $ExcludeNamePatterns.Count -gt 0) {
+      $skipByName = $false
+      foreach ($pat in $ExcludeNamePatterns) {
+        if ($name -like ($pat + "*")) {
+          Write-Host "Skipping item due to ExcludeNamePatterns ('$pat'): $name [$type]"
+          $skipByName = $true
+          break
+        }
+      }
+      if ($skipByName) { continue }
+    }
+
     $kept += $i
   }
   return $kept
@@ -215,7 +237,7 @@ foreach ($st in $stages) {
   Write-Host (" - displayName='{0}', stageType='{1}', workspaceName='{2}', workspaceId='{3}'" -f $name, $stageType, $wsName, $wsId) -ForegroundColor DarkGray
 }
 
-# Match by stageType or displayName (so 'Development', 'Test', 'Production' work)
+# Match by stageType or displayName
 $src = $stages | Where-Object {
   (($_.stageType   ?? "").Trim() -ieq $SourceStage.Trim()) -or
   (($_.displayName ?? "").Trim() -ieq $SourceStage.Trim())
@@ -312,7 +334,7 @@ if (-not $stageItems -or $stageItems.Count -eq 0) {
 
 Write-Host ("Items discovered from {0}" -f $itemsFrom) -ForegroundColor Cyan
 foreach ($i in $stageItems) {
-  Write-Host " - $($i.itemDisplayName) [$($i.itemType)] (source=$($i.source))"
+  Write-Host " - $($i.itemDisplayName) [$($i.itemType)] (id=$($i.sourceItemId), source=$($i.source))"
 }
 
 # ---------------------- Build list of items to deploy ----------------------
@@ -324,8 +346,8 @@ if ($ItemsJson -and $ItemsJson.Trim()) {
   $requested = $ItemsJson | ConvertFrom-Json
 
   foreach ($req in $requested) {
-    $typ  = ($req.itemType ?? "").Trim()
-    $disp = ($req.itemDisplayName ?? "").Trim()
+    $typ   = ($req.itemType ?? "").Trim()
+    $disp  = ($req.itemDisplayName ?? "").Trim()
     $srcId = ($req.sourceItemId ?? "").Trim()
 
     if (-not ($SupportedTypes -contains $typ)) {
@@ -370,16 +392,16 @@ else {
   }
 }
 
-# Apply ExcludeItemTypes
-$itemsToSend = Filter-Excluded -Items $itemsToSend -Exclude $ExcludeItemTypes
+# Apply ExcludeItemTypes + name patterns
+$itemsToSend = Filter-Excluded -Items $itemsToSend -Exclude $ExcludeItemTypes -ExcludeNamePatterns $ExcludeNamePatterns
 
 if (-not $itemsToSend -or $itemsToSend.Count -eq 0) {
-  throw "After filtering to SupportedTypes and applying ExcludeItemTypes, no items remain to deploy."
+  throw "After filtering to SupportedTypes and applying ExcludeItemTypes/NamePatterns, no items remain to deploy."
 }
 
 Write-Host "Items to deploy (from $itemsFrom):"
 foreach ($i in $itemsToSend) {
-  Write-Host " - $($i.itemDisplayName) [$($i.itemType)]"
+  Write-Host " - $($i.itemDisplayName) [$($i.itemType)] (id=$($i.sourceItemId))"
 }
 
 # ---------------------- Build deploy body and call API ----------------------

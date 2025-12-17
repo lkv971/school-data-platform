@@ -4,11 +4,13 @@ Deploy Dev/Test/Prod using Fabric REST:
 - Resolves the deployment pipeline by name or ID.
 - Resolves stages by name ("Development", "Test", "Production") via /stages.
 - Discovers items from the source stage, falling back to the workspace if needed.
-- Filters to deployable item types (Lakehouse, DataPipeline, Notebook, Dataflow, etc.).
-- Excludes item types that the REST deploy API doesn't support or that we don't want to move
-  (SemanticModel, Report, VariableLibrary, SQLEndpoint, Dashboard, Warehouse).
-- Also excludes internal staging artifacts by name, like StagingLakehouseForDataflows_*.
-- Can optionally deploy only a subset via -ItemsJson.
+- Filters to deployable item types (Lakehouse, DataPipeline, Notebook, etc.).
+- Excludes:
+    - SemanticModel, Report, VariableLibrary, SQLEndpoint, Dashboard
+    - Warehouse (REST + SP limitation)
+    - Dataflow/DataflowGen2 (DF_GOLD → Warehouse causing UnknownError)
+    - Staging lakehouses/warehouses (StagingLakehouseForDataflows_*, StagingWarehouseForDataflows_*)
+- Optional selective deploy via -ItemsJson.
 #>
 
 param(
@@ -38,7 +40,9 @@ param(
     "VariableLibrary",
     "SQLEndpoint",
     "Dashboard",
-    "Warehouse"   # avoid PrincipalTypeNotSupported for Warehouse
+    "Warehouse",    # avoid PrincipalTypeNotSupported for Warehouse
+    "Dataflow",     # avoid UnknownError for Dataflows
+    "DataflowGen2"  # same for Gen2
   ),
 
   # Name patterns to exclude (internal/staging artifacts, etc.)
@@ -52,6 +56,7 @@ $ErrorActionPreference = "Stop"
 $base = "https://api.fabric.microsoft.com/v1"
 
 # Types that the deploy API can accept (workspace item 'type' or stage item 'itemType')
+# We *see* Dataflows but they get excluded later via ExcludeItemTypes.
 $SupportedTypes = @(
   "Lakehouse",
   "DataPipeline",
@@ -82,7 +87,7 @@ function Get-FabricToken {
   (Invoke-RestMethod -Method POST -Uri $tokenUri -Body $body -ContentType "application/x-www-form-urlencoded").access_token
 }
 
-$token = Get-FabricToken -TenantId $TenantId -ClientId $ClientId -ClientSecret $ClientSecret
+$token   = Get-FabricToken -TenantId $TenantId -ClientId $ClientId -ClientSecret $ClientSecret
 $Headers = @{ Authorization = "Bearer $token" }
 
 function GetJson {
@@ -196,7 +201,6 @@ function Filter-Excluded {
 
 $pipeId = $PipelineId
 if (-not $pipeId) {
-
   $all = (GetJson "$base/deploymentPipelines").value
   if (-not $all) {
     throw "No deployment pipelines visible to the service principal."
@@ -373,7 +377,7 @@ if ($ItemsJson -and $ItemsJson.Trim()) {
     }
 
     foreach ($m in $match) {
-      $itemsToSend += @{
+      $itemsToSend += [PSCustomObject]@{
         sourceItemId    = $m.sourceItemId
         itemType        = $m.itemType
         itemDisplayName = $m.itemDisplayName
@@ -384,7 +388,7 @@ if ($ItemsJson -and $ItemsJson.Trim()) {
 else {
   # No selective list → deploy all discovered items
   $itemsToSend = $stageItems | ForEach-Object {
-    @{
+    [PSCustomObject]@{
       sourceItemId    = $_.sourceItemId
       itemType        = $_.itemType
       itemDisplayName = $_.itemDisplayName

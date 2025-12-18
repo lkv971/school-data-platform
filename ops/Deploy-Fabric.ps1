@@ -4,13 +4,16 @@ Deploy Dev/Test/Prod using Fabric REST:
 - Resolves the deployment pipeline by name or ID.
 - Resolves stages by name ("Development", "Test", "Production") via /stages.
 - Discovers items from the source stage, falling back to the workspace if needed.
-- Filters to deployable item types (Lakehouse, DataPipeline, Notebook, etc.).
+- Deploys:
+    - Lakehouse
+    - DataPipeline (PL_BRONZE, PL_SILVER, PL_GOLD, PL_Payroll, etc.)
+    - Notebook
+    - Dataflow / DataflowGen2 (DF_GOLD)
 - Excludes:
     - SemanticModel, Report, VariableLibrary, SQLEndpoint, Dashboard
-    - Warehouse (REST + SP limitation)
-    - Dataflow/DataflowGen2 (DF_GOLD → Warehouse causing UnknownError)
+    - Warehouse (WH_GOLD etc., due to SP limitations)
     - Staging lakehouses/warehouses (StagingLakehouseForDataflows_*, StagingWarehouseForDataflows_*)
-- Optional selective deploy via -ItemsJson.
+- Optional selective deploy via -ItemsJson, otherwise deploys all discovered items minus exclusions.
 #>
 
 param(
@@ -33,16 +36,14 @@ param(
   # e.g. '[{"itemDisplayName":"LH_BRONZE","itemType":"Lakehouse"}]'
   [string]$ItemsJson = "",
 
-  # Item types to exclude from deploy (REST limitations / design choice)
+  # Item types to exclude from deploy
   [string[]]$ExcludeItemTypes = @(
     "SemanticModel",
     "Report",
     "VariableLibrary",
     "SQLEndpoint",
     "Dashboard",
-    "Warehouse",    # avoid PrincipalTypeNotSupported for Warehouse
-    "Dataflow",     # avoid UnknownError for Dataflows
-    "DataflowGen2"  # same for Gen2
+    "Warehouse"    # avoid PrincipalTypeNotSupported for Warehouse
   ),
 
   # Name patterns to exclude (internal/staging artifacts, etc.)
@@ -56,7 +57,6 @@ $ErrorActionPreference = "Stop"
 $base = "https://api.fabric.microsoft.com/v1"
 
 # Types that the deploy API can accept (workspace item 'type' or stage item 'itemType')
-# We *see* Dataflows but they get excluded later via ExcludeItemTypes.
 $SupportedTypes = @(
   "Lakehouse",
   "DataPipeline",
@@ -65,7 +65,10 @@ $SupportedTypes = @(
   "Report",
   "Warehouse",
   "Dataflow",
-  "DataflowGen2"
+  "DataflowGen2",
+  "Dashboard",
+  "SQLEndpoint",
+  "VariableLibrary"
 )
 
 function Get-FabricToken {
@@ -206,12 +209,19 @@ if (-not $pipeId) {
     throw "No deployment pipelines visible to the service principal."
   }
 
-  $targetName = ($PipelineName ?? "").Trim()
-  if (-not $targetName) {
+  if ([string]::IsNullOrWhiteSpace($PipelineName)) {
     $targetName = "DP_LISE"
   }
+  else {
+    $targetName = $PipelineName.Trim()
+  }
 
-  $pipe = $all | Where-Object { (($_.displayName ?? "").Trim()) -ieq $targetName }
+  $pipe = $all | Where-Object {
+    $dn = $_.displayName
+    if ($null -eq $dn) { $dn = "" }
+    $dn.Trim() -ieq $targetName
+  }
+
   if (-not $pipe) {
     Write-Host "Pipelines visible to SPN:"
     foreach ($p in $all) {
@@ -241,14 +251,24 @@ foreach ($st in $stages) {
   Write-Host (" - displayName='{0}', stageType='{1}', workspaceName='{2}', workspaceId='{3}'" -f $name, $stageType, $wsName, $wsId) -ForegroundColor DarkGray
 }
 
-# Match by stageType or displayName
 $src = $stages | Where-Object {
-  (($_.stageType   ?? "").Trim() -ieq $SourceStage.Trim()) -or
-  (($_.displayName ?? "").Trim() -ieq $SourceStage.Trim())
+  $stType = $_.stageType
+  if ($null -eq $stType) { $stType = "" }
+  $disp = $_.displayName
+  if ($null -eq $disp) { $disp = "" }
+
+  ($stType.Trim() -ieq $SourceStage.Trim()) -or
+  ($disp.Trim()   -ieq $SourceStage.Trim())
 }
+
 $dst = $stages | Where-Object {
-  (($_.stageType   ?? "").Trim() -ieq $TargetStage.Trim()) -or
-  (($_.displayName ?? "").Trim() -ieq $TargetStage.Trim())
+  $stType = $_.stageType
+  if ($null -eq $stType) { $stType = "" }
+  $disp = $_.displayName
+  if ($null -eq $disp) { $disp = "" }
+
+  ($stType.Trim() -ieq $TargetStage.Trim()) -or
+  ($disp.Trim()   -ieq $TargetStage.Trim())
 }
 
 if (-not $src) {
@@ -350,9 +370,9 @@ if ($ItemsJson -and $ItemsJson.Trim()) {
   $requested = $ItemsJson | ConvertFrom-Json
 
   foreach ($req in $requested) {
-    $typ   = ($req.itemType ?? "").Trim()
-    $disp  = ($req.itemDisplayName ?? "").Trim()
-    $srcId = ($req.sourceItemId ?? "").Trim()
+    $typ   = if ($null -ne $req.itemType) { $req.itemType.Trim() } else { "" }
+    $disp  = if ($null -ne $req.itemDisplayName) { $req.itemDisplayName.Trim() } else { "" }
+    $srcId = if ($null -ne $req.sourceItemId) { $req.sourceItemId.Trim() } else { "" }
 
     if (-not ($SupportedTypes -contains $typ)) {
       Write-Host "Skipping requested item '$disp' [$typ] — not in SupportedTypes."
@@ -366,8 +386,13 @@ if ($ItemsJson -and $ItemsJson.Trim()) {
     }
     elseif ($disp -and $typ) {
       $match = $stageItems | Where-Object {
-        (($_.itemDisplayName ?? "").Trim() -ieq $disp) -and
-        (($_.itemType        ?? "").Trim() -ieq $typ)
+        $dName = $_.itemDisplayName
+        if ($null -eq $dName) { $dName = "" }
+        $iType = $_.itemType
+        if ($null -eq $iType) { $iType = "" }
+
+        ($dName.Trim() -ieq $disp) -and
+        ($iType.Trim() -ieq $typ)
       }
     }
 

@@ -1,31 +1,20 @@
-name: LISE Dev → Test
+name: deploy-dev-to-test
 
 on:
   push:
     branches:
       - dev
-    paths:
-      - 'ops/**'
-      - '.github/workflows/lise-dev-to-test.yml'
   workflow_dispatch:
-    inputs:
-      note:
-        description: 'Deployment note'
-        required: false
-        default: 'Deploy Dev → Test'
 
 jobs:
-  deploy-dev-to-test:
+  deploy:
     runs-on: windows-latest
-    environment: test   # 👈 use the 'test' environment
+    environment: test   # <-- now it uses the test environment
 
     env:
-      FABRIC_TENANT_ID:     ${{ secrets.FABRIC_TENANT_ID }}
-      FABRIC_CLIENT_ID:     ${{ secrets.FABRIC_CLIENT_ID }}
-      FABRIC_CLIENT_SECRET: ${{ secrets.FABRIC_CLIENT_SECRET }}
       FABRIC_PIPELINE_NAME: ${{ vars.FABRIC_PIPELINE_NAME }}
-      FABRIC_SOURCE_STAGE:  ${{ vars.FABRIC_SOURCE_STAGE }}
-      FABRIC_TARGET_STAGE:  ${{ vars.FABRIC_TARGET_STAGE }}
+      FABRIC_SOURCE_STAGE:  ${{ vars.FABRIC_SOURCE_STAGE_DEV }}
+      FABRIC_TARGET_STAGE:  ${{ vars.FABRIC_TARGET_STAGE_TEST }}
 
     steps:
       - name: Checkout repository
@@ -34,16 +23,14 @@ jobs:
       - name: Run Deploy-Fabric.ps1 (Dev → Test)
         shell: pwsh
         run: |
-          $note = "${{ github.event.inputs.note }}"
-          if ([string]::IsNullOrWhiteSpace($note)) {
-            $note = "Dev → Test deploy from GitHub run $env:GITHUB_RUN_ID"
+          $params = @{
+            TenantId     = "${{ secrets.FABRIC_TENANT_ID }}"
+            ClientId     = "${{ secrets.FABRIC_CLIENT_ID }}"
+            ClientSecret = "${{ secrets.FABRIC_CLIENT_SECRET }}"
+            PipelineName = $env:FABRIC_PIPELINE_NAME
+            SourceStage  = $env:FABRIC_SOURCE_STAGE
+            TargetStage  = $env:FABRIC_TARGET_STAGE
+            Note         = "Dev → Test deploy (GitHub Actions run $env:GITHUB_RUN_ID)"
           }
 
-          ./ops/Deploy-Fabric.ps1 `
-            -TenantId     $env:FABRIC_TENANT_ID `
-            -ClientId     $env:FABRIC_CLIENT_ID `
-            -ClientSecret $env:FABRIC_CLIENT_SECRET `
-            -PipelineName $env:FABRIC_PIPELINE_NAME `
-            -SourceStage  $env:FABRIC_SOURCE_STAGE `
-            -TargetStage  $env:FABRIC_TARGET_STAGE `
-            -Note         $note
+          ./ops/Deploy-Fabric.ps1 @params

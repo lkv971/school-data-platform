@@ -2,7 +2,7 @@
 Deploy Dev/Test/Prod using Fabric REST:
 
 - Resolves the deployment pipeline by name or ID.
-- Resolves stages by name ("Development", "Test", "Production") via /stages.
+- Resolves stages by displayName ("Development", "Test", "Production").
 - Discovers items from the source stage, falling back to the workspace if needed.
 - Deploys:
     - Lakehouse
@@ -121,12 +121,8 @@ function PostLro {
 
   # Long-running operation pattern (202 + Operation-Location)
   $opUrl = $resp.Headers["Operation-Location"]
-  if (-not $opUrl) {
-    $opUrl = $resp.Headers["operation-location"]
-  }
-  if (-not $opUrl) {
-    throw "No Operation-Location header returned for async operation."
-  }
+  if (-not $opUrl) { $opUrl = $resp.Headers["operation-location"] }
+  if (-not $opUrl) { throw "No Operation-Location header returned for async operation." }
 
   Write-Host "Long-running operation URL: $opUrl"
 
@@ -145,16 +141,10 @@ function PostLro {
 
     if ($lro -and $lro.status) {
       Write-Host "LRO status: $($lro.status)"
-      if ($lro.status -ieq "Succeeded") {
-        try {
-          $result = Invoke-RestMethod -Method GET -Uri ($opUrl.TrimEnd('/') + "/result") -Headers $Headers
-          return $result
-        }
-        catch {
-          return $lro
-        }
+      if ($lro.status -eq "Succeeded") {
+        return $lro
       }
-      elseif ($lro.status -ieq "Failed" -or $lro.status -ieq "Cancelled") {
+      elseif ($lro.status -eq "Failed" -or $lro.status -eq "Cancelled") {
         throw "Deployment LRO ended with status '$($lro.status)'. Details: $($lro | ConvertTo-Json -Depth 10)"
       }
     }
@@ -166,14 +156,14 @@ function PostLro {
 
 function Filter-Excluded {
   param(
-    [object[]]$Items,
+    [array]$Items,
     [string[]]$Exclude,
     [string[]]$ExcludeNamePatterns
   )
 
   $kept = @()
   foreach ($i in $Items) {
-    $name = $i.itemDisplayName
+    $name = if ($null -ne $i.itemDisplayName) { $i.itemDisplayName } else { "" }
     $type = $i.itemType
 
     # Type-based exclusion
@@ -204,17 +194,14 @@ function Filter-Excluded {
 
 $pipeId = $PipelineId
 if (-not $pipeId) {
-  $all = (GetJson "$base/deploymentPipelines").value
-  if (-not $all) {
-    throw "No deployment pipelines visible to the service principal."
+  if ([string]::IsNullOrWhiteSpace($PipelineName)) {
+    throw "Either PipelineId or PipelineName must be provided."
   }
 
-  if ([string]::IsNullOrWhiteSpace($PipelineName)) {
-    $targetName = "DP_LISE"
-  }
-  else {
-    $targetName = $PipelineName.Trim()
-  }
+  $all = (GetJson "$base/deploymentPipelines").value
+  if (-not $all) { throw "No deployment pipelines visible to the service principal." }
+
+  $targetName = $PipelineName.Trim()
 
   $pipe = $all | Where-Object {
     $dn = $_.displayName
@@ -223,20 +210,17 @@ if (-not $pipeId) {
   }
 
   if (-not $pipe) {
-    Write-Host "Pipelines visible to SPN:"
-    foreach ($p in $all) {
-      Write-Host " - $($p.displayName) [$($p.id)]"
-    }
-    throw "Deployment pipeline '$PipelineName' not found."
+    $names = ($all | ForEach-Object { $_.displayName }) -join ", "
+    throw "Deployment pipeline '$targetName' not found. Visible pipelines: $names"
   }
 
   $pipeId = $pipe.id
-  Write-Host "Pipeline: $($pipe.displayName) [$pipeId]"
 }
 else {
   $pipe = GetJson "$base/deploymentPipelines/$pipeId"
-  Write-Host "Pipeline: $($pipe.displayName) [$pipeId]"
 }
+
+Write-Host "Pipeline: $($pipe.displayName) [$pipeId]"
 
 # ---------------------- Resolve stages ----------------------
 
@@ -248,72 +232,57 @@ foreach ($st in $stages) {
   $stageType = $st.stageType
   $wsName    = $st.workspaceName
   $wsId      = $st.workspaceId
-  Write-Host (" - displayName='{0}', stageType='{1}', workspaceName='{2}', workspaceId='{3}'" -f $name, $stageType, $wsName, $wsId) -ForegroundColor DarkGray
+  Write-Host (" - displayName='{0}', stageType='{1}', workspaceName='{2}', workspaceId='{3}'" -f $name, $stageType, $wsName, $wsId)
 }
 
 $src = $stages | Where-Object {
-  $stType = $_.stageType
-  if ($null -eq $stType) { $stType = "" }
   $disp = $_.displayName
   if ($null -eq $disp) { $disp = "" }
-
-  ($stType.Trim() -ieq $SourceStage.Trim()) -or
-  ($disp.Trim()   -ieq $SourceStage.Trim())
+  $disp.Trim() -ieq $SourceStage.Trim()
+}
+$dst = $stages | Where-Object {
+  $disp = $_.displayName
+  if ($null -eq $disp) { $disp = "" }
+  $disp.Trim() -ieq $TargetStage.Trim()
 }
 
-$dst = $stages | Where-Object {
-  $stType = $_.stageType
-  if ($null -eq $stType) { $stType = "" }
-  $disp = $_.displayName
-  if ($null -eq $disp) { $disp = "" }
-
-  ($stType.Trim() -ieq $TargetStage.Trim()) -or
-  ($disp.Trim()   -ieq $TargetStage.Trim())
+if ($src.Count -gt 1) {
+  $matches = ($src | ForEach-Object { "'$($_.displayName)' (ID: $($_.id))" }) -join ", "
+  throw "Multiple source stages match '$SourceStage': $matches"
+}
+if ($dst.Count -gt 1) {
+  $matches = ($dst | ForEach-Object { "'$($_.displayName)' (ID: $($_.id))" }) -join ", "
+  throw "Multiple target stages match '$TargetStage': $matches"
 }
 
 if (-not $src) {
-  throw "Source stage '$SourceStage' not found in pipeline '$($pipe.displayName)'. See 'Stages returned by API' above."
+  $validNames = ($stages | ForEach-Object { $_.displayName }) -join ", "
+  throw "Source stage '$SourceStage' not found. Valid stages: $validNames"
 }
 if (-not $dst) {
-  throw "Target stage '$TargetStage' not found in pipeline '$($pipe.displayName)'. See 'Stages returned by API' above."
+  $validNames = ($stages | ForEach-Object { $_.displayName }) -join ", "
+  throw "Target stage '$TargetStage' not found. Valid stages: $validNames"
 }
 
-Write-Host "Source stage: $($src.displayName) [$($src.id)] (stageType='$($src.stageType)', workspaceName='$($src.workspaceName)')" -ForegroundColor Cyan
-Write-Host "Target stage: $($dst.displayName) [$($dst.id)] (stageType='$($dst.stageType)', workspaceName='$($dst.workspaceName)')" -ForegroundColor Cyan
+Write-Host "Source stage: $($src.displayName) [$($src.id)] (workspaceName='$($src.workspaceName)')" -ForegroundColor Green
+Write-Host "Target stage: $($dst.displayName) [$($dst.id)] (workspaceName='$($dst.workspaceName)')" -ForegroundColor Green
 
-# ---------------------- Resolve source workspaceId ----------------------
+# ---------------------- Discover items ----------------------
 
-$srcWsId = $null
-foreach ($prop in @("workspaceId","assignedWorkspaceId","workspaceGuid","workspaceObjectId")) {
-  if ($src.PSObject.Properties.Name -contains $prop -and $src.$prop) {
-    $srcWsId = $src.$prop
-    break
-  }
+$stageItemsUri = "$base/deploymentPipelines/$pipeId/stages/$($src.id)/items"
+$stageItemsResult = $null
+try {
+  $stageItemsResult = GetJson -Uri $stageItemsUri
 }
-
-if (-not $srcWsId) {
-  $srcStageObj = GetJson "$base/deploymentPipelines/$pipeId/stages/$($src.id)"
-  foreach ($prop in @("workspaceId","assignedWorkspaceId","workspaceGuid","workspaceObjectId")) {
-    if ($srcStageObj.PSObject.Properties.Name -contains $prop -and $srcStageObj.$prop) {
-      $srcWsId = $srcStageObj.$prop
-      break
-    }
-  }
+catch {
+  Write-Host "Failed to get items from stage endpoint. Will fall back to workspace items." -ForegroundColor Yellow
 }
-
-if (-not $srcWsId) {
-  throw "Could not resolve the source stage workspaceId. Ensure the stage is assigned to a workspace."
-}
-
-# ---------------------- Discover items from source stage/workspace ----------------------
-
-# 1) Try stage items
-$itemsUri      = "$base/deploymentPipelines/$pipeId/stages/$($src.id)/items"
-$stageItemsRaw = (GetJson $itemsUri).value
 
 $stageItems = @()
-if ($stageItemsRaw) {
-  $stageItems = $stageItemsRaw | Where-Object {
+$itemsFrom  = ""
+
+if ($stageItemsResult -and $stageItemsResult.value) {
+  $stageItems = $stageItemsResult.value | Where-Object {
     $_.PSObject.Properties.Name -contains "sourceItemId" -and
     $_.sourceItemId -and
     ($_.sourceItemId -match '^[0-9a-fA-F-]{36}$') -and
@@ -326,14 +295,14 @@ if ($stageItemsRaw) {
       source          = "stage"
     }
   }
+
+  $itemsFrom = "stage"
 }
 
-$itemsFrom = "stage"
-
-# 2) Fallback to workspace items if stage items aren't usable
 if (-not $stageItems -or $stageItems.Count -eq 0) {
-  Write-Host "No deployable items from stage endpoint; falling back to workspace items for $srcWsId ..."
-  $wsItems = (GetJson "$base/workspaces/$srcWsId/items").value
+  Write-Host "No deployable items from stage endpoint; falling back to workspace items for $($src.workspaceId) ..." -ForegroundColor Yellow
+
+  $wsItems = (GetJson "$base/workspaces/$($src.workspaceId)/items").value
 
   $stageItems = $wsItems | Where-Object {
     $_.PSObject.Properties.Name -contains "id" -and
@@ -386,10 +355,8 @@ if ($ItemsJson -and $ItemsJson.Trim()) {
     }
     elseif ($disp -and $typ) {
       $match = $stageItems | Where-Object {
-        $dName = $_.itemDisplayName
-        if ($null -eq $dName) { $dName = "" }
-        $iType = $_.itemType
-        if ($null -eq $iType) { $iType = "" }
+        $dName = if ($null -ne $_.itemDisplayName) { $_.itemDisplayName } else { "" }
+        $iType = if ($null -ne $_.itemType)        { $_.itemType        } else { "" }
 
         ($dName.Trim() -ieq $disp) -and
         ($iType.Trim() -ieq $typ)
@@ -433,7 +400,7 @@ foreach ($i in $itemsToSend) {
   Write-Host " - $($i.itemDisplayName) [$($i.itemType)] (id=$($i.sourceItemId))"
 }
 
-# ---------------------- Build deploy body and call API ----------------------
+# ---------------------- Call deploy API ----------------------
 
 $body = @{
   sourceStageId = $src.id

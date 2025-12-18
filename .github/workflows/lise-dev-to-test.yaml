@@ -9,12 +9,12 @@ on:
 jobs:
   deploy:
     runs-on: windows-latest
-    environment: test   # <-- now it uses the test environment
+    environment: test   # uses 'test' environment for vars & secrets
 
     env:
       FABRIC_PIPELINE_NAME: ${{ vars.FABRIC_PIPELINE_NAME }}
-      FABRIC_SOURCE_STAGE:  ${{ vars.FABRIC_SOURCE_STAGE_DEV }}
-      FABRIC_TARGET_STAGE:  ${{ vars.FABRIC_TARGET_STAGE_TEST }}
+      FABRIC_SOURCE_STAGE:  ${{ vars.FABRIC_SOURCE_STAGE }}
+      FABRIC_TARGET_STAGE:  ${{ vars.FABRIC_TARGET_STAGE }}
 
     steps:
       - name: Checkout repository

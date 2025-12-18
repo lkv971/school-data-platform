@@ -9,12 +9,12 @@ on:
 jobs:
   deploy:
     runs-on: windows-latest
-    environment: prod   # uses 'prod' environment's secrets/vars
+    environment: prod   # uses 'prod' environment for vars & secrets (and approvals)
 
     env:
-      FABRIC_PIPELINE_NAME: ${{ vars.FABRIC_PIPELINE_NAME }}         # e.g. DP_LISE
-      FABRIC_SOURCE_STAGE:  ${{ vars.FABRIC_SOURCE_STAGE_TEST }}     # e.g. Test
-      FABRIC_TARGET_STAGE:  ${{ vars.FABRIC_TARGET_STAGE_PROD }}     # e.g. Production
+      FABRIC_PIPELINE_NAME: ${{ vars.FABRIC_PIPELINE_NAME }}
+      FABRIC_SOURCE_STAGE:  ${{ vars.FABRIC_SOURCE_STAGE }}
+      FABRIC_TARGET_STAGE:  ${{ vars.FABRIC_TARGET_STAGE }}
 
     steps:
       - name: Checkout repository

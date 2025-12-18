@@ -1,28 +1,17 @@
-name: LISE Test → Prod
+name: deploy-test-to-prod
 
 on:
   push:
     branches:
       - main
-    paths:
-      - 'ops/**'
-      - '.github/workflows/lise-test-to-prod.yml'
   workflow_dispatch:
-    inputs:
-      note:
-        description: 'Deployment note'
-        required: false
-        default: 'Deploy Test → Prod'
 
 jobs:
-  deploy-test-to-prod:
+  deploy:
     runs-on: windows-latest
-    environment: prod   # 👈 uses the 'prod' environment (with approval + vars + secrets)
+    environment: prod   # uses 'prod' environment for vars & secrets (and approvals)
 
     env:
-      FABRIC_TENANT_ID:     ${{ secrets.FABRIC_TENANT_ID }}
-      FABRIC_CLIENT_ID:     ${{ secrets.FABRIC_CLIENT_ID }}
-      FABRIC_CLIENT_SECRET: ${{ secrets.FABRIC_CLIENT_SECRET }}
       FABRIC_PIPELINE_NAME: ${{ vars.FABRIC_PIPELINE_NAME }}
       FABRIC_SOURCE_STAGE:  ${{ vars.FABRIC_SOURCE_STAGE }}
       FABRIC_TARGET_STAGE:  ${{ vars.FABRIC_TARGET_STAGE }}
@@ -34,16 +23,14 @@ jobs:
       - name: Run Deploy-Fabric.ps1 (Test → Prod)
         shell: pwsh
         run: |
-          $note = "${{ github.event.inputs.note }}"
-          if ([string]::IsNullOrWhiteSpace($note)) {
-            $note = "Test → Prod deploy from GitHub run $env:GITHUB_RUN_ID"
+          $params = @{
+            TenantId     = "${{ secrets.FABRIC_TENANT_ID }}"
+            ClientId     = "${{ secrets.FABRIC_CLIENT_ID }}"
+            ClientSecret = "${{ secrets.FABRIC_CLIENT_SECRET }}"
+            PipelineName = $env:FABRIC_PIPELINE_NAME
+            SourceStage  = $env:FABRIC_SOURCE_STAGE
+            TargetStage  = $env:FABRIC_TARGET_STAGE
+            Note         = "Test → Prod deploy (GitHub Actions run $env:GITHUB_RUN_ID)"
           }
 
-          ./ops/Deploy-Fabric.ps1 `
-            -TenantId     $env:FABRIC_TENANT_ID `
-            -ClientId     $env:FABRIC_CLIENT_ID `
-            -ClientSecret $env:FABRIC_CLIENT_SECRET `
-            -PipelineName $env:FABRIC_PIPELINE_NAME `
-            -SourceStage  $env:FABRIC_SOURCE_STAGE `
-            -TargetStage  $env:FABRIC_TARGET_STAGE `
-            -Note         $note
+          ./ops/Deploy-Fabric.ps1 @params

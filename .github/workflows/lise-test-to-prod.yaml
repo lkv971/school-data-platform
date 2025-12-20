@@ -18,7 +18,7 @@ jobs:
       - name: Deploy Test → Prod (SAFE: lakehouses + notebooks only)
         shell: pwsh
         run: |
-          $itemsJson = @'
+          $itemsJson = @"
           [
             { "itemDisplayName": "LH_BRONZE",        "itemType": "Lakehouse" },
             { "itemDisplayName": "LH_SILVER",        "itemType": "Lakehouse" },
@@ -26,7 +26,7 @@ jobs:
             { "itemDisplayName": "WATERMARK_SILVER", "itemType": "Notebook"  },
             { "itemDisplayName": "NB_SILVER",        "itemType": "Notebook"  }
           ]
-          '@
+          "@
 
           $params = @{
             TenantId     = "${{ secrets.FABRIC_TENANT_ID }}"

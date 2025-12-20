@@ -9,28 +9,23 @@ on:
 jobs:
   deploy:
     runs-on: windows-latest
-    environment: test   # uses 'test' environment for vars & secrets
-
-    env:
-      FABRIC_PIPELINE_NAME: ${{ vars.FABRIC_PIPELINE_NAME }}
-      FABRIC_SOURCE_STAGE:  ${{ vars.FABRIC_SOURCE_STAGE }}
-      FABRIC_TARGET_STAGE:  ${{ vars.FABRIC_TARGET_STAGE }}
+    environment: test
 
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Run Deploy-Fabric.ps1 (Dev → Test)
+      - name: Deploy Dev → Test
         shell: pwsh
         run: |
           $params = @{
             TenantId     = "${{ secrets.FABRIC_TENANT_ID }}"
             ClientId     = "${{ secrets.FABRIC_CLIENT_ID }}"
             ClientSecret = "${{ secrets.FABRIC_CLIENT_SECRET }}"
-            PipelineName = $env:FABRIC_PIPELINE_NAME
-            SourceStage  = $env:FABRIC_SOURCE_STAGE
-            TargetStage  = $env:FABRIC_TARGET_STAGE
-            Note         = "Dev → Test deploy (GitHub Actions run $env:GITHUB_RUN_ID)"
+            PipelineName = "DP_LISE"
+            SourceStage  = "Development"
+            TargetStage  = "Test"
+            Note         = "Dev → Test deploy (run $env:GITHUB_RUN_ID)"
           }
 
           ./ops/Deploy-Fabric.ps1 @params

@@ -14,7 +14,7 @@ param(
   # e.g. '[{"itemDisplayName":"LH_BRONZE","itemType":"Lakehouse"}]'
   [string]$ItemsJson = "",
 
-  # Exclude types that should NOT be deployed automatically (esp. env-specific)
+  # Exclude types that should NOT be deployed automatically (env-specific)
   [string[]]$ExcludeItemTypes = @(
     "VariableLibrary",
     "SemanticModel",
@@ -32,6 +32,21 @@ param(
 
 $ErrorActionPreference = "Stop"
 $base = "https://api.fabric.microsoft.com/v1"
+
+# Keep list broad but realistic
+$SupportedTypes = @(
+  "Lakehouse",
+  "DataPipeline",
+  "Notebook",
+  "Warehouse",
+  "Dataflow",
+  "DataflowGen2",
+  "VariableLibrary",
+  "SemanticModel",
+  "Report",
+  "Dashboard",
+  "SQLEndpoint"
+)
 
 function Get-FabricToken {
   param([string]$TenantId,[string]$ClientId,[string]$ClientSecret)
@@ -67,9 +82,7 @@ function PostLro([string]$Uri, [hashtable]$Headers, [object]$Body) {
   }
 
   $opUrl = $resp.Headers["Operation-Location"]
-  if (-not $opUrl) {
-    return ($resp.Content | ConvertFrom-Json)
-  }
+  if (-not $opUrl) { return ($resp.Content | ConvertFrom-Json) }
 
   while ($true) {
     Start-Sleep -Seconds 5
@@ -113,18 +126,22 @@ $dst = $stages | Where-Object { $_.displayName -eq $TargetStage } | Select-Objec
 
 if (-not $src) { throw "Source stage '$SourceStage' not found in pipeline." }
 if (-not $dst) { throw "Target stage '$TargetStage' not found in pipeline." }
+if (-not $src.workspaceId) { throw "Source stage has no workspaceId assigned." }
 
 Write-Host "Source stage: $($src.displayName) [$($src.id)] (workspaceName='$($src.workspaceName)')"
 Write-Host "Target stage: $($dst.displayName) [$($dst.id)] (workspaceName='$($dst.workspaceName)')"
 
-# ---------------- Discover Items from Stage ----------------
+# ---------------- Discover Items (stage first; fallback to workspace) ----------------
+$discovered = @()
+$itemsFrom = "stage"
+
 $stageItemsResp = GetJson "$base/deploymentPipelines/$pipeId/stages/$($src.id)/items" $headers
 $stageItemsRaw  = $stageItemsResp.value
 
-$discovered = @()
 if ($stageItemsRaw) {
   $discovered = $stageItemsRaw | Where-Object {
-    $_.sourceItemId -and ($_.sourceItemId -match '^[0-9a-fA-F-]{36}$')
+    $_.sourceItemId -and ($_.sourceItemId -match '^[0-9a-fA-F-]{36}$') -and
+    ($SupportedTypes -contains $_.itemType)
   } | ForEach-Object {
     [PSCustomObject]@{
       sourceItemId    = $_.sourceItemId
@@ -135,10 +152,29 @@ if ($stageItemsRaw) {
 }
 
 if (-not $discovered -or $discovered.Count -eq 0) {
-  throw "No items discovered from stage endpoint. Ensure the source stage has content and is assigned to a workspace."
+  # <-- THIS IS THE CRITICAL FIX
+  Write-Host "No items returned by stage endpoint; falling back to workspace items for $($src.workspaceId) ..." -ForegroundColor Yellow
+  $itemsFrom = "workspace"
+
+  $wsItems = (GetJson "$base/workspaces/$($src.workspaceId)/items" $headers).value
+
+  $discovered = $wsItems | Where-Object {
+    $_.id -and ($_.id -match '^[0-9a-fA-F-]{36}$') -and
+    ($SupportedTypes -contains $_.type)
+  } | ForEach-Object {
+    [PSCustomObject]@{
+      sourceItemId    = $_.id
+      itemType        = $_.type
+      itemDisplayName = $_.displayName
+    }
+  }
 }
 
-Write-Host "Items discovered from stage:"
+if (-not $discovered -or $discovered.Count -eq 0) {
+  throw "No deployable items discovered from stage OR workspace. Check SPN permissions and that the workspace contains items."
+}
+
+Write-Host "Items discovered from $itemsFrom:"
 foreach ($i in $discovered) {
   Write-Host " - $($i.itemDisplayName) [$($i.itemType)] (id=$($i.sourceItemId))"
 }
@@ -153,22 +189,14 @@ if ($ItemsJson -and $ItemsJson.Trim()) {
   foreach ($req in $requested) {
     $disp = ($req.itemDisplayName ?? "").Trim()
     $typ  = ($req.itemType ?? "").Trim()
-
     if (-not $disp -or -not $typ) { continue }
 
-    $match = $discovered | Where-Object {
-      $_.itemDisplayName -ieq $disp -and $_.itemType -ieq $typ
-    } | Select-Object -First 1
-
-    if ($match) {
-      $itemsToDeploy += $match
-    } else {
-      Write-Host "Requested item not found in stage: '$disp' [$typ] — skipping."
-    }
+    $match = $discovered | Where-Object { $_.itemDisplayName -ieq $disp -and $_.itemType -ieq $typ } | Select-Object -First 1
+    if ($match) { $itemsToDeploy += $match }
+    else { Write-Host "Requested item not found: '$disp' [$typ] — skipping." }
   }
 }
 else {
-  # Full deploy mode
   $itemsToDeploy = $discovered
 }
 
@@ -177,12 +205,12 @@ $final = @()
 foreach ($it in $itemsToDeploy) {
 
   if ($ExcludeItemTypes -contains $it.itemType) {
-    Write-Host "Skipping item due to ExcludeItemTypes: $($it.itemDisplayName) [$($it.itemType)]"
+    Write-Host "Skipping due to ExcludeItemTypes: $($it.itemDisplayName) [$($it.itemType)]"
     continue
   }
 
   if (Is-ExcludedByName $it.itemDisplayName $ExcludeNamePatterns) {
-    Write-Host "Skipping item due to ExcludeNamePatterns: $($it.itemDisplayName) [$($it.itemType)]"
+    Write-Host "Skipping due to ExcludeNamePatterns: $($it.itemDisplayName) [$($it.itemType)]"
     continue
   }
 

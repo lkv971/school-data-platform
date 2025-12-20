@@ -1,9 +1,8 @@
 name: deploy-dev-to-test
 
-on:
+"on":
   push:
-    branches:
-      - dev
+    branches: [ "dev" ]
   workflow_dispatch:
 
 jobs:
@@ -11,12 +10,15 @@ jobs:
     runs-on: windows-latest
     environment: test
 
+    defaults:
+      run:
+        shell: pwsh
+
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Deploy Dev → Test
-        shell: pwsh
+      - name: Deploy Development -> Test
         run: |
           $params = @{
             TenantId     = "${{ secrets.FABRIC_TENANT_ID }}"
@@ -25,7 +27,7 @@ jobs:
             PipelineName = "DP_LISE"
             SourceStage  = "Development"
             TargetStage  = "Test"
-            Note         = "Dev → Test deploy (run $env:GITHUB_RUN_ID)"
+            Note         = "Dev -> Test deploy (run $env:GITHUB_RUN_ID)"
           }
 
           ./ops/Deploy-Fabric.ps1 @params

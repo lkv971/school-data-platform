@@ -3,37 +3,28 @@ name: deploy-test-to-prod
 on:
   push:
     branches:
-      - main          # runs when you merge dev -> main
-  workflow_dispatch:  # also allow manual run
+      - main
+  workflow_dispatch:
 
 jobs:
   deploy:
     runs-on: windows-latest
-    environment: prod   # uses 'prod' env for vars & secrets
-
-    env:
-      FABRIC_PIPELINE_NAME: ${{ vars.FABRIC_PIPELINE_NAME }}
-      FABRIC_SOURCE_STAGE:  ${{ vars.FABRIC_SOURCE_STAGE }}   # should be 'Test' in prod env
-      FABRIC_TARGET_STAGE:  ${{ vars.FABRIC_TARGET_STAGE }}   # should be 'Production' in prod env
+    environment: prod
 
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Run Deploy-Fabric.ps1 (Test to Prod - exclude WH-dependent items)
+      - name: Deploy Test → Prod (SAFE: lakehouses + notebooks only)
         shell: pwsh
         run: |
-          # Explicit list of items to deploy from Test -> Prod
-          # We deliberately do NOT include DF_GOLD, PL_GOLD, PL_Payroll here.
           $itemsJson = @'
           [
-            { "itemDisplayName": "LH_BRONZE",         "itemType": "Lakehouse" },
-            { "itemDisplayName": "LH_SILVER",         "itemType": "Lakehouse" },
-            { "itemDisplayName": "WATERMARK_BRONZE",  "itemType": "Notebook" },
-            { "itemDisplayName": "WATERMARK_SILVER",  "itemType": "Notebook" },
-            { "itemDisplayName": "NB_SILVER",         "itemType": "Notebook" },
-            { "itemDisplayName": "PL_BRONZE",         "itemType": "DataPipeline" },
-            { "itemDisplayName": "PL_SILVER",         "itemType": "DataPipeline" }
+            { "itemDisplayName": "LH_BRONZE",        "itemType": "Lakehouse" },
+            { "itemDisplayName": "LH_SILVER",        "itemType": "Lakehouse" },
+            { "itemDisplayName": "WATERMARK_BRONZE", "itemType": "Notebook"  },
+            { "itemDisplayName": "WATERMARK_SILVER", "itemType": "Notebook"  },
+            { "itemDisplayName": "NB_SILVER",        "itemType": "Notebook"  }
           ]
           '@
 
@@ -41,10 +32,10 @@ jobs:
             TenantId     = "${{ secrets.FABRIC_TENANT_ID }}"
             ClientId     = "${{ secrets.FABRIC_CLIENT_ID }}"
             ClientSecret = "${{ secrets.FABRIC_CLIENT_SECRET }}"
-            PipelineName = $env:FABRIC_PIPELINE_NAME
-            SourceStage  = $env:FABRIC_SOURCE_STAGE      # "Test"
-            TargetStage  = $env:FABRIC_TARGET_STAGE      # "Production"
-            Note         = "Test to Prod deploy (exclude DF_GOLD/PL_GOLD/PL_Payroll) - run $env:GITHUB_RUN_ID"
+            PipelineName = "DP_LISE"
+            SourceStage  = "Test"
+            TargetStage  = "Production"
+            Note         = "Test → Prod SAFE deploy (run $env:GITHUB_RUN_ID)"
             ItemsJson    = $itemsJson
           }
 

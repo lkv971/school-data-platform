@@ -10,15 +10,12 @@ param(
   [string]$Note = "CI/CD deploy via GitHub Actions",
 
   # Optional JSON array for selective deployments:
-  # Example:
-  # [
-  #   { "itemDisplayName": "LH_BRONZE", "itemType": "Lakehouse" },
-  #   { "itemDisplayName": "NB_SILVER", "itemType": "Notebook" }
-  # ]
   [string]$ItemsJson = "",
 
-  # Default exclusions (enterprise-friendly: don’t overwrite environment-specific things)
+  # DEFAULT exclusions: safe enterprise automation set
+  # (Warehouse excluded because SPN deploy returns PrincipalTypeNotSupported)
   [string[]]$ExcludeItemTypes = @(
+    "Warehouse",
     "VariableLibrary",
     "SemanticModel",
     "Report",
@@ -36,7 +33,6 @@ param(
 $ErrorActionPreference = "Stop"
 $base = "https://api.fabric.microsoft.com/v1"
 
-# Types we understand; anything else will be ignored safely
 $SupportedTypes = @(
   "Lakehouse",
   "DataPipeline",
@@ -98,14 +94,10 @@ function PostLro([string]$Uri, [hashtable]$Headers, [object]$Body) {
   }
 }
 
-function IsGuid([string]$s) {
-  return ($s -match '^[0-9a-fA-F-]{36}$')
-}
+function IsGuid([string]$s) { return ($s -match '^[0-9a-fA-F-]{36}$') }
 
 function Is-ExcludedByName([string]$name, [string[]]$patterns) {
-  foreach ($p in $patterns) {
-    if ($name -like "*$p*") { return $true }
-  }
+  foreach ($p in $patterns) { if ($name -like "*$p*") { return $true } }
   return $false
 }
 
@@ -153,10 +145,7 @@ $stageItemsRaw  = $stageItemsResp.value
 
 if ($stageItemsRaw) {
   foreach ($row in $stageItemsRaw) {
-    $id  = $null
-    if ($row.PSObject.Properties.Name -contains "sourceItemId") { $id = $row.sourceItemId }
-    elseif ($row.PSObject.Properties.Name -contains "id")       { $id = $row.id }
-
+    $id  = $row.sourceItemId
     $typ = $row.itemType
     $nm  = $row.itemDisplayName
 
@@ -176,7 +165,6 @@ if (-not $discovered -or $discovered.Count -eq 0) {
   $itemsFrom = "workspace"
 
   $wsItems = (GetJson "$base/workspaces/$($src.workspaceId)/items" $headers).value
-
   foreach ($row in $wsItems) {
     $id  = $row.id
     $typ = $row.type
@@ -194,7 +182,7 @@ if (-not $discovered -or $discovered.Count -eq 0) {
 }
 
 if (-not $discovered -or $discovered.Count -eq 0) {
-  throw "No deployable items discovered from stage OR workspace. Check SPN permissions and that the workspace contains items."
+  throw "No deployable items discovered from stage OR workspace."
 }
 
 Write-Host ("Items discovered from {0}:" -f $itemsFrom)
@@ -215,11 +203,8 @@ if ($ItemsJson -and $ItemsJson.Trim()) {
     if (-not $disp -or -not $typ) { continue }
 
     $match = $discovered | Where-Object { $_.itemDisplayName -ieq $disp -and $_.itemType -ieq $typ } | Select-Object -First 1
-    if ($match) {
-      $itemsToDeploy += $match
-    } else {
-      Write-Host ("Requested item not found: '{0}' [{1}] — skipping." -f $disp, $typ)
-    }
+    if ($match) { $itemsToDeploy += $match }
+    else { Write-Host ("Requested item not found: '{0}' [{1}] — skipping." -f $disp, $typ) }
   }
 } else {
   $itemsToDeploy = $discovered

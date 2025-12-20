@@ -15,7 +15,7 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Deploy Test → Prod (Lakehouses + Notebooks only)
+      - name: Deploy Test → Prod (SAFE: lakehouses + notebooks only)
         shell: pwsh
         run: |
           $itemsJson = @'

@@ -1,31 +1,34 @@
-name: deploy-test-to-prod-ALL
+name: deploy-test-to-prod
 
 on:
   push:
     branches:
-      - main          # runs when dev is merged into main
+      - main          # runs when you merge dev -> main
   workflow_dispatch:  # also allow manual run
 
 jobs:
   deploy:
     runs-on: windows-latest
-    environment: prod   # uses 'prod' environment for secrets/approvals
+    environment: prod   # uses 'prod' env for secrets/approvals
 
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Run Deploy-Fabric.ps1 (Test → Prod, include DF_GOLD + PL_GOLD + PL_Payroll)
+      - name: Run Deploy-Fabric.ps1 (Test → Prod SAFE: lakehouses + notebooks only)
         shell: pwsh
         run: |
-          # IMPORTANT:
-          # Override default ExcludeItemTypes so we DO NOT exclude Dataflow or DataPipeline.
+          # Exclude everything except Lakehouse + Notebook
           $excludeTypes = @(
-            "Warehouse",        # still avoid warehouse if needed
+            "SemanticModel",
+            "Report",
             "VariableLibrary",
             "SQLEndpoint",
-            "Dashboard"
-            # NOTE: no Dataflow / DataflowGen2 / DataPipeline here
+            "Dashboard",
+            "Warehouse",
+            "Dataflow",
+            "DataflowGen2",
+            "DataPipeline"   # excludes PL_BRONZE, PL_SILVER, PL_GOLD, PL_Payroll
           )
 
           $params = @{
@@ -35,9 +38,8 @@ jobs:
             PipelineName     = "DP_LISE"
             SourceStage      = "Test"
             TargetStage      = "Production"
-            Note             = "Test → Prod deploy (include DF_GOLD + PL_GOLD + PL_Payroll) – run $env:GITHUB_RUN_ID"
+            Note             = "Test → Prod SAFE deploy (lakehouses + notebooks only) – run $env:GITHUB_RUN_ID"
             ExcludeItemTypes = $excludeTypes
-            # ItemsJson not set → script uses ALL deployable items from Test → Prod
           }
 
           ./ops/Deploy-Fabric.ps1 @params

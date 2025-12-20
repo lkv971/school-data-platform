@@ -1,49 +1,43 @@
-name: deploy-test-to-prod
+name: deploy-test-to-prod-ALL
 
 on:
   push:
     branches:
-      - main
-  workflow_dispatch:
+      - main          # runs when dev is merged into main
+  workflow_dispatch:  # also allow manual run
 
 jobs:
   deploy:
     runs-on: windows-latest
-    environment: prod   # uses 'prod' environment for vars & secrets (and approvals)
-
-    env:
-      FABRIC_PIPELINE_NAME: ${{ vars.FABRIC_PIPELINE_NAME }}
-      FABRIC_SOURCE_STAGE:  ${{ vars.FABRIC_SOURCE_STAGE }}   # should be 'Test' in prod env
-      FABRIC_TARGET_STAGE:  ${{ vars.FABRIC_TARGET_STAGE }}   # should be 'Production' in prod env
+    environment: prod   # uses 'prod' environment for secrets/approvals
 
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Run Deploy-Fabric.ps1 (Test → Prod)
+      - name: Run Deploy-Fabric.ps1 (Test → Prod, include DF_GOLD + PL_GOLD + PL_Payroll)
         shell: pwsh
         run: |
-          # Exclude types we know cause trouble in Test → Prod
+          # IMPORTANT:
+          # Override default ExcludeItemTypes so we DO NOT exclude Dataflow or DataPipeline.
           $excludeTypes = @(
-            "SemanticModel",
-            "Report",
+            "Warehouse",        # still avoid warehouse if needed
             "VariableLibrary",
             "SQLEndpoint",
-            "Dashboard",
-            "Warehouse",      # avoid PrincipalTypeNotSupported
-            "Dataflow",       # TEMP: skip DF_GOLD
-            "DataflowGen2"    # in case DF_GOLD is typed as DataflowGen2
+            "Dashboard"
+            # NOTE: no Dataflow / DataflowGen2 / DataPipeline here
           )
 
           $params = @{
             TenantId         = "${{ secrets.FABRIC_TENANT_ID }}"
             ClientId         = "${{ secrets.FABRIC_CLIENT_ID }}"
             ClientSecret     = "${{ secrets.FABRIC_CLIENT_SECRET }}"
-            PipelineName     = $env:FABRIC_PIPELINE_NAME
-            SourceStage      = $env:FABRIC_SOURCE_STAGE      # "Test"
-            TargetStage      = $env:FABRIC_TARGET_STAGE      # "Production"
-            Note             = "Test → Prod deploy (GitHub Actions run $env:GITHUB_RUN_ID)"
+            PipelineName     = "DP_LISE"
+            SourceStage      = "Test"
+            TargetStage      = "Production"
+            Note             = "Test → Prod deploy (include DF_GOLD + PL_GOLD + PL_Payroll) – run $env:GITHUB_RUN_ID"
             ExcludeItemTypes = $excludeTypes
+            # ItemsJson not set → script uses ALL deployable items from Test → Prod
           }
 
           ./ops/Deploy-Fabric.ps1 @params

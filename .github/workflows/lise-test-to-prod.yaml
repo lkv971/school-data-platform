@@ -9,37 +9,43 @@ on:
 jobs:
   deploy:
     runs-on: windows-latest
-    environment: prod   # uses 'prod' env for secrets/approvals
+    environment: prod   # uses 'prod' env for vars & secrets
+
+    env:
+      FABRIC_PIPELINE_NAME: ${{ vars.FABRIC_PIPELINE_NAME }}
+      FABRIC_SOURCE_STAGE:  ${{ vars.FABRIC_SOURCE_STAGE }}   # should be 'Test' in prod env
+      FABRIC_TARGET_STAGE:  ${{ vars.FABRIC_TARGET_STAGE }}   # should be 'Production' in prod env
 
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Run Deploy-Fabric.ps1 (Test → Prod SAFE: lakehouses + notebooks only)
+      - name: Run Deploy-Fabric.ps1 (Test to Prod - exclude WH-dependent items)
         shell: pwsh
         run: |
-          # Exclude everything except Lakehouse + Notebook
-          $excludeTypes = @(
-            "SemanticModel",
-            "Report",
-            "VariableLibrary",
-            "SQLEndpoint",
-            "Dashboard",
-            "Warehouse",
-            "Dataflow",
-            "DataflowGen2",
-            "DataPipeline"   # excludes PL_BRONZE, PL_SILVER, PL_GOLD, PL_Payroll
-          )
+          # Explicit list of items to deploy from Test -> Prod
+          # We deliberately do NOT include DF_GOLD, PL_GOLD, PL_Payroll here.
+          $itemsJson = @'
+          [
+            { "itemDisplayName": "LH_BRONZE",         "itemType": "Lakehouse" },
+            { "itemDisplayName": "LH_SILVER",         "itemType": "Lakehouse" },
+            { "itemDisplayName": "WATERMARK_BRONZE",  "itemType": "Notebook" },
+            { "itemDisplayName": "WATERMARK_SILVER",  "itemType": "Notebook" },
+            { "itemDisplayName": "NB_SILVER",         "itemType": "Notebook" },
+            { "itemDisplayName": "PL_BRONZE",         "itemType": "DataPipeline" },
+            { "itemDisplayName": "PL_SILVER",         "itemType": "DataPipeline" }
+          ]
+          '@
 
           $params = @{
-            TenantId         = "${{ secrets.FABRIC_TENANT_ID }}"
-            ClientId         = "${{ secrets.FABRIC_CLIENT_ID }}"
-            ClientSecret     = "${{ secrets.FABRIC_CLIENT_SECRET }}"
-            PipelineName     = "DP_LISE"
-            SourceStage      = "Test"
-            TargetStage      = "Production"
-            Note             = "Test → Prod SAFE deploy (lakehouses + notebooks only) – run $env:GITHUB_RUN_ID"
-            ExcludeItemTypes = $excludeTypes
+            TenantId     = "${{ secrets.FABRIC_TENANT_ID }}"
+            ClientId     = "${{ secrets.FABRIC_CLIENT_ID }}"
+            ClientSecret = "${{ secrets.FABRIC_CLIENT_SECRET }}"
+            PipelineName = $env:FABRIC_PIPELINE_NAME
+            SourceStage  = $env:FABRIC_SOURCE_STAGE      # "Test"
+            TargetStage  = $env:FABRIC_TARGET_STAGE      # "Production"
+            Note         = "Test to Prod deploy (exclude DF_GOLD/PL_GOLD/PL_Payroll) - run $env:GITHUB_RUN_ID"
+            ItemsJson    = $itemsJson
           }
 
           ./ops/Deploy-Fabric.ps1 @params

@@ -1,9 +1,8 @@
 name: deploy-test-to-prod
 
-on:
+"on":
   push:
-    branches:
-      - main
+    branches: [ "main" ]
   workflow_dispatch:
 
 jobs:
@@ -11,22 +10,17 @@ jobs:
     runs-on: windows-latest
     environment: prod
 
+    defaults:
+      run:
+        shell: pwsh
+
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Deploy Test → Prod (SAFE: lakehouses + notebooks only)
-        shell: pwsh
+      - name: Deploy Test -> Prod (SAFE)
         run: |
-          $itemsJson = @"
-          [
-            { "itemDisplayName": "LH_BRONZE",        "itemType": "Lakehouse" },
-            { "itemDisplayName": "LH_SILVER",        "itemType": "Lakehouse" },
-            { "itemDisplayName": "WATERMARK_BRONZE", "itemType": "Notebook"  },
-            { "itemDisplayName": "WATERMARK_SILVER", "itemType": "Notebook"  },
-            { "itemDisplayName": "NB_SILVER",        "itemType": "Notebook"  }
-          ]
-          "@
+          $itemsJson = Get-Content -Raw ./ops/items-safe.json
 
           $params = @{
             TenantId     = "${{ secrets.FABRIC_TENANT_ID }}"
@@ -35,7 +29,7 @@ jobs:
             PipelineName = "DP_LISE"
             SourceStage  = "Test"
             TargetStage  = "Production"
-            Note         = "Test → Prod SAFE deploy (run $env:GITHUB_RUN_ID)"
+            Note         = "Test -> Prod SAFE deploy (run $env:GITHUB_RUN_ID)"
             ItemsJson    = $itemsJson
           }
 

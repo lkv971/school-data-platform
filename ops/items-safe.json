@@ -1,0 +1,11 @@
+[
+  { "itemDisplayName": "LH_BRONZE",        "itemType": "Lakehouse" },
+  { "itemDisplayName": "LH_SILVER",        "itemType": "Lakehouse" },
+
+  { "itemDisplayName": "WATERMARK_BRONZE", "itemType": "Notebook" },
+  { "itemDisplayName": "WATERMARK_SILVER", "itemType": "Notebook"  },
+  { "itemDisplayName": "NB_SILVER",        "itemType": "Notebook"  },
+
+  { "itemDisplayName": "PL_BRONZE",        "itemType": "DataPipeline" },
+  { "itemDisplayName": "PL_SILVER",        "itemType": "DataPipeline" }
+]

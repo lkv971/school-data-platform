@@ -9,11 +9,10 @@ param(
 
   [string]$Note = "CI/CD deploy via GitHub Actions",
 
-  # Optional JSON array for selective deployments:
+  # Optional JSON array for selective deployments
   [string]$ItemsJson = "",
 
-  # DEFAULT exclusions: safe enterprise automation set
-  # (Warehouse excluded because SPN deploy returns PrincipalTypeNotSupported)
+  # Default safe exclusions (Warehouse excluded: SPN deploy returns PrincipalTypeNotSupported)
   [string[]]$ExcludeItemTypes = @(
     "Warehouse",
     "VariableLibrary",
@@ -23,7 +22,7 @@ param(
     "SQLEndpoint"
   ),
 
-  # Dataflow staging artifacts (skip)
+  # Exclude dataflow staging artifacts
   [string[]]$ExcludeNamePatterns = @(
     "StagingLakehouseForDataflows_",
     "StagingWarehouseForDataflows_"
@@ -49,7 +48,6 @@ $SupportedTypes = @(
 
 function Get-FabricToken {
   param([string]$TenantId,[string]$ClientId,[string]$ClientSecret)
-
   $tokenUri = "https://login.microsoftonline.com/$TenantId/oauth2/v2.0/token"
   $body = @{
     client_id     = $ClientId
@@ -57,7 +55,6 @@ function Get-FabricToken {
     scope         = "https://api.fabric.microsoft.com/.default"
     grant_type    = "client_credentials"
   }
-
   Write-Host "Requesting Fabric access token..."
   (Invoke-RestMethod -Method POST -Uri $tokenUri -Body $body -ContentType "application/x-www-form-urlencoded").access_token
 }
@@ -67,7 +64,32 @@ function GetJson([string]$Uri, [hashtable]$Headers) {
   Invoke-RestMethod -Method GET -Uri $Uri -Headers $Headers
 }
 
-function PostLro([string]$Uri, [hashtable]$Headers, [object]$Body) {
+function IsGuid([string]$s) { return ($s -match '^[0-9a-fA-F-]{36}$') }
+
+function SafeTrim([object]$v) {
+  if ($null -eq $v) { return "" }
+  return ($v.ToString()).Trim()
+}
+
+function Is-ExcludedByName([string]$name, [string[]]$patterns) {
+  foreach ($p in $patterns) { if ($name -like "*$p*") { return $true } }
+  return $false
+}
+
+function Pick-ItemIdFromStageRow($row) {
+  # Prefer the stage item id first (this is crucial for Test -> Prod).
+  $candidates = @()
+  if ($row.PSObject.Properties.Name -contains "id")         { $candidates += (SafeTrim $row.id) }
+  if ($row.PSObject.Properties.Name -contains "itemId")     { $candidates += (SafeTrim $row.itemId) }
+  if ($row.PSObject.Properties.Name -contains "sourceItemId"){ $candidates += (SafeTrim $row.sourceItemId) }
+
+  foreach ($c in $candidates) {
+    if (IsGuid $c) { return $c }
+  }
+  return ""
+}
+
+function PostDeploy([string]$Uri, [hashtable]$Headers, [object]$Body) {
   Write-Host "POST $Uri"
   $json = $Body | ConvertTo-Json -Depth 50
 
@@ -76,12 +98,16 @@ function PostLro([string]$Uri, [hashtable]$Headers, [object]$Body) {
                             -MaximumRedirection 0 -ErrorAction SilentlyContinue
 
   if ($resp.StatusCode -ne 202 -and $resp.StatusCode -ne 200) {
-    Write-Host $resp.Content
+    Write-Host ("HTTP Status: {0}" -f $resp.StatusCode) -ForegroundColor Yellow
+    if ($resp.Content) { Write-Host $resp.Content }
     throw "Deployment POST failed with status $($resp.StatusCode)"
   }
 
   $opUrl = $resp.Headers["Operation-Location"]
-  if (-not $opUrl) { return ($resp.Content | ConvertFrom-Json) }
+  if (-not $opUrl) {
+    if ($resp.Content) { return ($resp.Content | ConvertFrom-Json) }
+    return $null
+  }
 
   while ($true) {
     Start-Sleep -Seconds 5
@@ -92,18 +118,6 @@ function PostLro([string]$Uri, [hashtable]$Headers, [object]$Body) {
     if ($status -eq "Succeeded") { return $op }
     throw "Deployment failed. Status=$status Details=$($op | ConvertTo-Json -Depth 20)"
   }
-}
-
-function IsGuid([string]$s) { return ($s -match '^[0-9a-fA-F-]{36}$') }
-
-function Is-ExcludedByName([string]$name, [string[]]$patterns) {
-  foreach ($p in $patterns) { if ($name -like "*$p*") { return $true } }
-  return $false
-}
-
-function SafeTrim([object]$v) {
-  if ($null -eq $v) { return "" }
-  return ($v.ToString()).Trim()
 }
 
 # ---------------- Auth ----------------
@@ -128,7 +142,6 @@ foreach ($s in $stages) {
 
 $src = $stages | Where-Object { $_.displayName -eq $SourceStage } | Select-Object -First 1
 $dst = $stages | Where-Object { $_.displayName -eq $TargetStage } | Select-Object -First 1
-
 if (-not $src) { throw "Source stage '$SourceStage' not found in pipeline." }
 if (-not $dst) { throw "Target stage '$TargetStage' not found in pipeline." }
 if (-not $src.workspaceId) { throw "Source stage has no workspaceId assigned." }
@@ -145,17 +158,17 @@ $stageItemsRaw  = $stageItemsResp.value
 
 if ($stageItemsRaw) {
   foreach ($row in $stageItemsRaw) {
-    $id  = $row.sourceItemId
-    $typ = $row.itemType
-    $nm  = $row.itemDisplayName
+    $id  = Pick-ItemIdFromStageRow $row
+    $typ = SafeTrim $row.itemType
+    $nm  = SafeTrim $row.itemDisplayName
 
-    if (-not (IsGuid (SafeTrim $id))) { continue }
-    if (-not ($SupportedTypes -contains (SafeTrim $typ))) { continue }
+    if (-not (IsGuid $id)) { continue }
+    if (-not ($SupportedTypes -contains $typ)) { continue }
 
     $discovered += [PSCustomObject]@{
-      sourceItemId    = (SafeTrim $id)
-      itemType        = (SafeTrim $typ)
-      itemDisplayName = (SafeTrim $nm)
+      sourceItemId    = $id
+      itemType        = $typ
+      itemDisplayName = $nm
     }
   }
 }
@@ -166,17 +179,17 @@ if (-not $discovered -or $discovered.Count -eq 0) {
 
   $wsItems = (GetJson "$base/workspaces/$($src.workspaceId)/items" $headers).value
   foreach ($row in $wsItems) {
-    $id  = $row.id
-    $typ = $row.type
-    $nm  = $row.displayName
+    $id  = SafeTrim $row.id
+    $typ = SafeTrim $row.type
+    $nm  = SafeTrim $row.displayName
 
-    if (-not (IsGuid (SafeTrim $id))) { continue }
-    if (-not ($SupportedTypes -contains (SafeTrim $typ))) { continue }
+    if (-not (IsGuid $id)) { continue }
+    if (-not ($SupportedTypes -contains $typ)) { continue }
 
     $discovered += [PSCustomObject]@{
-      sourceItemId    = (SafeTrim $id)
-      itemType        = (SafeTrim $typ)
-      itemDisplayName = (SafeTrim $nm)
+      sourceItemId    = $id
+      itemType        = $typ
+      itemDisplayName = $nm
     }
   }
 }
@@ -192,9 +205,8 @@ foreach ($i in $discovered) {
 
 # ---------------- Build Items to Deploy ----------------
 $itemsToDeploy = @()
-
 if ($ItemsJson -and $ItemsJson.Trim()) {
-  Write-Host "Selective deploy based on ItemsJson..." -ForegroundColor Yellow
+  Write-Host "Selective deploy based on ItemsJson..."
   $requested = $ItemsJson | ConvertFrom-Json
 
   foreach ($req in $requested) {
@@ -213,17 +225,14 @@ if ($ItemsJson -and $ItemsJson.Trim()) {
 # Apply exclusions
 $final = @()
 foreach ($it in $itemsToDeploy) {
-
   if ($ExcludeItemTypes -contains $it.itemType) {
     Write-Host ("Skipping due to ExcludeItemTypes: {0} [{1}]" -f $it.itemDisplayName, $it.itemType)
     continue
   }
-
   if (Is-ExcludedByName $it.itemDisplayName $ExcludeNamePatterns) {
     Write-Host ("Skipping due to ExcludeNamePatterns: {0} [{1}]" -f $it.itemDisplayName, $it.itemType)
     continue
   }
-
   $final += $it
 }
 
@@ -254,7 +263,7 @@ $body = @{
 }
 
 $deployUri = "$base/deploymentPipelines/$pipeId/deploy"
-$result = PostLro $deployUri $headers $body
+$result = PostDeploy $deployUri $headers $body
 
 Write-Host "✅ Deployment succeeded."
 $result | ConvertTo-Json -Depth 20

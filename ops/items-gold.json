@@ -1,0 +1,5 @@
+[
+  { "itemDisplayName": "DF_GOLD",    "itemType": "Dataflow" },
+  { "itemDisplayName": "PL_GOLD",    "itemType": "DataPipeline" },
+  { "itemDisplayName": "PL_Payroll", "itemType": "DataPipeline" }
+]

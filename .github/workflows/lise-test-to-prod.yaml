@@ -34,3 +34,20 @@ jobs:
           }
 
           ./ops/Deploy-Fabric.ps1 @params
+
+      - name: Deploy Test -> Prod (GOLD)
+        run: |
+          $itemsJson = Get-Content -Raw ./ops/items-gold.json
+
+          $params = @{
+            TenantId     = "${{ secrets.FABRIC_TENANT_ID }}"
+            ClientId     = "${{ secrets.FABRIC_CLIENT_ID }}"
+            ClientSecret = "${{ secrets.FABRIC_CLIENT_SECRET }}"
+            PipelineName = "DP_LISE"
+            SourceStage  = "Test"
+            TargetStage  = "Production"
+            Note         = "Test -> Prod GOLD deploy (run $env:GITHUB_RUN_ID)"
+            ItemsJson    = $itemsJson
+          }
+
+          ./ops/Deploy-Fabric.ps1 @params

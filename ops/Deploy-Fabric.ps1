@@ -12,7 +12,7 @@ param(
   # Optional JSON array for selective deployments
   [string]$ItemsJson = "",
 
-  # Default safe exclusions (Warehouse excluded: SPN deploy returns PrincipalTypeNotSupported)
+  # Default safe exclusions (Warehouse excluded: SPN deploy may return PrincipalTypeNotSupported)
   [string[]]$ExcludeItemTypes = @(
     "Warehouse",
     "VariableLibrary",
@@ -26,7 +26,12 @@ param(
   [string[]]$ExcludeNamePatterns = @(
     "StagingLakehouseForDataflows_",
     "StagingWarehouseForDataflows_"
-  )
+  ),
+
+  # Enterprise reliability knobs
+  [int]$DeployMaxRetries = 10,
+  [int]$DeployRetryDelaySeconds = 60,
+  [int]$OperationPollSeconds = 5
 )
 
 $ErrorActionPreference = "Stop"
@@ -77,11 +82,11 @@ function Is-ExcludedByName([string]$name, [string[]]$patterns) {
 }
 
 function Pick-ItemIdFromStageRow($row) {
-  # Prefer the stage item id first (this is crucial for Test -> Prod).
+  # Prefer the stage item id first (crucial for Test -> Prod).
   $candidates = @()
-  if ($row.PSObject.Properties.Name -contains "id")         { $candidates += (SafeTrim $row.id) }
-  if ($row.PSObject.Properties.Name -contains "itemId")     { $candidates += (SafeTrim $row.itemId) }
-  if ($row.PSObject.Properties.Name -contains "sourceItemId"){ $candidates += (SafeTrim $row.sourceItemId) }
+  if ($row.PSObject.Properties.Name -contains "id")          { $candidates += (SafeTrim $row.id) }
+  if ($row.PSObject.Properties.Name -contains "itemId")      { $candidates += (SafeTrim $row.itemId) }
+  if ($row.PSObject.Properties.Name -contains "sourceItemId") { $candidates += (SafeTrim $row.sourceItemId) }
 
   foreach ($c in $candidates) {
     if (IsGuid $c) { return $c }
@@ -89,35 +94,135 @@ function Pick-ItemIdFromStageRow($row) {
   return ""
 }
 
+function TryParse-ErrorJson([string]$content) {
+  if (-not $content) { return $null }
+  try { return ($content | ConvertFrom-Json) } catch { return $null }
+}
+
+function Invoke-DeployPost([string]$Uri, [hashtable]$Headers, [string]$JsonBody) {
+  # We use Invoke-WebRequest to get Operation-Location header reliably
+  try {
+    return Invoke-WebRequest -Method POST -Uri $Uri -Headers $Headers `
+                             -Body $JsonBody -ContentType "application/json" `
+                             -MaximumRedirection 0 -ErrorAction Stop
+  }
+  catch {
+    # PowerShell's Web cmdlets throw on non-2xx. Extract status + body.
+    $ex = $_.Exception
+    $statusCode = $null
+    $content = $null
+
+    if ($ex.PSObject.Properties.Name -contains "Response" -and $ex.Response) {
+      $resp = $ex.Response
+      try { $statusCode = [int]$resp.StatusCode } catch {}
+      try {
+        if ($resp.Content) { $content = $resp.Content.ReadAsStringAsync().Result }
+      } catch {}
+    }
+
+    # Fallback: sometimes ErrorDetails.Message carries the JSON body
+    if (-not $content -and $_.ErrorDetails -and $_.ErrorDetails.Message) {
+      $content = $_.ErrorDetails.Message
+    }
+
+    return [PSCustomObject]@{
+      __isError   = $true
+      StatusCode  = $statusCode
+      Content     = $content
+      Exception   = $ex
+    }
+  }
+}
+
 function PostDeploy([string]$Uri, [hashtable]$Headers, [object]$Body) {
   Write-Host "POST $Uri"
   $json = $Body | ConvertTo-Json -Depth 50
 
-  $resp = Invoke-WebRequest -Method POST -Uri $Uri -Headers $Headers `
-                            -Body $json -ContentType "application/json" `
-                            -MaximumRedirection 0 -ErrorAction SilentlyContinue
+  $retryableErrorCodes = @(
+    "WorkspaceMigrationOperationInProgress",
+    "TooManyRequests",
+    "Throttled",
+    "ServiceUnavailable"
+  )
+  $retryableHttpStatus = @(429, 500, 502, 503, 504)
 
-  if ($resp.StatusCode -ne 202 -and $resp.StatusCode -ne 200) {
-    Write-Host ("HTTP Status: {0}" -f $resp.StatusCode) -ForegroundColor Yellow
-    if ($resp.Content) { Write-Host $resp.Content }
-    throw "Deployment POST failed with status $($resp.StatusCode)"
+  for ($attempt = 1; $attempt -le $DeployMaxRetries; $attempt++) {
+    Write-Host ("POST attempt {0}/{1}" -f $attempt, $DeployMaxRetries)
+
+    $resp = Invoke-DeployPost -Uri $Uri -Headers $Headers -JsonBody $json
+
+    # If we got a real response object, check status code
+    if ($resp -and -not ($resp.PSObject.Properties.Name -contains "__isError")) {
+      if ($resp.StatusCode -eq 202 -or $resp.StatusCode -eq 200) {
+        $opUrl = $resp.Headers["Operation-Location"]
+        if (-not $opUrl) {
+          if ($resp.Content) { return ($resp.Content | ConvertFrom-Json) }
+          return $null
+        }
+
+        while ($true) {
+          Start-Sleep -Seconds $OperationPollSeconds
+          $op = Invoke-RestMethod -Method GET -Uri $opUrl -Headers $Headers
+          $status = $op.status
+          Write-Host "Operation status: $status"
+          if ($status -eq "Running" -or $status -eq "NotStarted") { continue }
+          if ($status -eq "Succeeded") { return $op }
+          throw "Deployment failed. Status=$status Details=$($op | ConvertTo-Json -Depth 20)"
+        }
+      }
+
+      # Non-success but non-throw (rare)
+      Write-Host ("HTTP Status: {0}" -f $resp.StatusCode) -ForegroundColor Yellow
+      if ($resp.Content) { Write-Host $resp.Content }
+      throw "Deployment POST failed with status $($resp.StatusCode)"
+    }
+
+    # Error wrapper from catch
+    $statusCode = $resp.StatusCode
+    $content = $resp.Content
+    $errObj = TryParse-ErrorJson -content $content
+
+    $errCode = $null
+    $errMsg  = $null
+    if ($errObj) {
+      $errCode = $errObj.errorCode
+      $errMsg  = $errObj.message
+    }
+
+    if ($statusCode) {
+      Write-Host ("HTTP Status: {0}" -f $statusCode) -ForegroundColor Yellow
+    }
+    if ($errCode) {
+      Write-Host ("Fabric errorCode: {0}" -f $errCode) -ForegroundColor Yellow
+    }
+    if ($errMsg) {
+      Write-Host ("Message: {0}" -f $errMsg) -ForegroundColor Yellow
+    }
+    if ($content -and -not $errObj) {
+      Write-Host $content -ForegroundColor Yellow
+    }
+
+    $shouldRetry =
+      (($errCode -and ($retryableErrorCodes -contains $errCode)) -or
+       ($statusCode -and ($retryableHttpStatus -contains [int]$statusCode)))
+
+    if ($shouldRetry -and $attempt -lt $DeployMaxRetries) {
+      Write-Host ("Retrying in {0} seconds..." -f $DeployRetryDelaySeconds) -ForegroundColor Yellow
+      Start-Sleep -Seconds $DeployRetryDelaySeconds
+      continue
+    }
+
+    # Not retryable or max attempts exceeded
+    if ($errCode) {
+      throw ("Deployment POST failed. errorCode={0} message={1}" -f $errCode, $errMsg)
+    }
+    if ($statusCode) {
+      throw ("Deployment POST failed with HTTP {0}" -f $statusCode)
+    }
+    throw "Deployment POST failed with an unknown error."
   }
 
-  $opUrl = $resp.Headers["Operation-Location"]
-  if (-not $opUrl) {
-    if ($resp.Content) { return ($resp.Content | ConvertFrom-Json) }
-    return $null
-  }
-
-  while ($true) {
-    Start-Sleep -Seconds 5
-    $op = Invoke-RestMethod -Method GET -Uri $opUrl -Headers $Headers
-    $status = $op.status
-    Write-Host "Operation status: $status"
-    if ($status -eq "Running" -or $status -eq "NotStarted") { continue }
-    if ($status -eq "Succeeded") { return $op }
-    throw "Deployment failed. Status=$status Details=$($op | ConvertTo-Json -Depth 20)"
-  }
+  throw ("Deployment blocked/retrying exceeded max attempts ({0})." -f $DeployMaxRetries)
 }
 
 # ---------------- Auth ----------------

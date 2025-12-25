@@ -1,6 +1,6 @@
 name: deploy-dev-to-test
 
-"on":
+on:
   push:
     branches: [ "dev" ]
   workflow_dispatch:

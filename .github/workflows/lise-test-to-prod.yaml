@@ -1,6 +1,6 @@
 name: deploy-test-to-prod
 
-"on":
+on:
   push:
     branches: [ "main" ]
   workflow_dispatch:
@@ -36,6 +36,8 @@ jobs:
           ./ops/Deploy-Fabric.ps1 @params
 
       - name: Deploy Test -> Prod (GOLD)
+        id: gold
+        continue-on-error: true
         run: |
           $itemsJson = Get-Content -Raw ./ops/items-gold.json
 
@@ -51,3 +53,12 @@ jobs:
           }
 
           ./ops/Deploy-Fabric.ps1 @params
+
+      - name: Summary
+        if: always()
+        run: |
+          if ("${{ steps.gold.outcome }}" -ne "success") {
+            Write-Host "⚠️ GOLD deploy failed (or was interrupted). SAFE deploy may still have succeeded." -ForegroundColor Yellow
+          } else {
+            Write-Host "✅ GOLD deploy succeeded." -ForegroundColor Green
+          }

@@ -706,7 +706,7 @@ df_dates = df_dates.withColumn("CALENDARYEAR", year(col("DATE"))) \
                    .withColumn("CALENDARDAY", dayofmonth(col("DATE"))) \
                    .withColumn("MONTHNAME", date_format(col("DATE"), "MMMM")) \
                    .withColumn("DAYNAME", date_format(col("DATE"), "EEEE")) \
-                   .withColumn("SCHOOLYEARSTART", when(month(col("DATE")) >= 8, year(col("DATE"))).otherwise(year(col("DATE")) -1)) \
+                   .withColumn("SCHOOLYEARSTART", when(month(col("DATE")) >= 7, year(col("DATE"))).otherwise(year(col("DATE")) -1)) \
                    .withColumn("SCHOOLYEAREND", col("SCHOOLYEARSTART") + 1) \
                    .withColumn("SCHOOLYEAR", concat(col("SCHOOLYEARSTART"),
                                              lit("-"),
@@ -1150,8 +1150,9 @@ for table_name, append_df in append_tables.items():
     merge_condition = make_merge_condition(keys)
 
     try:
+        src = append_df.dropDuplicates(keys)
         target = DeltaTable.forName(spark, table_name)
-        (target.alias("t").merge(append_df.alias("s"), merge_condition).whenNotMatchedInsertAll().execute())
+        (target.alias("t").merge(src.alias("s"), merge_condition).whenMatchedUpdateAll().whenNotMatchedInsertAll().execute())
         print(f"Upsert completed for '{table_name}' using key columns {keys}")
     except Exception as e:
         if "is not a Delta table" in e.desc:

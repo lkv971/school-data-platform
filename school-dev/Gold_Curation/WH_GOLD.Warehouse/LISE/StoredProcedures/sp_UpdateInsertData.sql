@@ -22,12 +22,12 @@ BEGIN
     @uservices INT=0, @iservices INT=0,
     @uvilles INT=0, @ivilles INT=0,
     @uschoolyear INT=0, @ischoolyear INT=0,
-    @idates INT =0,
-    @ifac_services INT=0,
-    @ifac_niveaux INT=0,
-    @ifac_eleves INT =0,
-    @ifac_familles INT =0,
-    @ifac_validations INT=0,
+    @udates INT=0, @idates INT =0,
+    @ufac_services INT=0, @ifac_services INT=0,
+    @ufac_niveaux INT=0, @ifac_niveaux INT=0,
+    @ufac_eleves INT =0, @ifac_eleves INT =0,
+    @ufac_familles INT =0, @ifac_familles INT =0,
+    @ufac_validations INT=0, @ifac_validations INT=0,
     @TotalRowsWritten INT=0; 
 
     UPDATE LC
@@ -470,7 +470,25 @@ BEGIN
     WHERE LY.SchoolYear = LSY.SCHOOLYEAR)
     ;
     SET @ischoolyear = @@ROWCOUNT;
-    
+
+    UPDATE LFV
+    SET
+    LFV.ValidationID   = LSFV.IDVALIDATION,
+    LFV.TypeFacture    = LSFV.TYPEFACTURE,
+    LFV.NombreFacture  = LSFV.NOMBREFACTURE,
+    LFV.DateValidation = LSFV.DATEVALIDATION
+    FROM LISE.FacturesValidations AS LFV
+    INNER JOIN LISE.Staging_FacturesValidations AS LSFV
+      ON LFV.ValidationKey = LSFV.KEYVALIDATION
+    WHERE LSFV.DATEVALIDATION IS NOT NULL
+    AND (
+       ISNULL(LFV.ValidationID, -1) <> ISNULL(LSFV.IDVALIDATION, -1)
+      OR ISNULL(LFV.TypeFacture, '') <> ISNULL(LSFV.TYPEFACTURE, '')
+      OR ISNULL(LFV.NombreFacture, -1) <> ISNULL(LSFV.NOMBREFACTURE, -1)
+      OR ISNULL(LFV.DateValidation, '19000101') <> ISNULL(LSFV.DATEVALIDATION, '19000101')
+    );
+    SET @ufac_validations = @@ROWCOUNT;
+
     INSERT INTO LISE.FacturesValidations (ValidationKey, ValidationID, TypeFacture, NombreFacture, DateValidation)
     SELECT LSFV.KEYVALIDATION, LSFV.IDVALIDATION, LSFV.TYPEFACTURE, LSFV.NOMBREFACTURE, LSFV.DATEVALIDATION
     FROM LISE.Staging_FacturesValidations AS LSFV
@@ -485,6 +503,33 @@ BEGIN
       ;
       SET @ifac_validations = @@ROWCOUNT; 
 
+    UPDATE LFE
+    SET
+    LFE.EleveID       = LSFE.IDELEVE,
+    LFE.ResponsableID = LSFE.IDRESPONSABLE,
+    LFE.ValidationID  = LSFE.IDVALIDATION,
+    LFE.ClasseKey     = LSFE.KEYCLASSE,
+    LFE.ClasseID      = LSFE.IDCLASSE,
+    LFE.RegimeID      = LSFE.IDREGIME,
+    LFE.TotalEleve    = LSFE.TOTALELEVE,
+    LFE.DateFacture   = LSFE.DATEFACTURE
+    FROM LISE.FacturesEleves AS LFE
+    INNER JOIN LISE.Staging_FacturesEleves AS LSFE
+    ON LFE.EleveKey = LSFE.KEYELEVE
+    AND LFE.ResponsableKey = LSFE.KEYRESPONSABLE
+    AND LFE.ValidationKey = LSFE.KEYVALIDATION
+    WHERE LSFE.DATEFACTURE IS NOT NULL
+    AND (
+       ISNULL(LFE.EleveID, -1) <> ISNULL(LSFE.IDELEVE, -1)
+      OR ISNULL(LFE.ResponsableID, -1) <> ISNULL(LSFE.IDRESPONSABLE, -1)
+      OR ISNULL(LFE.ValidationID, -1) <> ISNULL(LSFE.IDVALIDATION, -1)
+      OR ISNULL(LFE.ClasseKey, '') <> ISNULL(LSFE.KEYCLASSE, '')
+      OR ISNULL(LFE.ClasseID, -1) <> ISNULL(LSFE.IDCLASSE, -1)
+      OR ISNULL(LFE.RegimeID, -1) <> ISNULL(LSFE.IDREGIME, -1)
+      OR ISNULL(LFE.TotalEleve, 0) <> ISNULL(LSFE.TOTALELEVE, 0)
+      OR ISNULL(LFE.DateFacture, '19000101') <> ISNULL(LSFE.DATEFACTURE, '19000101')
+    );
+    SET @ufac_eleves = @@ROWCOUNT;
 
     INSERT INTO LISE.FacturesEleves (EleveKey, EleveID, ResponsableKey, ResponsableID, ValidationKey, ValidationID, ClasseKey, ClasseID, RegimeID, TotalEleve, DateFacture)
     SELECT LSFE.KEYELEVE, LSFE.IDELEVE, LSFE.KEYRESPONSABLE, LSFE.IDRESPONSABLE, LSFE.KEYVALIDATION, LSFE.IDVALIDATION, LSFE.KEYCLASSE, LSFE.IDCLASSE, LSFE.IDREGIME, LSFE.TOTALELEVE, LSFE.DATEFACTURE
@@ -507,6 +552,28 @@ BEGIN
       ;
       SET @ifac_eleves = @@ROWCOUNT;
 
+    UPDATE LFF
+    SET
+    LFF.ResponsableID = LSFF.IDRESPONSABLE,
+    LFF.ValidationID  = LSFF.IDVALIDATION,
+    LFF.FoyerID       = LSFF.IDFOYER,
+    LFF.ProfessionID  = LSFF.IDPROFESSION,
+    LFF.TotalFamille  = LSFF.TOTALFAMILLE,
+    LFF.DateFacture   = LSFF.DATEFACTURE
+    FROM LISE.FacturesFamilles AS LFF
+    INNER JOIN LISE.Staging_FacturesFamilles AS LSFF
+    ON LFF.ResponsableKey = LSFF.KEYRESPONSABLE
+    AND LFF.ValidationKey  = LSFF.KEYVALIDATION
+    WHERE LSFF.DATEFACTURE IS NOT NULL
+    AND (
+       ISNULL(LFF.ResponsableID, -1) <> ISNULL(LSFF.IDRESPONSABLE, -1)
+      OR ISNULL(LFF.ValidationID, -1) <> ISNULL(LSFF.IDVALIDATION, -1)
+      OR ISNULL(LFF.FoyerID, -1) <> ISNULL(LSFF.IDFOYER, -1)
+      OR ISNULL(LFF.ProfessionID, -1) <> ISNULL(LSFF.IDPROFESSION, -1)
+      OR ISNULL(LFF.TotalFamille, 0) <> ISNULL(LSFF.TOTALFAMILLE, 0)
+      OR ISNULL(LFF.DateFacture, '19000101') <> ISNULL(LSFF.DATEFACTURE, '19000101')
+    );
+    SET @ufac_familles = @@ROWCOUNT;
 
     INSERT INTO LISE.FacturesFamilles (ResponsableKey, ResponsableID, ValidationKey, ValidationID, FoyerID, ProfessionID, TotalFamille, DateFacture)
     SELECT LSFF.KEYRESPONSABLE, LSFF.IDRESPONSABLE, LSFF.KEYVALIDATION, LSFF.IDVALIDATION, LSFF.IDFOYER, LSFF.IDPROFESSION, LSFF.TOTALFAMILLE, LSFF.DATEFACTURE
@@ -524,6 +591,26 @@ BEGIN
     ;
     SET @ifac_familles = @@ROWCOUNT;
 
+    UPDATE LFN
+    SET
+    LFN.ValidationID  = LSFN.IDVALIDATION,
+    LFN.ResponsableID = LSFN.IDRESPONSABLE,
+    LFN.TotalNiveau   = LSFN.TOTALNIVEAU,
+    LFN.DateFacture   = LSFN.DATEFACTURE
+    FROM LISE.FacturesNiveaux AS LFN
+    INNER JOIN LISE.Staging_FacturesNiveaux AS LSFN
+    ON LFN.NiveauID       = LSFN.IDNIVEAU
+    AND LFN.ResponsableKey = LSFN.KEYRESPONSABLE
+    AND LFN.ValidationKey  = LSFN.KEYVALIDATION
+    WHERE LSFN.DATEFACTURE IS NOT NULL
+    AND (
+       ISNULL(LFN.ValidationID, -1) <> ISNULL(LSFN.IDVALIDATION, -1)
+      OR ISNULL(LFN.ResponsableID, -1) <> ISNULL(LSFN.IDRESPONSABLE, -1)
+      OR ISNULL(LFN.TotalNiveau, 0) <> ISNULL(LSFN.TOTALNIVEAU, 0)
+      OR ISNULL(LFN.DateFacture, '19000101') <> ISNULL(LSFN.DATEFACTURE, '19000101')
+    );
+    SET @ufac_niveaux = @@ROWCOUNT; 
+
     INSERT INTO LISE.FacturesNiveaux (NiveauID, ValidationKey, ValidationID, ResponsableKey, ResponsableID, TotalNiveau, DateFacture)
     SELECT LSFN.IDNIVEAU, LSFN.KEYVALIDATION, LSFN.IDVALIDATION, LSFN.KEYRESPONSABLE, LSFN.IDRESPONSABLE, LSFN.TOTALNIVEAU, LSFN.DATEFACTURE
     FROM LISE.Staging_FacturesNiveaux AS LSFN
@@ -540,93 +627,150 @@ BEGIN
       )
     ;  
     SET @ifac_niveaux = @@ROWCOUNT;  
-
-
-  INSERT INTO LISE.FacturesServices (EleveKey, EleveID, ResponsableKey, ResponsableID, ValidationKey, ValidationID, ServiceID, Quantite, Prix, Remise, TotalService, DateFacture)
-  SELECT LSFS.KEYELEVE, LSFS.IDELEVE, LSFS.KEYRESPONSABLE, LSFS.IDRESPONSABLE, LSFS.KEYVALIDATION, LSFS.IDVALIDATION, LSFS.IDSERVICE, LSFS.QUANTITE, LSFS.PRIX, LSFS.REMISE, LSFS.TOTALSERVICE, LSFS.DATEFACTURE
-  FROM LISE.Staging_FacturesServices AS LSFS
-  WHERE LSFS.DATEFACTURE IS NOT NULL
-  AND NOT EXISTS (
-    SELECT 1
+  
+    UPDATE LFS
+    SET
+    LFS.EleveID       = LSFS.IDELEVE,
+    LFS.ResponsableID = LSFS.IDRESPONSABLE,
+    LFS.ValidationID  = LSFS.IDVALIDATION,
+    LFS.Quantite      = LSFS.QUANTITE,
+    LFS.Prix          = LSFS.PRIX,
+    LFS.Remise        = LSFS.REMISE,
+    LFS.TotalService  = LSFS.TOTALSERVICE
     FROM LISE.FacturesServices AS LFS
-    WHERE LFS.EleveKey = LSFS.KEYELEVE
-      AND LFS.EleveID = LSFS.IDELEVE
-      AND LFS.ResponsableKey = LSFS.KEYRESPONSABLE
-      AND LFS.ResponsableID = LSFS.IDRESPONSABLE
-      AND LFS.ValidationKey = LSFS.KEYVALIDATION 
-      AND LFS.ServiceID = LSFS.IDSERVICE  
-      AND LFS.DateFacture = LSFS.DATEFACTURE 
-    )
+    INNER JOIN LISE.Staging_FacturesServices AS LSFS
+    ON LFS.EleveKey       = LSFS.KEYELEVE
+    AND LFS.ResponsableKey = LSFS.KEYRESPONSABLE
+    AND LFS.ValidationKey  = LSFS.KEYVALIDATION
+    AND LFS.ServiceID      = LSFS.IDSERVICE
+    AND LFS.DateFacture    = LSFS.DATEFACTURE
+    WHERE LSFS.DATEFACTURE IS NOT NULL
+    AND (
+       ISNULL(LFS.EleveID, -1) <> ISNULL(LSFS.IDELEVE, -1)
+      OR ISNULL(LFS.ResponsableID, -1) <> ISNULL(LSFS.IDRESPONSABLE, -1)
+      OR ISNULL(LFS.ValidationID, -1) <> ISNULL(LSFS.IDVALIDATION, -1)
+      OR ISNULL(LFS.Quantite, 0) <> ISNULL(LSFS.QUANTITE, 0)
+      OR ISNULL(LFS.Prix, 0) <> ISNULL(LSFS.PRIX, 0)
+      OR ISNULL(LFS.Remise, 0) <> ISNULL(LSFS.REMISE, 0)
+      OR ISNULL(LFS.TotalService, 0) <> ISNULL(LSFS.TOTALSERVICE, 0)
+    );
+    SET @ufac_services = @@ROWCOUNT;
+
+    INSERT INTO LISE.FacturesServices (EleveKey, EleveID, ResponsableKey, ResponsableID, ValidationKey, ValidationID, ServiceID, Quantite, Prix, Remise, TotalService, DateFacture)
+    SELECT LSFS.KEYELEVE, LSFS.IDELEVE, LSFS.KEYRESPONSABLE, LSFS.IDRESPONSABLE, LSFS.KEYVALIDATION, LSFS.IDVALIDATION, LSFS.IDSERVICE, LSFS.QUANTITE, LSFS.PRIX, LSFS.REMISE, LSFS.TOTALSERVICE, LSFS.DATEFACTURE
+    FROM LISE.Staging_FacturesServices AS LSFS
+    WHERE LSFS.DATEFACTURE IS NOT NULL
+    AND NOT EXISTS (
+      SELECT 1
+      FROM LISE.FacturesServices AS LFS
+      WHERE LFS.EleveKey = LSFS.KEYELEVE
+        AND LFS.EleveID = LSFS.IDELEVE
+        AND LFS.ResponsableKey = LSFS.KEYRESPONSABLE
+        AND LFS.ResponsableID = LSFS.IDRESPONSABLE
+        AND LFS.ValidationKey = LSFS.KEYVALIDATION 
+        AND LFS.ServiceID = LSFS.IDSERVICE  
+        AND LFS.DateFacture = LSFS.DATEFACTURE 
+      )
     ;
-    SET @ifac_services = @@ROWCOUNT;
+    SET @ifac_services = @@ROWCOUNT;  
 
-
-  INSERT INTO LISE.Dates (DateID, Date, CalendarYear, CalendarMonth, CalendarDay, MonthName, DayName, SchoolYear, IsSchoolPeriod)
-  SELECT LSD.IDDATE, LSD.DATE, LSD.CALENDARYEAR, LSD.CALENDARMONTH, LSD.CALENDARDAY, LSD.MONTHNAME, LSD.DAYNAME, LSD.SCHOOLYEAR, LSD.ISSCHOOLPERIOD
-  FROM LISE.Staging_Dates AS LSD
-  WHERE NOT EXISTS (
-    SELECT 1
+    UPDATE LD
+    SET
+    LD.DateID         = LSD.IDDATE,
+    LD.CalendarYear   = LSD.CALENDARYEAR,
+    LD.CalendarMonth  = LSD.CALENDARMONTH,
+    LD.CalendarDay    = LSD.CALENDARDAY,
+    LD.MonthName      = LSD.MONTHNAME,
+    LD.DayName        = LSD.DAYNAME,
+    LD.SchoolYear     = LSD.SCHOOLYEAR,
+    LD.IsSchoolPeriod = LSD.ISSCHOOLPERIOD
     FROM LISE.Dates AS LD
-    WHERE LD.Date = LSD.DATE
-    )
-  ;
-  SET @idates = @@ROWCOUNT;
+    INNER JOIN LISE.Staging_Dates AS LSD
+      ON LD.Date = LSD.DATE
+    WHERE
+     ISNULL(LD.CalendarYear, -1) <> ISNULL(LSD.CALENDARYEAR, -1)
+    OR ISNULL(LD.CalendarMonth, -1) <> ISNULL(LSD.CALENDARMONTH, -1)
+    OR ISNULL(LD.CalendarDay, -1) <> ISNULL(LSD.CALENDARDAY, -1)
+    OR ISNULL(LD.MonthName, '') <> ISNULL(LSD.MONTHNAME, '')
+    OR ISNULL(LD.DayName, '') <> ISNULL(LSD.DAYNAME, '')
+    OR ISNULL(LD.SchoolYear, '') <> ISNULL(LSD.SCHOOLYEAR, '')
+    OR ISNULL(LD.IsSchoolPeriod, -1) <> ISNULL(LSD.ISSCHOOLPERIOD, -1);
+    SET @udates = @@ROWCOUNT;
 
-  SET @TotalRowsWritten =
-    COALESCE(@uclasses,0) + COALESCE(@iclasses,0) + COALESCE(@utargets,0) + COALESCE(@itargets,0) +
-    COALESCE(@ueleves,0) + COALESCE(@ieleves,0) + COALESCE(@uprofessions,0) + COALESCE(@iprofessions,0) +
-    COALESCE(@upays,0) + COALESCE(@ipays,0) + COALESCE(@ustaff,0) + COALESCE(@istaff,0) +
-    COALESCE(@upersonnels,0) + COALESCE(@ipersonnels,0) + COALESCE(@uprofesseurs,0) + COALESCE(@iprofesseurs,0) +
-    COALESCE(@uresponsables,0) + COALESCE(@iresponsables,0) + COALESCE(@univeaux,0) + COALESCE(@iniveaux,0) +
-    COALESCE(@uetablissements,0) + COALESCE(@ietablissements,0) + COALESCE(@uregimes,0) + COALESCE(@iregimes,0) +
-    COALESCE(@uparents,0) + COALESCE(@iparents,0) + COALESCE(@uenfants,0) + COALESCE(@ienfants,0) +
-    COALESCE(@ufoyers,0) + COALESCE(@ifoyers,0) + COALESCE(@uservices,0) + COALESCE(@iservices,0) +
-    COALESCE(@uvilles,0) + COALESCE(@ivilles,0) + COALESCE(@uschoolyear,0) + COALESCE(@ischoolyear,0) +
-    COALESCE(@idates,0) + COALESCE(@ifac_services,0) + COALESCE(@ifac_niveaux,0) + COALESCE(@ifac_eleves,0) +
-    COALESCE(@ifac_familles,0) + COALESCE(@ifac_validations,0);
+    INSERT INTO LISE.Dates (DateID, Date, CalendarYear, CalendarMonth, CalendarDay, MonthName, DayName, SchoolYear, IsSchoolPeriod)
+    SELECT LSD.IDDATE, LSD.DATE, LSD.CALENDARYEAR, LSD.CALENDARMONTH, LSD.CALENDARDAY, LSD.MONTHNAME, LSD.DAYNAME, LSD.SCHOOLYEAR, LSD.ISSCHOOLPERIOD
+    FROM LISE.Staging_Dates AS LSD
+    WHERE NOT EXISTS (
+      SELECT 1
+      FROM LISE.Dates AS LD
+      WHERE LD.Date = LSD.DATE
+      )
+    ;
+    SET @idates = @@ROWCOUNT;
 
-  SELECT
-    RowsUpdated_Classes = @uclasses,
-    RowsInserted_Classes = @iclasses,
-    RowsUpdated_Targets = @utargets,
-    RowsInserted_Targets = @itargets,
-    RowsUpdated_Eleves = @ueleves,
-    RowsInserted_Eleves = @ieleves,
-    RowsUpdated_Professions = @uprofessions,
-    RowsInserted_Professions = @iprofessions,
-    RowsUpdated_Pays = @upays,
-    RowsInserted_Pays = @ipays,
-    RowsUpdated_Staff = @ustaff,
-    RowsInserted_Staff = @istaff,
-    RowsUpdated_Personnels = @upersonnels,
-    RowsInserted_Personnels = @ipersonnels,
-    RowsUpdated_Professeurs = @uprofesseurs,
-    RowsInserted_Professeurs = @iprofesseurs,
-    RowsUpdated_Responsables = @uresponsables,
-    RowsInserted_Responsables= @iresponsables,
-    RowsUpdated_Niveaux = @univeaux,
-    RowsInserted_Niveaux = @iniveaux,
-    RowsUpdated_Etablissements = @uetablissements,
-    RowsInserted_Etablissements= @ietablissements,
-    RowsUpdated_Regimes = @uregimes,
-    RowsInserted_Regimes = @iregimes,
-    RowsUpdated_Parents = @uparents,
-    RowsInserted_Parents = @iparents,
-    RowsUpdated_Enfants = @uenfants,
-    RowsInserted_Enfants = @ienfants,
-    RowsUpdated_Foyers = @ufoyers,
-    RowsInserted_Foyers = @ifoyers,
-    RowsUpdated_Services = @uservices,
-    RowsInserted_Services = @iservices,
-    RowsUpdated_Villes = @uvilles,
-    RowsInserted_Villes = @ivilles,
-    RowsUpdated_SchoolYear = @uschoolyear,
-    RowsInserted_SchoolYear = @ischoolyear,
-    RowsInserted_Dates = @idates,
-    RowsInserted_Fac_Services = @ifac_services,
-    RowsInserted_Fac_Niveaux = @ifac_niveaux,
-    RowsInserted_Fac_Eleves = @ifac_eleves,
-    RowsInserted_Fac_Familles = @ifac_familles,
-    RowsInserted_Fac_Validations = @ifac_validations,
-    TotalRowsWritten = @TotalRowsWritten;
+    SET @TotalRowsWritten =
+      COALESCE(@uclasses,0) + COALESCE(@iclasses,0) + COALESCE(@utargets,0) + COALESCE(@itargets,0) +
+      COALESCE(@ueleves,0) + COALESCE(@ieleves,0) + COALESCE(@uprofessions,0) + COALESCE(@iprofessions,0) +
+      COALESCE(@upays,0) + COALESCE(@ipays,0) + COALESCE(@ustaff,0) + COALESCE(@istaff,0) +
+      COALESCE(@upersonnels,0) + COALESCE(@ipersonnels,0) + COALESCE(@uprofesseurs,0) + COALESCE(@iprofesseurs,0) +
+      COALESCE(@uresponsables,0) + COALESCE(@iresponsables,0) + COALESCE(@univeaux,0) + COALESCE(@iniveaux,0) +
+      COALESCE(@uetablissements,0) + COALESCE(@ietablissements,0) + COALESCE(@uregimes,0) + COALESCE(@iregimes,0) +
+      COALESCE(@uparents,0) + COALESCE(@iparents,0) + COALESCE(@uenfants,0) + COALESCE(@ienfants,0) +
+      COALESCE(@ufoyers,0) + COALESCE(@ifoyers,0) + COALESCE(@uservices,0) + COALESCE(@iservices,0) +
+      COALESCE(@uvilles,0) + COALESCE(@ivilles,0) + COALESCE(@uschoolyear,0) + COALESCE(@ischoolyear,0) +
+      COALESCE(@udates,0) + COALESCE(@ufac_services,0) + COALESCE(@ufac_niveaux,0) + COALESCE(@ufac_eleves,0) +
+      COALESCE(@ufac_familles,0) + COALESCE(@ufac_validations,0) +
+      COALESCE(@idates,0) + COALESCE(@ifac_services,0) + COALESCE(@ifac_niveaux,0) + COALESCE(@ifac_eleves,0) +
+      COALESCE(@ifac_familles,0) + COALESCE(@ifac_validations,0);
+
+    SELECT
+      RowsUpdated_Classes = @uclasses,
+      RowsInserted_Classes = @iclasses,
+      RowsUpdated_Targets = @utargets,
+      RowsInserted_Targets = @itargets,
+      RowsUpdated_Eleves = @ueleves,
+      RowsInserted_Eleves = @ieleves,
+      RowsUpdated_Professions = @uprofessions,
+      RowsInserted_Professions = @iprofessions,
+      RowsUpdated_Pays = @upays,
+      RowsInserted_Pays = @ipays,
+      RowsUpdated_Staff = @ustaff,
+      RowsInserted_Staff = @istaff,
+      RowsUpdated_Personnels = @upersonnels,
+      RowsInserted_Personnels = @ipersonnels,
+      RowsUpdated_Professeurs = @uprofesseurs,
+      RowsInserted_Professeurs = @iprofesseurs,
+      RowsUpdated_Responsables = @uresponsables,
+      RowsInserted_Responsables= @iresponsables,
+      RowsUpdated_Niveaux = @univeaux,
+      RowsInserted_Niveaux = @iniveaux,
+      RowsUpdated_Etablissements = @uetablissements,
+      RowsInserted_Etablissements= @ietablissements,
+      RowsUpdated_Regimes = @uregimes,
+      RowsInserted_Regimes = @iregimes,
+      RowsUpdated_Parents = @uparents,
+      RowsInserted_Parents = @iparents,
+      RowsUpdated_Enfants = @uenfants,
+      RowsInserted_Enfants = @ienfants,
+      RowsUpdated_Foyers = @ufoyers,
+      RowsInserted_Foyers = @ifoyers,
+      RowsUpdated_Services = @uservices,
+      RowsInserted_Services = @iservices,
+      RowsUpdated_Villes = @uvilles,
+      RowsInserted_Villes = @ivilles,
+      RowsUpdated_SchoolYear = @uschoolyear,
+      RowsInserted_SchoolYear = @ischoolyear,
+      RowsUpdated_Dates = @udates,
+      RowsInserted_Dates = @idates,
+      RowsUpdated_Fac_Services = @ufac_services,
+      RowsInserted_Fac_Services = @ifac_services,
+      RowsUpdated_Fac_Niveaux = @ufac_niveaux,
+      RowsInserted_Fac_Niveaux = @ifac_niveaux,
+      RowsUpdated_Fac_Eleves = @ufac_eleves,
+      RowsInserted_Fac_Eleves = @ifac_eleves,
+      RowsUpdated_Fac_Familles = @ufac_familles,
+      RowsInserted_Fac_Familles = @ifac_familles,
+      RowsUpdated_Fac_Validations = @ufac_validations,
+      RowsInserted_Fac_Validations = @ifac_validations,
+      TotalRowsWritten = @TotalRowsWritten;
 END

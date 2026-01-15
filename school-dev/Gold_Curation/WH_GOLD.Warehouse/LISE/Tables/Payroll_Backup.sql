@@ -1,4 +1,4 @@
-CREATE TABLE [LISE].[Payroll] (
+CREATE TABLE [LISE].[Payroll_Backup] (
 
 	[PaieID] uniqueidentifier NOT NULL, 
 	[PersonnelID] int NULL, 
@@ -11,9 +11,6 @@ CREATE TABLE [LISE].[Payroll] (
 	[ProfessionTypeID] int NULL, 
 	[EtablissementID] int NULL, 
 	[ClasseID] int NULL, 
-	[NiveauID] int NULL
+	[NiveauID] int NULL, 
+	[PersonnelKey] varchar(50) NULL
 );
-
-
-GO
-ALTER TABLE [LISE].[Payroll] ADD CONSTRAINT UQ_Payroll_PersonnelID_Date unique NONCLUSTERED ([PersonnelID], [Date]);

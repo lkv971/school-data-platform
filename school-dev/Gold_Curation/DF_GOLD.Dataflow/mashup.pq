@@ -91,7 +91,7 @@ shared dropzone = let
   #"Replaced value" = Table.ReplaceValue(TypedFinal, null, 0, Replacer.ReplaceValue, {"Montant"})
 in
   #"Replaced value";
-shared pPayPeriod = "2025-09" meta [IsParameterQuery = true, IsParameterQueryRequired = false, Type = type text, DefaultValue = ""];
+shared pPayPeriod = "2025-10" meta [IsParameterQuery = true, IsParameterQueryRequired = false, Type = type text, DefaultValue = ""];
 shared WorkspaceId = "28e6a84a-1953-410e-8b52-272e6318afde" meta [IsParameterQuery = true, IsParameterQueryRequired = false, Type = type any, DefaultValue = ""];
 shared LakehouseId = "bfe479b8-2f70-44bc-84d5-dfa2ec50d321" meta [IsParameterQuery = true, IsParameterQueryRequired = false, Type = type any, DefaultValue = ""];
 shared dropzone_DataDestination = let

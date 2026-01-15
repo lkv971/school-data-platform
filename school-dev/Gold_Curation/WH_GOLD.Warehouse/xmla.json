@@ -605,35 +605,6 @@
             ]
           },
           {
-            "name": "PersonnelKey",
-            "dataType": "string",
-            "sourceColumn": "PersonnelKey",
-            "sourceProviderType": "varchar",
-            "sourceLineageTag": "PersonnelKey",
-            "summarizeBy": "none",
-            "annotations": [
-              {
-                "name": "SummarizationSetBy",
-                "value": "Automatic"
-              }
-            ]
-          },
-          {
-            "name": "ProfesseurID",
-            "dataType": "int64",
-            "sourceColumn": "ProfesseurID",
-            "formatString": "0",
-            "sourceProviderType": "int",
-            "sourceLineageTag": "ProfesseurID",
-            "summarizeBy": "sum",
-            "annotations": [
-              {
-                "name": "SummarizationSetBy",
-                "value": "Automatic"
-              }
-            ]
-          },
-          {
             "name": "Nom",
             "dataType": "string",
             "sourceColumn": "Nom",
@@ -662,12 +633,26 @@
             ]
           },
           {
-            "name": "ClasseID",
+            "name": "Nationalite",
+            "dataType": "string",
+            "sourceColumn": "Nationalite",
+            "sourceProviderType": "varchar",
+            "sourceLineageTag": "Nationalite",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "Badge",
             "dataType": "int64",
-            "sourceColumn": "ClasseID",
+            "sourceColumn": "Badge",
             "formatString": "0",
             "sourceProviderType": "int",
-            "sourceLineageTag": "ClasseID",
+            "sourceLineageTag": "Badge",
             "summarizeBy": "sum",
             "annotations": [
               {
@@ -677,11 +662,11 @@
             ]
           },
           {
-            "name": "Nationalite",
+            "name": "PersonnelKey",
             "dataType": "string",
-            "sourceColumn": "Nationalite",
+            "sourceColumn": "PersonnelKey",
             "sourceProviderType": "varchar",
-            "sourceLineageTag": "Nationalite",
+            "sourceLineageTag": "PersonnelKey",
             "summarizeBy": "none",
             "annotations": [
               {
@@ -793,13 +778,13 @@
             ]
           },
           {
-            "name": "Badge",
-            "dataType": "int64",
-            "sourceColumn": "Badge",
-            "formatString": "0",
-            "sourceProviderType": "int",
-            "sourceLineageTag": "Badge",
-            "summarizeBy": "sum",
+            "name": "IsTeacher",
+            "dataType": "boolean",
+            "sourceColumn": "IsTeacher",
+            "formatString": "\"TRUE\";\"TRUE\";\"FALSE\"",
+            "sourceProviderType": "bit",
+            "sourceLineageTag": "IsTeacher",
+            "summarizeBy": "none",
             "annotations": [
               {
                 "name": "SummarizationSetBy",
@@ -2473,6 +2458,207 @@
                 "value": "Automatic"
               }
             ]
+          }
+        ],
+        "partitions": [
+          {
+            "name": "{{Partition_Name}}",
+            "mode": "directLake",
+            "source": {
+              "type": "entity",
+              "entityName": "Payroll",
+              "expressionSource": "DatabaseQuery",
+              "schemaName": "LISE"
+            }
+          }
+        ],
+        "annotations": [
+          {
+            "name": "IsTableInBiModel",
+            "value": "False"
+          }
+        ]
+      },
+      {
+        "name": "Payroll_Backup",
+        "sourceLineageTag": "[LISE].[Payroll_Backup]",
+        "columns": [
+          {
+            "name": "PaieID",
+            "sourceColumn": "PaieID",
+            "sourceProviderType": "uniqueidentifier",
+            "sourceLineageTag": "PaieID",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "PersonnelID",
+            "dataType": "int64",
+            "sourceColumn": "PersonnelID",
+            "formatString": "0",
+            "sourceProviderType": "int",
+            "sourceLineageTag": "PersonnelID",
+            "summarizeBy": "sum",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "Nom",
+            "dataType": "string",
+            "sourceColumn": "Nom",
+            "sourceProviderType": "varchar",
+            "sourceLineageTag": "Nom",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "Prenom",
+            "dataType": "string",
+            "sourceColumn": "Prenom",
+            "sourceProviderType": "varchar",
+            "sourceLineageTag": "Prenom",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "Periode",
+            "dataType": "string",
+            "sourceColumn": "Periode",
+            "sourceProviderType": "varchar",
+            "sourceLineageTag": "Periode",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "Date",
+            "dataType": "dateTime",
+            "sourceColumn": "Date",
+            "formatString": "General Date",
+            "sourceProviderType": "date",
+            "sourceLineageTag": "Date",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "Montant",
+            "dataType": "double",
+            "sourceColumn": "Montant",
+            "sourceProviderType": "float",
+            "sourceLineageTag": "Montant",
+            "summarizeBy": "sum",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              },
+              {
+                "name": "PBI_FormatHint",
+                "value": "{\"isGeneralNumber\":true}"
+              }
+            ]
+          },
+          {
+            "name": "Devise",
+            "dataType": "string",
+            "sourceColumn": "Devise",
+            "sourceProviderType": "varchar",
+            "sourceLineageTag": "Devise",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "ProfessionTypeID",
+            "dataType": "int64",
+            "sourceColumn": "ProfessionTypeID",
+            "formatString": "0",
+            "sourceProviderType": "int",
+            "sourceLineageTag": "ProfessionTypeID",
+            "summarizeBy": "sum",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "EtablissementID",
+            "dataType": "int64",
+            "sourceColumn": "EtablissementID",
+            "formatString": "0",
+            "sourceProviderType": "int",
+            "sourceLineageTag": "EtablissementID",
+            "summarizeBy": "sum",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "ClasseID",
+            "dataType": "int64",
+            "sourceColumn": "ClasseID",
+            "formatString": "0",
+            "sourceProviderType": "int",
+            "sourceLineageTag": "ClasseID",
+            "summarizeBy": "sum",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "NiveauID",
+            "dataType": "int64",
+            "sourceColumn": "NiveauID",
+            "formatString": "0",
+            "sourceProviderType": "int",
+            "sourceLineageTag": "NiveauID",
+            "summarizeBy": "sum",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
           },
           {
             "name": "PersonnelKey",
@@ -2495,7 +2681,7 @@
             "mode": "directLake",
             "source": {
               "type": "entity",
-              "entityName": "Payroll",
+              "entityName": "Payroll_Backup",
               "expressionSource": "DatabaseQuery",
               "schemaName": "LISE"
             }

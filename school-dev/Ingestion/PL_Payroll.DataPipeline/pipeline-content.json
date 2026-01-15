@@ -43,7 +43,7 @@
           "datasetSettings": {
             "annotations": [],
             "connectionSettings": {
-              "name": "c3ab31dd_d043_4e91_9746_6874b92154a4",
+              "name": "20ac351f_38cc_4773_b1c9_02033a4df769",
               "properties": {
                 "annotations": [],
                 "type": "Lakehouse",
@@ -154,7 +154,16 @@
                 "secureInput": false
               },
               "typeProperties": {
-                "storedProcedureName": "[LISE].[spc_upsert_payroll]"
+                "storedProcedureName": "[LISE].[spc_upsert_payroll]",
+                "storedProcedureParameters": {
+                  "pPayPeriod": {
+                    "value": {
+                      "value": "@variables('varPeriod')",
+                      "type": "Expression"
+                    },
+                    "type": "String"
+                  }
+                }
               },
               "connectionSettings": {
                 "name": "fc9d4a1d_9b08_4153_96ff_1ac670b31df3",
@@ -170,6 +179,52 @@
                     "connection": "@pipeline().libraryVariables.VL_LISE_Warehouse_Connection"
                   }
                 }
+              }
+            },
+            {
+              "name": "DQ_Check_PayrollDuplicates",
+              "type": "Script",
+              "dependsOn": [
+                {
+                  "activity": "UpsertPayroll",
+                  "dependencyConditions": [
+                    "Succeeded"
+                  ]
+                }
+              ],
+              "policy": {
+                "timeout": "0.12:00:00",
+                "retry": 0,
+                "retryIntervalInSeconds": 30,
+                "secureOutput": false,
+                "secureInput": false
+              },
+              "connectionSettings": {
+                "name": "a098f517_3cea_4db8_98a0_2f4211f2bf1a",
+                "properties": {
+                  "annotations": [],
+                  "type": "DataWarehouse",
+                  "typeProperties": {
+                    "endpoint": "@pipeline().libraryVariables.VL_LISE_WH_Gold_SQL_Connection",
+                    "artifactId": "@pipeline().libraryVariables.VL_LISE_WH_Gold_ID",
+                    "workspaceId": "@pipeline().libraryVariables.VL_LISE_Workspace_ID"
+                  },
+                  "externalReferences": {
+                    "connection": "@pipeline().libraryVariables.VL_LISE_Warehouse_Connection"
+                  }
+                }
+              },
+              "typeProperties": {
+                "scripts": [
+                  {
+                    "type": "Query",
+                    "text": {
+                      "value": "DECLARE @pPayPeriod varchar(7) = '@{variables('varPeriod')}';\r\n\r\nDECLARE @PayDate date =\r\n    DATEFROMPARTS(CONVERT(int, LEFT(@pPayPeriod, 4)),\r\n                  CONVERT(int, RIGHT(@pPayPeriod, 2)),\r\n                  1);\r\n\r\nIF EXISTS (\r\n    SELECT 1\r\n    FROM LISE.Payroll\r\n    WHERE [Date] = @PayDate\r\n    GROUP BY PersonnelID, [Date]\r\n    HAVING COUNT(*) > 1\r\n)\r\nBEGIN\r\n    DECLARE @msg nvarchar(4000);\r\n\r\n    SELECT TOP 1\r\n        @msg = CONCAT(\r\n            'DQ FAIL: Duplicate payroll rows detected for PayDate=',\r\n            CONVERT(varchar(10), @PayDate, 120),\r\n            '. Example PersonnelID=',\r\n            CAST(PersonnelID AS varchar(20)),\r\n            ' has ',\r\n            CAST(COUNT(*) AS varchar(10)),\r\n            ' rows.'\r\n        )\r\n    FROM LISE.Payroll\r\n    WHERE [Date] = @PayDate\r\n    GROUP BY PersonnelID, [Date]\r\n    HAVING COUNT(*) > 1\r\n    ORDER BY COUNT(*) DESC;\r\n\r\n    THROW 51021, @msg, 1;\r\nEND;\r\n",
+                      "type": "Expression"
+                    }
+                  }
+                ],
+                "scriptBlockExecutionTimeout": "02:00:00"
               }
             }
           ]
@@ -218,7 +273,7 @@
                   "datasetSettings": {
                     "annotations": [],
                     "connectionSettings": {
-                      "name": "180cff68_066f_4088_ba72_fc09e5cee6ee",
+                      "name": "2254234f_4524_4430_a438_e9876771586e",
                       "properties": {
                         "annotations": [],
                         "type": "Lakehouse",
@@ -262,7 +317,7 @@
                   "datasetSettings": {
                     "annotations": [],
                     "connectionSettings": {
-                      "name": "68957704_a884_43a1_b0e1_fbd68e9636ed",
+                      "name": "eaf7bb39_fb8c_447c_be98_f8e45004395f",
                       "properties": {
                         "annotations": [],
                         "type": "Lakehouse",
@@ -330,7 +385,7 @@
                 "datasetSettings": {
                   "annotations": [],
                   "connectionSettings": {
-                    "name": "6eabe52c_c07e_4918_9dc0_4aada1cbf919",
+                    "name": "2275436e_3ed0_4085_93de_7afef7367e62",
                     "properties": {
                       "annotations": [],
                       "type": "Lakehouse",

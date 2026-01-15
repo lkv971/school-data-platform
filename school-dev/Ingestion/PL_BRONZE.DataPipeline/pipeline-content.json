@@ -13,9 +13,9 @@
           }
         ],
         "policy": {
-          "timeout": "0.12:00:00",
-          "retry": 0,
-          "retryIntervalInSeconds": 30,
+          "timeout": "0.00:30:00",
+          "retry": 6,
+          "retryIntervalInSeconds": 300,
           "secureOutput": false,
           "secureInput": false
         },
@@ -76,7 +76,7 @@
           "datasetSettings": {
             "annotations": [],
             "linkedService": {
-              "name": "4879e248_4c59_4ff9_9556_4eec0877e106",
+              "name": "d3c173a6_9c1e_4093_ac2e_76b3abd1b219",
               "properties": {
                 "annotations": [],
                 "type": "Lakehouse",
@@ -143,9 +143,9 @@
               "type": "GetMetadata",
               "dependsOn": [],
               "policy": {
-                "timeout": "0.12:00:00",
-                "retry": 0,
-                "retryIntervalInSeconds": 30,
+                "timeout": "0.00:10:00",
+                "retry": 6,
+                "retryIntervalInSeconds": 300,
                 "secureOutput": false,
                 "secureInput": false
               },
@@ -207,8 +207,8 @@
                     "type": "Copy",
                     "dependsOn": [],
                     "policy": {
-                      "timeout": "0.12:00:00",
-                      "retry": 0,
+                      "timeout": "0.15:00:00",
+                      "retry": 6,
                       "retryIntervalInSeconds": 30,
                       "secureOutput": false,
                       "secureInput": false
@@ -258,7 +258,7 @@
                         "datasetSettings": {
                           "annotations": [],
                           "linkedService": {
-                            "name": "28810a7d_e60b_4cda_a6e6_ea5051210617",
+                            "name": "3fd93a3b_2314_4c31_9b65_b6d451a111cb",
                             "properties": {
                               "annotations": [],
                               "type": "Lakehouse",

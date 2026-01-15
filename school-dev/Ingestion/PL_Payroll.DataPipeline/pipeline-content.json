@@ -29,9 +29,9 @@
           }
         ],
         "policy": {
-          "timeout": "0.12:00:00",
-          "retry": 0,
-          "retryIntervalInSeconds": 30,
+          "timeout": "0.00:10:00",
+          "retry": 6,
+          "retryIntervalInSeconds": 300,
           "secureOutput": false,
           "secureInput": false
         },
@@ -43,7 +43,7 @@
           "datasetSettings": {
             "annotations": [],
             "connectionSettings": {
-              "name": "20ac351f_38cc_4773_b1c9_02033a4df769",
+              "name": "79586946_1021_4c32_97d2_e4ccf4b9007a",
               "properties": {
                 "annotations": [],
                 "type": "Lakehouse",
@@ -107,9 +107,9 @@
               "type": "RefreshDataflow",
               "dependsOn": [],
               "policy": {
-                "timeout": "0.12:00:00",
-                "retry": 0,
-                "retryIntervalInSeconds": 30,
+                "timeout": "0.03:00:00",
+                "retry": 2,
+                "retryIntervalInSeconds": 600,
                 "secureOutput": false,
                 "secureInput": false
               },
@@ -273,7 +273,7 @@
                   "datasetSettings": {
                     "annotations": [],
                     "connectionSettings": {
-                      "name": "2254234f_4524_4430_a438_e9876771586e",
+                      "name": "4f783457_e90d_4c66_bc8b_7da08b907655",
                       "properties": {
                         "annotations": [],
                         "type": "Lakehouse",
@@ -317,7 +317,7 @@
                   "datasetSettings": {
                     "annotations": [],
                     "connectionSettings": {
-                      "name": "eaf7bb39_fb8c_447c_be98_f8e45004395f",
+                      "name": "80ee5149_3b0e_492e_b726_1bf8871318b8",
                       "properties": {
                         "annotations": [],
                         "type": "Lakehouse",
@@ -385,7 +385,7 @@
                 "datasetSettings": {
                   "annotations": [],
                   "connectionSettings": {
-                    "name": "2275436e_3ed0_4085_93de_7afef7367e62",
+                    "name": "c61e7be2_d172_45ad_ad29_c9a5becfff25",
                     "properties": {
                       "annotations": [],
                       "type": "Lakehouse",

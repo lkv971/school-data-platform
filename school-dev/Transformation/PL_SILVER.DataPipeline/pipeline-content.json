@@ -27,7 +27,7 @@
           "datasetSettings": {
             "annotations": [],
             "linkedService": {
-              "name": "c7c3241f_cf26_4f2b_966e_80fdf4036ffd",
+              "name": "9762b3fd_be50_4954_b397_cbe26beda940",
               "properties": {
                 "annotations": [],
                 "type": "Lakehouse",
@@ -83,7 +83,7 @@
           "datasetSettings": {
             "annotations": [],
             "linkedService": {
-              "name": "9965e57a_1be3_4c69_aece_fbb1452b44f9",
+              "name": "b2c66bb5_f31a_4bcd_adab_c377bbd9d301",
               "properties": {
                 "annotations": [],
                 "type": "Lakehouse",
@@ -129,9 +129,9 @@
               "type": "TridentNotebook",
               "dependsOn": [],
               "policy": {
-                "timeout": "0.12:00:00",
-                "retry": 0,
-                "retryIntervalInSeconds": 30,
+                "timeout": "0.01:30:00",
+                "retry": 3,
+                "retryIntervalInSeconds": 600,
                 "secureOutput": false,
                 "secureInput": false
               },
@@ -167,9 +167,9 @@
                 }
               ],
               "policy": {
-                "timeout": "0.12:00:00",
-                "retry": 0,
-                "retryIntervalInSeconds": 30,
+                "timeout": "0.01:30:00",
+                "retry": 3,
+                "retryIntervalInSeconds": 600,
                 "secureOutput": false,
                 "secureInput": false
               },

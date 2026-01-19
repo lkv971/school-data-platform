@@ -43,7 +43,7 @@
           "datasetSettings": {
             "annotations": [],
             "connectionSettings": {
-              "name": "79586946_1021_4c32_97d2_e4ccf4b9007a",
+              "name": "32716cfc_a925_4b52_ab62_100269712bc0",
               "properties": {
                 "annotations": [],
                 "type": "Lakehouse",
@@ -226,6 +226,42 @@
                 ],
                 "scriptBlockExecutionTimeout": "02:00:00"
               }
+            },
+            {
+              "name": "Refresh_HR_semantic",
+              "type": "PBISemanticModelRefresh",
+              "dependsOn": [
+                {
+                  "activity": "DQ_Check_PayrollDuplicates",
+                  "dependencyConditions": [
+                    "Succeeded"
+                  ]
+                }
+              ],
+              "policy": {
+                "timeout": "0.12:00:00",
+                "retry": 0,
+                "retryIntervalInSeconds": 30,
+                "secureOutput": false,
+                "secureInput": false
+              },
+              "typeProperties": {
+                "method": "post",
+                "waitOnCompletion": true,
+                "commitMode": "Transactional",
+                "operationType": "SemanticModelRefresh",
+                "groupId": {
+                  "value": "@pipeline().libraryVariables.VL_LISE_Workspace_ID",
+                  "type": "Expression"
+                },
+                "datasetId": {
+                  "value": "@pipeline().libraryVariables.VL_LISE_SM_HR_ID",
+                  "type": "Expression"
+                }
+              },
+              "externalReferences": {
+                "connection": "c02876ce-2b69-40c2-aa37-0468298fcab6"
+              }
             }
           ]
         }
@@ -273,7 +309,7 @@
                   "datasetSettings": {
                     "annotations": [],
                     "connectionSettings": {
-                      "name": "4f783457_e90d_4c66_bc8b_7da08b907655",
+                      "name": "ba4a17c1_ac4d_4d9c_96d1_564774cb89a3",
                       "properties": {
                         "annotations": [],
                         "type": "Lakehouse",
@@ -317,7 +353,7 @@
                   "datasetSettings": {
                     "annotations": [],
                     "connectionSettings": {
-                      "name": "80ee5149_3b0e_492e_b726_1bf8871318b8",
+                      "name": "30b411d2_c7db_4a77_8fac_b282f6fd9960",
                       "properties": {
                         "annotations": [],
                         "type": "Lakehouse",
@@ -385,7 +421,7 @@
                 "datasetSettings": {
                   "annotations": [],
                   "connectionSettings": {
-                    "name": "c61e7be2_d172_45ad_ad29_c9a5becfff25",
+                    "name": "f0f90f66_6dc9_4ed0_8ec6_9fc70f63bbb3",
                     "properties": {
                       "annotations": [],
                       "type": "Lakehouse",
@@ -471,6 +507,11 @@
       "VL_LISE_Warehouse_Connection": {
         "type": "String",
         "variableName": "Warehouse_Connection",
+        "libraryName": "VL_LISE"
+      },
+      "VL_LISE_SM_HR_ID": {
+        "type": "String",
+        "variableName": "SM_HR_ID",
         "libraryName": "VL_LISE"
       }
     }

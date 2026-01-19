@@ -53,6 +53,14 @@
     {
       "name": "WH_Gold_SQL_Connection",
       "value": "xisdbyhsv57ubp3vvd3oymv5ou-anogdnxzhtwu3ajq62pbivihgm.datawarehouse.fabric.microsoft.com"
+    },
+    {
+      "name": "SM_HR_ID",
+      "value": "690e3fc2-957a-4a32-b7fc-ed0ae0515350"
+    },
+    {
+      "name": "SM_Invoices_ID",
+      "value": "51d92688-8fdd-49d7-8191-89426fe480b6"
     }
   ]
 }

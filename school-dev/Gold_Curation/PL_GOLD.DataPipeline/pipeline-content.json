@@ -27,7 +27,7 @@
           "datasetSettings": {
             "annotations": [],
             "linkedService": {
-              "name": "ef0e40d8_c9d5_4828_9a62_6118c7b76e4f",
+              "name": "bf319d8f_e48b_4bf1_8425_83b571c16981",
               "properties": {
                 "annotations": [],
                 "type": "Lakehouse",
@@ -78,7 +78,7 @@
           "datasetSettings": {
             "annotations": [],
             "linkedService": {
-              "name": "45f0f2f3_453d_4af3_8dd4_09cc1d1e292a",
+              "name": "ef97e2cb_1e5c_44c0_b66d_bb208822386e",
               "properties": {
                 "annotations": [],
                 "type": "DataWarehouse",
@@ -539,6 +539,42 @@
                   }
                 }
               }
+            },
+            {
+              "name": "Refresh_invoices",
+              "type": "PBISemanticModelRefresh",
+              "dependsOn": [
+                {
+                  "activity": "InsertSuccessLogs",
+                  "dependencyConditions": [
+                    "Succeeded"
+                  ]
+                }
+              ],
+              "policy": {
+                "timeout": "0.12:00:00",
+                "retry": 0,
+                "retryIntervalInSeconds": 30,
+                "secureOutput": false,
+                "secureInput": false
+              },
+              "typeProperties": {
+                "method": "post",
+                "waitOnCompletion": true,
+                "commitMode": "Transactional",
+                "operationType": "SemanticModelRefresh",
+                "groupId": {
+                  "value": "@pipeline().libraryVariables.VL_LISE_Workspace_ID",
+                  "type": "Expression"
+                },
+                "datasetId": {
+                  "value": "@pipeline().libraryVariables.VL_LISE_SM_Invoices_ID",
+                  "type": "Expression"
+                }
+              },
+              "externalReferences": {
+                "connection": "c02876ce-2b69-40c2-aa37-0468298fcab6"
+              }
             }
           ]
         }
@@ -563,6 +599,11 @@
       "VL_LISE_WH_Gold_SQL_Connection": {
         "type": "String",
         "variableName": "WH_Gold_SQL_Connection",
+        "libraryName": "VL_LISE"
+      },
+      "VL_LISE_SM_Invoices_ID": {
+        "type": "String",
+        "variableName": "SM_Invoices_ID",
         "libraryName": "VL_LISE"
       }
     }

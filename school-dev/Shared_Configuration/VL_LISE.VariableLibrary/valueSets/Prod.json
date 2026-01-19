@@ -49,6 +49,14 @@
     {
       "name": "DF_Gold_ID",
       "value": "36a2b4cd-75c2-4b01-8bfb-fb50dcef27b9"
+    },
+    {
+      "name": "SM_HR_ID",
+      "value": "f72c9552-5fb4-4a46-a46e-c85756a639a5"
+    },
+    {
+      "name": "SM_Invoices_ID",
+      "value": "d5122396-feca-465c-9e2e-a0fb3c3ed1c4"
     }
   ]
 }

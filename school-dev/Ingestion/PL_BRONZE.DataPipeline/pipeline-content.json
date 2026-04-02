@@ -2,44 +2,28 @@
   "properties": {
     "activities": [
       {
-        "name": "GetChildItems",
         "type": "GetMetadata",
-        "dependsOn": [
-          {
-            "activity": "LookupWatermark",
-            "dependencyConditions": [
-              "Succeeded"
-            ]
-          }
-        ],
-        "policy": {
-          "timeout": "0.00:30:00",
-          "retry": 6,
-          "retryIntervalInSeconds": 300,
-          "secureOutput": false,
-          "secureInput": false
-        },
         "typeProperties": {
-          "fieldList": [
-            "childItems"
-          ],
           "datasetSettings": {
-            "annotations": [],
             "type": "DelimitedText",
             "typeProperties": {
               "location": {
                 "type": "FileServerLocation"
               },
               "columnDelimiter": ",",
+              "quoteChar": "\"",
               "escapeChar": "\\",
-              "firstRowAsHeader": true,
-              "quoteChar": "\""
+              "firstRowAsHeader": true
             },
             "schema": [],
             "externalReferences": {
-              "connection": "@pipeline().libraryVariables.VL_LISE_LISE_256_Connection"
-            }
+              "connection": "a34006b2-0a2e-43d0-90a5-50c6b63b54c9"
+            },
+            "annotations": []
           },
+          "fieldList": [
+            "childItems"
+          ],
           "storeSettings": {
             "type": "FileServerReadSettings",
             "recursive": true,
@@ -48,68 +32,76 @@
           "formatSettings": {
             "type": "DelimitedTextReadSettings"
           }
-        }
-      },
-      {
-        "name": "LookupWatermark",
-        "type": "Lookup",
-        "dependsOn": [],
-        "policy": {
-          "timeout": "0.12:00:00",
-          "retry": 0,
-          "retryIntervalInSeconds": 30,
-          "secureOutput": false,
-          "secureInput": false
         },
-        "typeProperties": {
-          "source": {
-            "type": "JsonSource",
-            "storeSettings": {
-              "type": "LakehouseReadSettings",
-              "recursive": true,
-              "enablePartitionDiscovery": false
-            },
-            "formatSettings": {
-              "type": "JsonReadSettings"
-            }
-          },
-          "datasetSettings": {
-            "annotations": [],
-            "linkedService": {
-              "name": "d3c173a6_9c1e_4093_ac2e_76b3abd1b219",
-              "properties": {
-                "annotations": [],
-                "type": "Lakehouse",
-                "typeProperties": {
-                  "workspaceId": "@pipeline().libraryVariables.VL_LISE_Workspace_ID",
-                  "artifactId": "@pipeline().libraryVariables.VL_LISE_LH_Bronze_ID",
-                  "rootFolder": "Files"
-                }
-              }
-            },
-            "type": "Json",
-            "typeProperties": {
-              "location": {
-                "type": "LakehouseLocation",
-                "fileName": "watermark.json",
-                "folderPath": "Watermarks"
-              }
-            },
-            "schema": {}
-          }
-        }
-      },
-      {
-        "name": "FilterFiles",
-        "type": "Filter",
+        "policy": {
+          "timeout": "0.00:30:00",
+          "retry": 6,
+          "retryIntervalInSeconds": 300,
+          "secureInput": false,
+          "secureOutput": false
+        },
+        "name": "GetChildItems",
         "dependsOn": [
           {
-            "activity": "GetChildItems",
+            "activity": "LookupWatermark",
             "dependencyConditions": [
               "Succeeded"
             ]
           }
-        ],
+        ]
+      },
+      {
+        "type": "Lookup",
+        "typeProperties": {
+          "source": {
+            "type": "JsonSource",
+            "formatSettings": {
+              "type": "JsonReadSettings"
+            },
+            "storeSettings": {
+              "type": "LakehouseReadSettings",
+              "recursive": true,
+              "enablePartitionDiscovery": false
+            }
+          },
+          "datasetSettings": {
+            "type": "Json",
+            "typeProperties": {
+              "location": {
+                "type": "LakehouseLocation",
+                "folderPath": "Watermarks",
+                "fileName": "watermark.json"
+              }
+            },
+            "schema": {},
+            "linkedService": {
+              "name": "LH_BRONZE",
+              "properties": {
+                "type": "Lakehouse",
+                "typeProperties": {
+                  "artifactId": "ec50d321-dfa2-84d5-44bc-2f70bfe479b8",
+                  "workspaceId": "00000000-0000-0000-0000-000000000000",
+                  "rootFolder": "Files"
+                },
+                "annotations": []
+              }
+            },
+            "annotations": []
+          },
+          "firstRowOnly": true
+        },
+        "policy": {
+          "timeout": "0.12:00:00",
+          "retry": 0,
+          "retryIntervalInSeconds": 30,
+          "secureInput": false,
+          "secureOutput": false
+        },
+        "name": "LookupWatermark",
+        "dependsOn": []
+      },
+      {
+        "type": "Filter",
         "typeProperties": {
           "items": {
             "value": "@coalesce(activity('GetChildItems').output.childItems, json('[]'))",
@@ -119,19 +111,19 @@
             "value": "@contains(createArray('COM_ELEVES.csv', 'COM_RESPONSABLES.csv', 'COM_CLASSES.csv', 'COM_PERSONNELS.csv', 'COM_PROFSPRINCIPAUX.csv', 'COM_NIVEAU.csv', 'COM_ETABLISSEMENT.csv', 'COM_FOYER.csv', 'TAB_CSP.csv', 'TAB_PAYS.csv', 'FAC_COMPTA_GENERAL.csv', 'FAC_HISTO_LIGNE.csv', 'FAC_HISTO_FAMILLE.csv', 'FAC_HISTO_ELEVE.csv', 'FAC_VALIDATION.csv'), item().name)",
             "type": "Expression"
           }
-        }
-      },
-      {
-        "name": "ForEachFile",
-        "type": "ForEach",
+        },
+        "name": "FilterFiles",
         "dependsOn": [
           {
-            "activity": "FilterFiles",
+            "activity": "GetChildItems",
             "dependencyConditions": [
               "Succeeded"
             ]
           }
-        ],
+        ]
+      },
+      {
+        "type": "ForEach",
         "typeProperties": {
           "items": {
             "value": "@coalesce(activity('FilterFiles').output.value, activity('FilterFiles').output.value, json('[]'))",
@@ -139,22 +131,9 @@
           },
           "activities": [
             {
-              "name": "GetLastModified",
               "type": "GetMetadata",
-              "dependsOn": [],
-              "policy": {
-                "timeout": "0.00:10:00",
-                "retry": 6,
-                "retryIntervalInSeconds": 300,
-                "secureOutput": false,
-                "secureInput": false
-              },
               "typeProperties": {
-                "fieldList": [
-                  "lastModified"
-                ],
                 "datasetSettings": {
-                  "annotations": [],
                   "type": "DelimitedText",
                   "typeProperties": {
                     "location": {
@@ -165,15 +144,19 @@
                       }
                     },
                     "columnDelimiter": ",",
+                    "quoteChar": "\"",
                     "escapeChar": "\\",
-                    "firstRowAsHeader": true,
-                    "quoteChar": "\""
+                    "firstRowAsHeader": true
                   },
                   "schema": [],
                   "externalReferences": {
-                    "connection": "@pipeline().libraryVariables.VL_LISE_LISE_256_Connection"
-                  }
+                    "connection": "a34006b2-0a2e-43d0-90a5-50c6b63b54c9"
+                  },
+                  "annotations": []
                 },
+                "fieldList": [
+                  "lastModified"
+                ],
                 "storeSettings": {
                   "type": "FileServerReadSettings",
                   "recursive": true,
@@ -182,50 +165,39 @@
                 "formatSettings": {
                   "type": "DelimitedTextReadSettings"
                 }
-              }
+              },
+              "policy": {
+                "timeout": "0.00:10:00",
+                "retry": 6,
+                "retryIntervalInSeconds": 300,
+                "secureInput": false,
+                "secureOutput": false
+              },
+              "name": "GetLastModified",
+              "dependsOn": []
             },
             {
-              "name": "IfFilesModified",
               "type": "IfCondition",
-              "dependsOn": [
-                {
-                  "activity": "GetLastModified",
-                  "dependencyConditions": [
-                    "Succeeded"
-                  ]
-                }
-              ],
               "typeProperties": {
                 "expression": {
                   "value": "@greater(activity('GetLastModified').output.lastModified, activity('LookupWatermark').output.firstRow.lastModified)",
                   "type": "Expression"
                 },
-                "ifFalseActivities": [],
                 "ifTrueActivities": [
                   {
-                    "name": "CopyFiles",
                     "type": "Copy",
-                    "dependsOn": [],
-                    "policy": {
-                      "timeout": "0.15:00:00",
-                      "retry": 6,
-                      "retryIntervalInSeconds": 30,
-                      "secureOutput": false,
-                      "secureInput": false
-                    },
                     "typeProperties": {
                       "source": {
                         "type": "DelimitedTextSource",
+                        "formatSettings": {
+                          "type": "DelimitedTextReadSettings"
+                        },
                         "storeSettings": {
                           "type": "FileServerReadSettings",
                           "recursive": true,
                           "enablePartitionDiscovery": false
                         },
-                        "formatSettings": {
-                          "type": "DelimitedTextReadSettings"
-                        },
                         "datasetSettings": {
-                          "annotations": [],
                           "type": "DelimitedText",
                           "typeProperties": {
                             "location": {
@@ -236,58 +208,58 @@
                               }
                             },
                             "columnDelimiter": ",",
+                            "quoteChar": "\"",
                             "escapeChar": "\\",
-                            "firstRowAsHeader": true,
-                            "quoteChar": "\""
+                            "firstRowAsHeader": true
                           },
                           "schema": [],
                           "externalReferences": {
-                            "connection": "@pipeline().libraryVariables.VL_LISE_LISE_256_Connection"
-                          }
+                            "connection": "a34006b2-0a2e-43d0-90a5-50c6b63b54c9"
+                          },
+                          "annotations": []
                         }
                       },
                       "sink": {
                         "type": "DelimitedTextSink",
-                        "storeSettings": {
-                          "type": "LakehouseWriteSettings"
-                        },
                         "formatSettings": {
                           "type": "DelimitedTextWriteSettings",
                           "fileExtension": ".txt"
                         },
+                        "storeSettings": {
+                          "type": "LakehouseWriteSettings"
+                        },
                         "datasetSettings": {
-                          "annotations": [],
-                          "linkedService": {
-                            "name": "3fd93a3b_2314_4c31_9b65_b6d451a111cb",
-                            "properties": {
-                              "annotations": [],
-                              "type": "Lakehouse",
-                              "typeProperties": {
-                                "workspaceId": "@pipeline().libraryVariables.VL_LISE_Workspace_ID",
-                                "artifactId": "@pipeline().libraryVariables.VL_LISE_LH_Bronze_ID",
-                                "rootFolder": "Files"
-                              }
-                            }
-                          },
                           "type": "DelimitedText",
                           "typeProperties": {
                             "location": {
                               "type": "LakehouseLocation",
+                              "folderPath": "Data/2025-2026",
                               "fileName": {
                                 "value": "@item().name",
                                 "type": "Expression"
-                              },
-                              "folderPath": "Lise_Data/2025-2026"
+                              }
                             },
                             "columnDelimiter": ",",
+                            "quoteChar": "\"",
                             "escapeChar": "\\",
-                            "firstRowAsHeader": true,
-                            "quoteChar": "\""
+                            "firstRowAsHeader": true
                           },
-                          "schema": []
+                          "schema": [],
+                          "linkedService": {
+                            "name": "LH_BRONZE",
+                            "properties": {
+                              "type": "Lakehouse",
+                              "typeProperties": {
+                                "artifactId": "ec50d321-dfa2-84d5-44bc-2f70bfe479b8",
+                                "workspaceId": "00000000-0000-0000-0000-000000000000",
+                                "rootFolder": "Files"
+                              },
+                              "annotations": []
+                            }
+                          },
+                          "annotations": []
                         }
                       },
-                      "enableStaging": false,
                       "translator": {
                         "type": "TabularTranslator",
                         "typeConversion": true,
@@ -295,12 +267,30 @@
                           "allowDataTruncation": true,
                           "treatBooleanAsNumber": false
                         }
-                      }
-                    }
+                      },
+                      "enableStaging": false
+                    },
+                    "policy": {
+                      "timeout": "0.15:00:00",
+                      "retry": 6,
+                      "retryIntervalInSeconds": 30,
+                      "secureInput": false,
+                      "secureOutput": false
+                    },
+                    "name": "CopyFiles",
+                    "dependsOn": []
                   },
                   {
-                    "name": "SetCopyVariable",
                     "type": "SetVariable",
+                    "typeProperties": {
+                      "variableName": "copystatus",
+                      "value": "true"
+                    },
+                    "policy": {
+                      "secureInput": false,
+                      "secureOutput": false
+                    },
+                    "name": "SetCopyVariable",
                     "dependsOn": [
                       {
                         "activity": "CopyFiles",
@@ -308,25 +298,61 @@
                           "Succeeded"
                         ]
                       }
-                    ],
-                    "policy": {
-                      "secureOutput": false,
-                      "secureInput": false
-                    },
-                    "typeProperties": {
-                      "variableName": "copystatus",
-                      "value": "true"
-                    }
+                    ]
                   }
-                ]
-              }
+                ],
+                "ifFalseActivities": []
+              },
+              "name": "IfFilesModified",
+              "dependsOn": [
+                {
+                  "activity": "GetLastModified",
+                  "dependencyConditions": [
+                    "Succeeded"
+                  ]
+                }
+              ]
             }
           ]
-        }
+        },
+        "name": "ForEachFile",
+        "dependsOn": [
+          {
+            "activity": "FilterFiles",
+            "dependencyConditions": [
+              "Succeeded"
+            ]
+          }
+        ]
       },
       {
-        "name": "IfFilesCopied",
         "type": "IfCondition",
+        "typeProperties": {
+          "expression": {
+            "value": "@variables('copystatus')",
+            "type": "Expression"
+          },
+          "ifTrueActivities": [
+            {
+              "type": "TridentNotebook",
+              "typeProperties": {
+                "notebookId": "b113bd89-63e2-b799-45b2-8eacb547f169",
+                "workspaceId": "00000000-0000-0000-0000-000000000000"
+              },
+              "policy": {
+                "timeout": "0.12:00:00",
+                "retry": 0,
+                "retryIntervalInSeconds": 30,
+                "secureInput": false,
+                "secureOutput": false
+              },
+              "name": "UpdateBronzeWatermark",
+              "dependsOn": []
+            }
+          ],
+          "ifFalseActivities": []
+        },
+        "name": "IfFilesCopied",
         "dependsOn": [
           {
             "activity": "ForEachFile",
@@ -334,71 +360,13 @@
               "Succeeded"
             ]
           }
-        ],
-        "typeProperties": {
-          "expression": {
-            "value": "@variables('copystatus')",
-            "type": "Expression"
-          },
-          "ifFalseActivities": [],
-          "ifTrueActivities": [
-            {
-              "name": "UpdateBronzeWatermark",
-              "type": "TridentNotebook",
-              "dependsOn": [],
-              "policy": {
-                "timeout": "0.12:00:00",
-                "retry": 0,
-                "retryIntervalInSeconds": 30,
-                "secureOutput": false,
-                "secureInput": false
-              },
-              "typeProperties": {
-                "notebookId": {
-                  "value": "@pipeline().libraryVariables.VL_LISE_NB_Watermark_Bronze_ID",
-                  "type": "Expression"
-                },
-                "workspaceId": {
-                  "value": "@pipeline().libraryVariables.VL_LISE_Workspace_ID",
-                  "type": "Expression"
-                }
-              }
-            }
-          ]
-        }
+        ]
       }
     ],
     "variables": {
       "copystatus": {
         "type": "String",
         "defaultValue": "false"
-      }
-    },
-    "libraryVariables": {
-      "VL_LISE_LH_Bronze_ID": {
-        "type": "String",
-        "variableName": "LH_Bronze_ID",
-        "libraryName": "VL_LISE"
-      },
-      "VL_LISE_PL_Bronze_ID": {
-        "type": "String",
-        "variableName": "PL_Bronze_ID",
-        "libraryName": "VL_LISE"
-      },
-      "VL_LISE_NB_Watermark_Bronze_ID": {
-        "type": "String",
-        "variableName": "NB_Watermark_Bronze_ID",
-        "libraryName": "VL_LISE"
-      },
-      "VL_LISE_Workspace_ID": {
-        "type": "String",
-        "variableName": "Workspace_ID",
-        "libraryName": "VL_LISE"
-      },
-      "VL_LISE_LISE_256_Connection": {
-        "type": "String",
-        "variableName": "LISE_256_Connection",
-        "libraryName": "VL_LISE"
       }
     }
   }

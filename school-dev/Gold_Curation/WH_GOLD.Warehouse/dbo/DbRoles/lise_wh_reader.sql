@@ -1,0 +1,1 @@
+CREATE ROLE [lise_wh_reader];

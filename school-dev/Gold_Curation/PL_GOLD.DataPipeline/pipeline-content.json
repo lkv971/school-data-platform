@@ -1,0 +1,397 @@
+{
+  "properties": {
+    "activities": [
+      {
+        "type": "Lookup",
+        "typeProperties": {
+          "source": {
+            "type": "JsonSource",
+            "formatSettings": {
+              "type": "JsonReadSettings"
+            },
+            "storeSettings": {
+              "type": "LakehouseReadSettings",
+              "recursive": true,
+              "enablePartitionDiscovery": false
+            }
+          },
+          "datasetSettings": {
+            "type": "Json",
+            "typeProperties": {
+              "location": {
+                "type": "LakehouseLocation",
+                "folderPath": "Watermarks",
+                "fileName": "watermark.json"
+              }
+            },
+            "schema": {},
+            "linkedService": {
+              "name": "LH_SILVER",
+              "properties": {
+                "type": "Lakehouse",
+                "typeProperties": {
+                  "artifactId": "c112f2b3-dfc3-90bd-41ec-33d0b727fb41",
+                  "workspaceId": "00000000-0000-0000-0000-000000000000",
+                  "rootFolder": "Files"
+                },
+                "annotations": []
+              }
+            },
+            "annotations": []
+          }
+        },
+        "policy": {
+          "timeout": "0.12:00:00",
+          "retry": 0,
+          "retryIntervalInSeconds": 30,
+          "secureInput": false,
+          "secureOutput": false
+        },
+        "name": "LookupSilverWatermark",
+        "dependsOn": []
+      },
+      {
+        "type": "Lookup",
+        "typeProperties": {
+          "source": {
+            "type": "DataWarehouseSource",
+            "sqlReaderQuery": "SELECT COALESCE(MAX(FinishedAtUTC),\r\nCAST('1970-01-01T00:00:00' AS DATETIME2(3))) AS last_modified\r\nFROM LISE.IngestionLogs\r\nWHERE Layer = 'Gold' AND TargetObject = 'Multiple' AND Status = 'Succeeded';",
+            "partitionOption": "None",
+            "queryTimeout": "02:00:00"
+          },
+          "datasetSettings": {
+            "type": "DataWarehouseTable",
+            "typeProperties": {
+              "schema": "LISE",
+              "table": "IngestionLogs"
+            },
+            "schema": [],
+            "linkedService": {
+              "name": "WH_GOLD",
+              "properties": {
+                "type": "DataWarehouse",
+                "typeProperties": {
+                  "artifactId": "dfeb41e8-5d30-44e8-9958-443d69433f33",
+                  "endpoint": "blhnrhw756mevdmbsb4226lysu-yeogpstubdye5kwblq2bcfjdj4.datawarehouse.fabric.microsoft.com",
+                  "workspaceId": "ca671cc1-0874-4ef0-aac1-5c341115234f"
+                },
+                "annotations": []
+              }
+            },
+            "annotations": []
+          }
+        },
+        "policy": {
+          "timeout": "0.12:00:00",
+          "retry": 0,
+          "retryIntervalInSeconds": 30,
+          "secureInput": false,
+          "secureOutput": false
+        },
+        "name": "LookupGoldIngestionLogs",
+        "dependsOn": [
+          {
+            "activity": "LookupSilverWatermark",
+            "dependencyConditions": [
+              "Succeeded"
+            ]
+          }
+        ]
+      },
+      {
+        "type": "IfCondition",
+        "typeProperties": {
+          "expression": {
+            "value": "@greater(activity('LookupSilverWatermark').output.firstRow.lastModified, activity('LookupGoldIngestionLogs').output.firstRow.last_modified)",
+            "type": "Expression"
+          },
+          "ifTrueActivities": [
+            {
+              "type": "RefreshSqlEndpoint",
+              "typeProperties": {
+                "workspaceId": "00000000-0000-0000-0000-000000000000",
+                "sqlEndpointId": "4384230e-f10b-4d20-a33b-3003d38140f4"
+              },
+              "externalReferences": {
+                "connection": "69e3e39c-3adf-4dd8-a280-3e3ab5641917"
+              },
+              "policy": {
+                "timeout": "0.12:00:00",
+                "retry": 0,
+                "retryIntervalInSeconds": 30,
+                "secureInput": false,
+                "secureOutput": false
+              },
+              "name": "RefreshSqlEndpoint",
+              "dependsOn": []
+            },
+            {
+              "type": "Script",
+              "typeProperties": {
+                "scripts": [
+                  {
+                    "text": {
+                      "value": "DROP VIEW IF EXISTS LISE.Staging_Regimes;\r\nEXEC('CREATE VIEW LISE.Staging_Regimes\r\nAS SELECT DISTINCT IDREGIME, REGIME\r\nFROM LH_SILVER.dbo.dim_regimes;')\r\n\r\nDROP VIEW IF EXISTS LISE.Staging_Etablissements;\r\nEXEC('CREATE VIEW LISE.Staging_Etablissements\r\nAS SELECT DISTINCT IDETABLISSEMENT, ETABLISSEMENT\r\nFROM LH_SILVER.dbo.dim_etablissements;');\r\n\r\nDROP VIEW IF EXISTS LISE.Staging_Niveaux;\r\nEXEC('CREATE VIEW LISE.Staging_Niveaux\r\nAS SELECT DISTINCT IDNIVEAU, NIVEAU, IDETABLISSEMENT \r\nFROM LH_SILVER.dbo.dim_niveaux;');\r\n\r\nDROP VIEW IF EXISTS LISE.Staging_Classes;\r\nEXEC('CREATE VIEW LISE.Staging_Classes \r\nAS SELECT DISTINCT IDCLASSE, CLASSE, CLASSELIBELLE, IDNIVEAU, IDETABLISSEMENT\r\nFROM LH_SILVER.dbo.dim_classes;');\r\n\r\nDROP VIEW IF EXISTS LISE.Staging_ClassesTargets;\r\nEXEC('CREATE VIEW LISE.Staging_ClassesTargets \r\nAS SELECT DISTINCT KEYCLASSE, IDCLASSE, TARGETCOUNT, MAXIMUMCOUNT, SCHOOLYEAR\r\nFROM LH_SILVER.dbo.dim_classes_targets;');\r\n\r\nDROP VIEW IF EXISTS LISE.Staging_Foyers;\r\nEXEC('CREATE VIEW LISE.Staging_Foyers\r\nAS SELECT DISTINCT IDFOYER, VILLE, IDVILLE\r\nFROM LH_SILVER.dbo.dim_foyers;');\r\n\r\nDROP VIEW IF EXISTS LISE.Staging_Pays;\r\nEXEC('CREATE VIEW LISE.Staging_Pays\r\nAS SELECT DISTINCT IDPAYS, PAYS, NATIONALITE\r\nFROM LH_SILVER.dbo.dim_pays;');\r\n\r\nDROP VIEW IF EXISTS LISE.Staging_Villes;\r\nEXEC('CREATE VIEW LISE.Staging_Villes\r\nAS SELECT DISTINCT IDVILLE, VILLE, CODEPOSTAL, LATITUDE, LONGITUDE, DEPARTEMENT, PAYS \r\nFROM LH_SILVER.dbo.dim_villes;');\r\n\r\nDROP VIEW IF EXISTS LISE.Staging_Professions;\r\nEXEC('CREATE VIEW LISE.Staging_Professions\r\nAS SELECT DISTINCT IDPROFESSION, PROFESSION\r\nFROM LH_SILVER.dbo.dim_professions;');\r\n\r\nDROP VIEW IF EXISTS LISE.Staging_Staff;\r\nEXEC('CREATE VIEW LISE.Staging_Staff\r\nAS SELECT DISTINCT KEYPERSONNEL, IDPERSONNEL, VILLE, DATEENTREE, DATESORTIE, TELEPHONE, EMAIL, DATENAISSANCE, AGE\r\nFROM LH_SILVER.dbo.dim_staff;');\r\n\r\nDROP VIEW IF EXISTS LISE.Staging_Personnels;\r\nEXEC('CREATE VIEW LISE.Staging_Personnels\r\nAS SELECT DISTINCT IDPERSONNEL, NOM, PRENOM, NATIONALITE, BADGE\r\nFROM LH_SILVER.dbo.dim_personnels;');\r\n\r\nDROP VIEW IF EXISTS LISE.Staging_Professeurs;\r\nEXEC('CREATE VIEW LISE.Staging_Professeurs \r\nAS SELECT DISTINCT IDPROFESSEUR, IDPERSONNEL, IDCLASSE\r\nFROM LH_SILVER.dbo.dim_professeurs;');\r\n\r\nDROP VIEW IF EXISTS LISE.Staging_Parents;\r\nEXEC('CREATE VIEW LISE.Staging_Parents\r\nAS SELECT DISTINCT IDRESPONSABLE, NOM, PRENOM, FULLNAME\\r\\nFROM LH_SILVER.dbo.dim_parents;');\r\n\r\nDROP VIEW IF EXISTS LISE.Staging_Responsables;\r\nEXEC('CREATE VIEW LISE.Staging_Responsables\r\nAS SELECT DISTINCT KEYRESPONSABLE, IDRESPONSABLE, ENFANTSACHARGE, REGLEMENT, TELEPHONE, EMAIL, NUMEROCOMPTE, BANQUE\r\nFROM LH_SILVER.dbo.dim_responsables;');\r\n\r\nDROP VIEW IF EXISTS LISE.Staging_Enfants;\r\nEXEC('CREATE VIEW LISE.Staging_Enfants\r\nAS SELECT DISTINCT IDELEVE, NOM, PRENOM, SEXE, DATENAISSANCE, AGE, NATIONALITE, IDENTITENATIONALE, FULLNAME\r\nFROM LH_SILVER.dbo.dim_enfants;');\r\n\r\nDROP VIEW IF EXISTS LISE.Staging_Eleves;\r\nEXEC('CREATE VIEW LISE.Staging_Eleves\r\nAS SELECT DISTINCT KEYELEVE, IDELEVE, IDRESPONSABLE, DATEENTREE, DATESORTIE\r\nFROM LH_SILVER.dbo.dim_eleves;');\r\n\r\nDROP VIEW IF EXISTS LISE.Staging_Services;\r\nEXEC('CREATE VIEW LISE.Staging_Services\r\nAS SELECT DISTINCT IDSERVICE, SERVICE\r\nFROM LH_SILVER.dbo.dim_services;');\r\n\r\nDROP VIEW IF EXISTS LISE.Staging_Dates;\r\nEXEC('CREATE VIEW LISE.Staging_Dates \r\nAS SELECT DISTINCT IDDATE, DATE, CALENDARYEAR, CALENDARMONTH, CALENDARDAY, MONTHNAME, DAYNAME, SCHOOLYEAR, ISSCHOOLPERIOD\r\nFROM LH_SILVER.dbo.dim_dates;');\r\n\r\nDROP VIEW IF EXISTS LISE.Staging_FacturesFamilles;\r\nEXEC('CREATE VIEW LISE.Staging_FacturesFamille\r\nAS SELECT DISTINCT KEYRESPONSABLE, IDRESPONSABLE, KEYVALIDATION, IDVALIDATION, IDFOYER, IDPROFESSION, TOTALFAMILLE, DATEFACTURE\r\nFROM LH_SILVER.dbo.fact_factures_familles;');\r\n\r\nDROP VIEW IF EXISTS LISE.Staging_FacturesEleves;\r\nEXEC('CREATE VIEW LISE.Staging_FacturesEleves \r\nAS SELECT DISTINCT KEYELEVE, IDELEVE, KEYRESPONSABLE, IDRESPONSABLE, KEYVALIDATION, IDVALIDATION, KEYCLASSE, IDCLASSE, IDREGIME, TOTALELEVE, DATEFACTURE\r\nFROM LH_SILVER.dbo.fact_factures_eleves;');\r\n\r\nDROP VIEW IF EXISTS LISE.Staging_FacturesNiveaux;\r\nEXEC('CREATE VIEW LISE.Staging_FacturesNiveaux\r\nAS SELECT DISTINCT IDNIVEAU, KEYVALIDATION, IDVALIDATION, KEYRESPONSABLE, IDRESPONSABLE, TOTALNIVEAU, DATEFACTURE\r\nFROM LH_SILVER.dbo.fact_factures_niveaux;');\r\n\r\nDROP VIEW IF EXISTS LISE.Staging_FacturesServices;\r\nEXEC('CREATE VIEW LISE.Staging_FacturesServices\r\nAS SELECT DISTINCT KEYELEVE, IDELEVE, KEYRESPONSABLE, IDRESPONSABLE, KEYVALIDATION, IDVALIDATION, IDSERVICE, QUANTITE, PRIX, REMISE, TOTALSERVICE, DATEFACTURE\r\nFROM LH_SILVER.dbo.fact_factures_services;');\r\n\r\nDROP VIEW IF EXISTS LISE.Staging_FacturesValidations;\r\nEXEC('CREATE VIEW LISE.Staging_FacturesValidations\r\nAS SELECT DISTINCT KEYVALIDATION, IDVALIDATION, TYPEFACTURE, NOMBREFACTURE, DATEVALIDATION\r\nFROM LH_SILVER.dbo.fact_factures_validations;');\r\n\r\nDROP VIEW IF EXISTS LISE.Staging_SchoolYears;\r\nEXEC('CREATE VIEW LISE.Staging_SchoolYears\r\nAS SELECT DISTINCT SCHOOLYEAR, SCHOOLYEARLIBELLE\r\nFROM LH_SILVER.dbo.dim_school_years;'",
+                      "type": "Expression"
+                    },
+                    "type": "NonQuery"
+                  }
+                ],
+                "scriptBlockExecutionTimeout": "02:00:00"
+              },
+              "linkedService": {
+                "name": "WH_GOLD",
+                "properties": {
+                  "type": "DataWarehouse",
+                  "typeProperties": {
+                    "artifactId": "dfeb41e8-5d30-44e8-9958-443d69433f33",
+                    "endpoint": "blhnrhw756mevdmbsb4226lysu-yeogpstubdye5kwblq2bcfjdj4.datawarehouse.fabric.microsoft.com",
+                    "workspaceId": "ca671cc1-0874-4ef0-aac1-5c341115234f"
+                  },
+                  "annotations": []
+                }
+              },
+              "policy": {
+                "timeout": "0.12:00:00",
+                "retry": 0,
+                "retryIntervalInSeconds": 30,
+                "secureInput": false,
+                "secureOutput": false
+              },
+              "name": "CreateViews",
+              "dependsOn": [
+                {
+                  "activity": "RefreshSqlEndpoint",
+                  "dependencyConditions": [
+                    "Succeeded"
+                  ]
+                }
+              ]
+            },
+            {
+              "type": "SqlServerStoredProcedure",
+              "typeProperties": {
+                "storedProcedureName": "[LISE].[sp_UpdateInsertData]"
+              },
+              "linkedService": {
+                "name": "WH_GOLD",
+                "properties": {
+                  "type": "DataWarehouse",
+                  "typeProperties": {
+                    "artifactId": "dfeb41e8-5d30-44e8-9958-443d69433f33",
+                    "endpoint": "blhnrhw756mevdmbsb4226lysu-yeogpstubdye5kwblq2bcfjdj4.datawarehouse.fabric.microsoft.com",
+                    "workspaceId": "ca671cc1-0874-4ef0-aac1-5c341115234f"
+                  },
+                  "annotations": []
+                }
+              },
+              "policy": {
+                "timeout": "0.12:00:00",
+                "retry": 0,
+                "retryIntervalInSeconds": 30,
+                "secureInput": false,
+                "secureOutput": false
+              },
+              "name": "UpsertData",
+              "dependsOn": [
+                {
+                  "activity": "CreateViews",
+                  "dependencyConditions": [
+                    "Succeeded"
+                  ]
+                }
+              ]
+            },
+            {
+              "type": "SqlServerStoredProcedure",
+              "typeProperties": {
+                "storedProcedureName": "[LISE].[InsertIngestionLogs]",
+                "storedProcedureParameters": {
+                  "Status": {
+                    "value": "Succeeded",
+                    "type": "String"
+                  },
+                  "Layer": {
+                    "value": "Gold",
+                    "type": "String"
+                  },
+                  "TargetObject": {
+                    "value": "Multiple",
+                    "type": "String"
+                  },
+                  "RowsWritten": {
+                    "value": {
+                      "value": "@activity('UpsertData').output.resultSets[0].rows[0].TotalRowsWritten",
+                      "type": "Expression"
+                    },
+                    "type": "Int32"
+                  }
+                }
+              },
+              "linkedService": {
+                "name": "WH_GOLD",
+                "properties": {
+                  "type": "DataWarehouse",
+                  "typeProperties": {
+                    "artifactId": "dfeb41e8-5d30-44e8-9958-443d69433f33",
+                    "endpoint": "blhnrhw756mevdmbsb4226lysu-yeogpstubdye5kwblq2bcfjdj4.datawarehouse.fabric.microsoft.com",
+                    "workspaceId": "ca671cc1-0874-4ef0-aac1-5c341115234f"
+                  },
+                  "annotations": []
+                }
+              },
+              "policy": {
+                "timeout": "0.12:00:00",
+                "retry": 0,
+                "retryIntervalInSeconds": 30,
+                "secureInput": false,
+                "secureOutput": false
+              },
+              "name": "InsertLogSuccess",
+              "dependsOn": [
+                {
+                  "activity": "UpsertData",
+                  "dependencyConditions": [
+                    "Succeeded"
+                  ]
+                }
+              ]
+            },
+            {
+              "type": "SqlServerStoredProcedure",
+              "typeProperties": {
+                "storedProcedureName": "[LISE].[InsertIngestionLogs]",
+                "storedProcedureParameters": {
+                  "Status": {
+                    "value": "Failed",
+                    "type": "String"
+                  },
+                  "ErrorMessage": {
+                    "value": "See Monitor Errors",
+                    "type": "String"
+                  },
+                  "RowsWritten": {
+                    "value": "0",
+                    "type": "Int32"
+                  }
+                }
+              },
+              "linkedService": {
+                "name": "WH_GOLD",
+                "properties": {
+                  "type": "DataWarehouse",
+                  "typeProperties": {
+                    "artifactId": "dfeb41e8-5d30-44e8-9958-443d69433f33",
+                    "endpoint": "blhnrhw756mevdmbsb4226lysu-yeogpstubdye5kwblq2bcfjdj4.datawarehouse.fabric.microsoft.com",
+                    "workspaceId": "ca671cc1-0874-4ef0-aac1-5c341115234f"
+                  },
+                  "annotations": []
+                }
+              },
+              "policy": {
+                "timeout": "0.12:00:00",
+                "retry": 0,
+                "retryIntervalInSeconds": 30,
+                "secureInput": false,
+                "secureOutput": false
+              },
+              "name": "InsertFailedLogs",
+              "dependsOn": [
+                {
+                  "activity": "UpsertData",
+                  "dependencyConditions": [
+                    "Failed"
+                  ]
+                }
+              ]
+            }
+          ],
+          "ifFalseActivities": [
+            {
+              "type": "SqlServerStoredProcedure",
+              "typeProperties": {
+                "storedProcedureName": "[LISE].[InsertIngestionLogs]",
+                "storedProcedureParameters": {
+                  "Layer": {
+                    "value": "Gold",
+                    "type": "String"
+                  },
+                  "Status": {
+                    "value": "NoChange",
+                    "type": "String"
+                  },
+                  "TargetObject": {
+                    "value": "Multiple",
+                    "type": "String"
+                  },
+                  "RowsWritten": {
+                    "value": "0",
+                    "type": "Int32"
+                  },
+                  "FinishedAtUTC": {
+                    "value": {
+                      "value": "@utcNow()",
+                      "type": "Expression"
+                    },
+                    "type": "String"
+                  },
+                  "RunID": {
+                    "value": {
+                      "value": "@pipeline().RunId",
+                      "type": "Expression"
+                    },
+                    "type": "String"
+                  },
+                  "TriggerType": {
+                    "value": {
+                      "value": "@pipeline().TriggerType",
+                      "type": "Expression"
+                    },
+                    "type": "String"
+                  },
+                  "BatchID": {
+                    "value": {
+                      "value": "@pipeline().TriggerTime",
+                      "type": "Expression"
+                    },
+                    "type": "String"
+                  }
+                }
+              },
+              "linkedService": {
+                "name": "WH_GOLD",
+                "properties": {
+                  "type": "DataWarehouse",
+                  "typeProperties": {
+                    "artifactId": "dfeb41e8-5d30-44e8-9958-443d69433f33",
+                    "endpoint": "blhnrhw756mevdmbsb4226lysu-yeogpstubdye5kwblq2bcfjdj4.datawarehouse.fabric.microsoft.com",
+                    "workspaceId": "ca671cc1-0874-4ef0-aac1-5c341115234f"
+                  },
+                  "annotations": []
+                }
+              },
+              "policy": {
+                "timeout": "0.12:00:00",
+                "retry": 0,
+                "retryIntervalInSeconds": 30,
+                "secureInput": false,
+                "secureOutput": false
+              },
+              "name": "InsertNoChangeLogs",
+              "dependsOn": []
+            }
+          ]
+        },
+        "name": "IfFilesChanged",
+        "dependsOn": [
+          {
+            "activity": "LookupGoldIngestionLogs",
+            "dependencyConditions": [
+              "Succeeded"
+            ]
+          }
+        ]
+      }
+    ]
+  }
+}

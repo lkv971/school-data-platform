@@ -8,15 +8,15 @@
 # META   },
 # META   "dependencies": {
 # META     "lakehouse": {
-# META       "default_lakehouse": "b727fb41-33d0-41ec-90bd-dfc3c112f2b3",
+# META       "default_lakehouse": "5b11fd41-c6a9-48d3-968c-c2b8633746e8",
 # META       "default_lakehouse_name": "LH_SILVER",
-# META       "default_lakehouse_workspace_id": "28e6a84a-1953-410e-8b52-272e6318afde",
+# META       "default_lakehouse_workspace_id": "ca671cc1-0874-4ef0-aac1-5c341115234f",
 # META       "known_lakehouses": [
 # META         {
-# META           "id": "bfe479b8-2f70-44bc-84d5-dfa2ec50d321"
+# META           "id": "5b11fd41-c6a9-48d3-968c-c2b8633746e8"
 # META         },
 # META         {
-# META           "id": "b727fb41-33d0-41ec-90bd-dfc3c112f2b3"
+# META           "id": "1d3872cf-5662-4218-8fb2-0cac4a7f5491"
 # META         }
 # META       ]
 # META     },
@@ -49,10 +49,10 @@ import json
 
 # CELL ********************
 
-BRONZE_BASE = "abfss://LISE@onelake.dfs.fabric.microsoft.com/LH_BRONZE.Lakehouse/Files"
+BRONZE_BASE = "abfss://LISE_DEV@onelake.dfs.fabric.microsoft.com/LH_BRONZE.Lakehouse/Files"
 
 def p(year: str, filename: str) -> str:
-    return f"{BRONZE_BASE}/Lise_Data/{year}/{filename}"
+    return f"{BRONZE_BASE}/Data/{year}/{filename}"
 
 
 # METADATA ********************
@@ -210,7 +210,7 @@ villes_schema = StructType([
     StructField("PAYS", StringType(), True)
 ])
 
-villes_path = "abfss://LISE@onelake.dfs.fabric.microsoft.com/LH_BRONZE.Lakehouse/Files/External_Data/VILLES.csv"
+villes_path = "abfss://LISE_DEV@onelake.dfs.fabric.microsoft.com/LH_BRONZE.Lakehouse/Files/External/VILLES.csv"
 
 window_villes = Window.orderBy(col("VILLE"))
 

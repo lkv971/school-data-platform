@@ -20,7 +20,7 @@
       "value": "b547f169-8eac-45b2-b799-63e2b113bd89"
     },
     {
-      "name": "LISE_256_Connection",
+      "name": "OP_2526_Connection",
       "note": "",
       "type": "String",
       "value": "ae5b318f-348c-4e21-8dd2-80a1a58e2cdd"
@@ -29,7 +29,7 @@
       "name": "Workspace_ID",
       "note": "",
       "type": "String",
-      "value": "28e6a84a-1953-410e-8b52-272e6318afde"
+      "value": "ca671cc1-0874-4ef0-aac1-5c341115234f"
     },
     {
       "name": "LH_Silver_ID",
@@ -65,13 +65,13 @@
       "name": "WH_Gold_ID",
       "note": "",
       "type": "String",
-      "value": "d86bd324-6717-4394-a68f-bcb9a744a991"
+      "value": "dfeb41e8-5d30-44e8-9958-443d69433f33"
     },
     {
       "name": "WH_Gold_SQL_Connection",
       "note": "",
       "type": "String",
-      "value": "xisdbyhsv57ubp3vvd3oymv5ou-jkuomkctdehedc2se4xgggfp3y.datawarehouse.fabric.microsoft.com"
+      "value": "blhnrhw756mevdmbsb4226lysu-yeogpstubdye5kwblq2bcfjdj4.datawarehouse.fabric.microsoft.com"
     },
     {
       "name": "PL_Gold_ID",

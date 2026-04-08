@@ -8,7 +8,8 @@
             "type": "DelimitedText",
             "typeProperties": {
               "location": {
-                "type": "FileServerLocation"
+                "type": "LakehouseLocation",
+                "folderPath": "LISE ACADEMY/2025-2026"
               },
               "columnDelimiter": ",",
               "quoteChar": "\"",
@@ -16,8 +17,17 @@
               "firstRowAsHeader": true
             },
             "schema": [],
-            "externalReferences": {
-              "connection": "a34006b2-0a2e-43d0-90a5-50c6b63b54c9"
+            "linkedService": {
+              "name": "LH_BRONZE",
+              "properties": {
+                "type": "Lakehouse",
+                "typeProperties": {
+                  "artifactId": "ec50d321-dfa2-84d5-44bc-2f70bfe479b8",
+                  "workspaceId": "00000000-0000-0000-0000-000000000000",
+                  "rootFolder": "Files"
+                },
+                "annotations": []
+              }
             },
             "annotations": []
           },
@@ -25,8 +35,7 @@
             "childItems"
           ],
           "storeSettings": {
-            "type": "FileServerReadSettings",
-            "recursive": true,
+            "type": "LakehouseReadSettings",
             "enablePartitionDiscovery": false
           },
           "formatSettings": {
@@ -69,7 +78,7 @@
             "typeProperties": {
               "location": {
                 "type": "LakehouseLocation",
-                "folderPath": "Watermarks",
+                "folderPath": "WATERMARKS",
                 "fileName": "watermark.json"
               }
             },
@@ -137,11 +146,9 @@
                   "type": "DelimitedText",
                   "typeProperties": {
                     "location": {
-                      "type": "FileServerLocation",
-                      "fileName": {
-                        "value": "@item().name",
-                        "type": "Expression"
-                      }
+                      "type": "LakehouseLocation",
+                      "folderPath": "LISE ACADEMY/2025-2026",
+                      "fileName": "@item().name"
                     },
                     "columnDelimiter": ",",
                     "quoteChar": "\"",
@@ -149,8 +156,17 @@
                     "firstRowAsHeader": true
                   },
                   "schema": [],
-                  "externalReferences": {
-                    "connection": "a34006b2-0a2e-43d0-90a5-50c6b63b54c9"
+                  "linkedService": {
+                    "name": "LH_BRONZE",
+                    "properties": {
+                      "type": "Lakehouse",
+                      "typeProperties": {
+                        "artifactId": "ec50d321-dfa2-84d5-44bc-2f70bfe479b8",
+                        "workspaceId": "00000000-0000-0000-0000-000000000000",
+                        "rootFolder": "Files"
+                      },
+                      "annotations": []
+                    }
                   },
                   "annotations": []
                 },
@@ -158,8 +174,7 @@
                   "lastModified"
                 ],
                 "storeSettings": {
-                  "type": "FileServerReadSettings",
-                  "recursive": true,
+                  "type": "LakehouseReadSettings",
                   "enablePartitionDiscovery": false
                 },
                 "formatSettings": {
@@ -180,130 +195,27 @@
               "type": "IfCondition",
               "typeProperties": {
                 "expression": {
-                  "value": "@greater(activity('GetLastModified').output.lastModified, activity('LookupWatermark').output.firstRow.lastModified)",
+                  "value": "@greater(\n    activity('GetLastModified').output.lastModified,\n    activity('LookupWatermark').output.firstRow.lastModified\n)",
                   "type": "Expression"
                 },
                 "ifTrueActivities": [
                   {
-                    "type": "Copy",
-                    "typeProperties": {
-                      "source": {
-                        "type": "DelimitedTextSource",
-                        "formatSettings": {
-                          "type": "DelimitedTextReadSettings"
-                        },
-                        "storeSettings": {
-                          "type": "FileServerReadSettings",
-                          "recursive": true,
-                          "enablePartitionDiscovery": false
-                        },
-                        "datasetSettings": {
-                          "type": "DelimitedText",
-                          "typeProperties": {
-                            "location": {
-                              "type": "FileServerLocation",
-                              "fileName": {
-                                "value": "@item().name",
-                                "type": "Expression"
-                              }
-                            },
-                            "columnDelimiter": ",",
-                            "quoteChar": "\"",
-                            "escapeChar": "\\",
-                            "firstRowAsHeader": true
-                          },
-                          "schema": [],
-                          "externalReferences": {
-                            "connection": "a34006b2-0a2e-43d0-90a5-50c6b63b54c9"
-                          },
-                          "annotations": []
-                        }
-                      },
-                      "sink": {
-                        "type": "DelimitedTextSink",
-                        "formatSettings": {
-                          "type": "DelimitedTextWriteSettings",
-                          "fileExtension": ".txt"
-                        },
-                        "storeSettings": {
-                          "type": "LakehouseWriteSettings"
-                        },
-                        "datasetSettings": {
-                          "type": "DelimitedText",
-                          "typeProperties": {
-                            "location": {
-                              "type": "LakehouseLocation",
-                              "folderPath": "Data/2025-2026",
-                              "fileName": {
-                                "value": "@item().name",
-                                "type": "Expression"
-                              }
-                            },
-                            "columnDelimiter": ",",
-                            "quoteChar": "\"",
-                            "escapeChar": "\\",
-                            "firstRowAsHeader": true
-                          },
-                          "schema": [],
-                          "linkedService": {
-                            "name": "LH_BRONZE",
-                            "properties": {
-                              "type": "Lakehouse",
-                              "typeProperties": {
-                                "artifactId": "ec50d321-dfa2-84d5-44bc-2f70bfe479b8",
-                                "workspaceId": "00000000-0000-0000-0000-000000000000",
-                                "rootFolder": "Files"
-                              },
-                              "annotations": []
-                            }
-                          },
-                          "annotations": []
-                        }
-                      },
-                      "translator": {
-                        "type": "TabularTranslator",
-                        "typeConversion": true,
-                        "typeConversionSettings": {
-                          "allowDataTruncation": true,
-                          "treatBooleanAsNumber": false
-                        }
-                      },
-                      "enableStaging": false
-                    },
-                    "policy": {
-                      "timeout": "0.15:00:00",
-                      "retry": 6,
-                      "retryIntervalInSeconds": 30,
-                      "secureInput": false,
-                      "secureOutput": false
-                    },
-                    "name": "CopyFiles",
-                    "dependsOn": []
-                  },
-                  {
                     "type": "SetVariable",
                     "typeProperties": {
-                      "variableName": "copystatus",
+                      "variableName": "bronzeChanged",
                       "value": "true"
                     },
                     "policy": {
                       "secureInput": false,
                       "secureOutput": false
                     },
-                    "name": "SetCopyVariable",
-                    "dependsOn": [
-                      {
-                        "activity": "CopyFiles",
-                        "dependencyConditions": [
-                          "Succeeded"
-                        ]
-                      }
-                    ]
+                    "name": "SetBronzeChangedTrue",
+                    "dependsOn": []
                   }
                 ],
                 "ifFalseActivities": []
               },
-              "name": "IfFilesModified",
+              "name": "IfFileIsNewerThanBronzeWatermark",
               "dependsOn": [
                 {
                   "activity": "GetLastModified",
@@ -329,7 +241,7 @@
         "type": "IfCondition",
         "typeProperties": {
           "expression": {
-            "value": "@variables('copystatus')",
+            "value": "@equals(variables('bronzeChanged'), 'true')",
             "type": "Expression"
           },
           "ifTrueActivities": [
@@ -348,11 +260,40 @@
               },
               "name": "UpdateBronzeWatermark",
               "dependsOn": []
+            },
+            {
+              "type": "InvokePipeline",
+              "typeProperties": {
+                "parameters": {},
+                "waitOnCompletion": true,
+                "workspaceId": "00000000-0000-0000-0000-000000000000",
+                "pipelineId": "fec4795e-da0b-a47a-4550-3318bde0fe5b",
+                "operationType": "InvokeFabricPipeline"
+              },
+              "externalReferences": {
+                "connection": "7f8f0ed3-dcf1-4906-b940-97ff27521bc7"
+              },
+              "policy": {
+                "timeout": "0.12:00:00",
+                "retry": 0,
+                "retryIntervalInSeconds": 30,
+                "secureInput": false,
+                "secureOutput": false
+              },
+              "name": "InvokePLSILVER",
+              "dependsOn": [
+                {
+                  "activity": "UpdateBronzeWatermark",
+                  "dependencyConditions": [
+                    "Succeeded"
+                  ]
+                }
+              ]
             }
           ],
           "ifFalseActivities": []
         },
-        "name": "IfFilesCopied",
+        "name": "IfBronzeChanged",
         "dependsOn": [
           {
             "activity": "ForEachFile",
@@ -364,7 +305,7 @@
       }
     ],
     "variables": {
-      "copystatus": {
+      "bronzeChanged": {
         "type": "String",
         "defaultValue": "false"
       }

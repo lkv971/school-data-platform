@@ -146,7 +146,7 @@
               "name": "UpdateSilverWatermark",
               "dependsOn": [
                 {
-                  "activity": "LH_SILVER_maintenance",
+                  "activity": "RefreshSqlEndpoint",
                   "dependencyConditions": [
                     "Succeeded"
                   ]
@@ -157,7 +157,7 @@
               "type": "LakehouseMaintenance",
               "typeProperties": {
                 "table": "fact_factures_eleves",
-                "schema": "dbo",
+                "schema": "",
                 "optimizeEnabled": true,
                 "vOrderEnabled": true,
                 "zOrderEnabled": false,
@@ -191,6 +191,62 @@
               "dependsOn": [
                 {
                   "activity": "TransformData",
+                  "dependencyConditions": [
+                    "Succeeded"
+                  ]
+                }
+              ]
+            },
+            {
+              "type": "RefreshSqlEndpoint",
+              "typeProperties": {
+                "workspaceId": "00000000-0000-0000-0000-000000000000",
+                "sqlEndpointId": "4384230e-f10b-4d20-a33b-3003d38140f4",
+                "recreateTables": false
+              },
+              "externalReferences": {
+                "connection": "69e3e39c-3adf-4dd8-a280-3e3ab5641917"
+              },
+              "policy": {
+                "timeout": "0.12:00:00",
+                "retry": 0,
+                "retryIntervalInSeconds": 30,
+                "secureInput": false,
+                "secureOutput": false
+              },
+              "name": "RefreshSqlEndpoint",
+              "dependsOn": [
+                {
+                  "activity": "LH_SILVER_maintenance",
+                  "dependencyConditions": [
+                    "Succeeded"
+                  ]
+                }
+              ]
+            },
+            {
+              "type": "InvokePipeline",
+              "typeProperties": {
+                "parameters": {},
+                "waitOnCompletion": true,
+                "workspaceId": "00000000-0000-0000-0000-000000000000",
+                "pipelineId": "1690f14b-5023-add2-44e3-295724d4a4c4",
+                "operationType": "InvokeFabricPipeline"
+              },
+              "externalReferences": {
+                "connection": "7f8f0ed3-dcf1-4906-b940-97ff27521bc7"
+              },
+              "policy": {
+                "timeout": "0.12:00:00",
+                "retry": 0,
+                "retryIntervalInSeconds": 30,
+                "secureInput": false,
+                "secureOutput": false
+              },
+              "name": "InvokePLGOLD",
+              "dependsOn": [
+                {
+                  "activity": "UpdateSilverWatermark",
                   "dependencyConditions": [
                     "Succeeded"
                   ]

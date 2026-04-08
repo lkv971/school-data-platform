@@ -52,7 +52,7 @@ import json
 BRONZE_BASE = "abfss://LISE_DEV@onelake.dfs.fabric.microsoft.com/LH_BRONZE.Lakehouse/Files"
 
 def p(year: str, filename: str) -> str:
-    return f"{BRONZE_BASE}/Data/{year}/{filename}"
+    return f"{BRONZE_BASE}/LISE ACADEMY/{year}/{filename}"
 
 
 # METADATA ********************
@@ -210,7 +210,7 @@ villes_schema = StructType([
     StructField("PAYS", StringType(), True)
 ])
 
-villes_path = "abfss://LISE_DEV@onelake.dfs.fabric.microsoft.com/LH_BRONZE.Lakehouse/Files/External/VILLES.csv"
+villes_path = "abfss://LISE_DEV@onelake.dfs.fabric.microsoft.com/LH_BRONZE.Lakehouse/Files/LISE ACADEMY/VILLES.csv"
 
 window_villes = Window.orderBy(col("VILLE"))
 

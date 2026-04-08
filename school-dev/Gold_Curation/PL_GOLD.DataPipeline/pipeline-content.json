@@ -107,25 +107,6 @@
           },
           "ifTrueActivities": [
             {
-              "type": "RefreshSqlEndpoint",
-              "typeProperties": {
-                "workspaceId": "00000000-0000-0000-0000-000000000000",
-                "sqlEndpointId": "4384230e-f10b-4d20-a33b-3003d38140f4"
-              },
-              "externalReferences": {
-                "connection": "69e3e39c-3adf-4dd8-a280-3e3ab5641917"
-              },
-              "policy": {
-                "timeout": "0.12:00:00",
-                "retry": 0,
-                "retryIntervalInSeconds": 30,
-                "secureInput": false,
-                "secureOutput": false
-              },
-              "name": "RefreshSqlEndpoint",
-              "dependsOn": []
-            },
-            {
               "type": "Script",
               "typeProperties": {
                 "scripts": [
@@ -159,14 +140,7 @@
                 "secureOutput": false
               },
               "name": "CreateViews",
-              "dependsOn": [
-                {
-                  "activity": "RefreshSqlEndpoint",
-                  "dependencyConditions": [
-                    "Succeeded"
-                  ]
-                }
-              ]
+              "dependsOn": []
             },
             {
               "type": "SqlServerStoredProcedure",

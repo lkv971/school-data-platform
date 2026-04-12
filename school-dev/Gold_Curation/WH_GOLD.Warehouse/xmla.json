@@ -1927,6 +1927,395 @@
         ]
       },
       {
+        "name": "Payroll",
+        "sourceLineageTag": "[LISE].[Payroll]",
+        "columns": [
+          {
+            "name": "PaieID",
+            "sourceColumn": "PaieID",
+            "sourceProviderType": "uniqueidentifier",
+            "sourceLineageTag": "PaieID",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "PersonnelID",
+            "dataType": "int64",
+            "sourceColumn": "PersonnelID",
+            "formatString": "0",
+            "sourceProviderType": "int",
+            "sourceLineageTag": "PersonnelID",
+            "summarizeBy": "sum",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "Nom",
+            "dataType": "string",
+            "sourceColumn": "Nom",
+            "sourceProviderType": "varchar",
+            "sourceLineageTag": "Nom",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "Prenom",
+            "dataType": "string",
+            "sourceColumn": "Prenom",
+            "sourceProviderType": "varchar",
+            "sourceLineageTag": "Prenom",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "Periode",
+            "dataType": "string",
+            "sourceColumn": "Periode",
+            "sourceProviderType": "varchar",
+            "sourceLineageTag": "Periode",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "Date",
+            "dataType": "dateTime",
+            "sourceColumn": "Date",
+            "formatString": "General Date",
+            "sourceProviderType": "date",
+            "sourceLineageTag": "Date",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "Montant",
+            "dataType": "double",
+            "sourceColumn": "Montant",
+            "sourceProviderType": "decimal",
+            "sourceLineageTag": "Montant",
+            "summarizeBy": "sum",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              },
+              {
+                "name": "PBI_FormatHint",
+                "value": "{\"isGeneralNumber\":true}"
+              }
+            ]
+          },
+          {
+            "name": "Devise",
+            "dataType": "string",
+            "sourceColumn": "Devise",
+            "sourceProviderType": "varchar",
+            "sourceLineageTag": "Devise",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "ProfessionTypeID",
+            "dataType": "int64",
+            "sourceColumn": "ProfessionTypeID",
+            "formatString": "0",
+            "sourceProviderType": "int",
+            "sourceLineageTag": "ProfessionTypeID",
+            "summarizeBy": "sum",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "EtablissementID",
+            "dataType": "int64",
+            "sourceColumn": "EtablissementID",
+            "formatString": "0",
+            "sourceProviderType": "int",
+            "sourceLineageTag": "EtablissementID",
+            "summarizeBy": "sum",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "ClasseID",
+            "dataType": "int64",
+            "sourceColumn": "ClasseID",
+            "formatString": "0",
+            "sourceProviderType": "int",
+            "sourceLineageTag": "ClasseID",
+            "summarizeBy": "sum",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "NiveauID",
+            "dataType": "int64",
+            "sourceColumn": "NiveauID",
+            "formatString": "0",
+            "sourceProviderType": "int",
+            "sourceLineageTag": "NiveauID",
+            "summarizeBy": "sum",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          }
+        ],
+        "partitions": [
+          {
+            "name": "{{Partition_Name}}",
+            "mode": "directLake",
+            "source": {
+              "type": "entity",
+              "entityName": "Payroll",
+              "expressionSource": "DatabaseQuery",
+              "schemaName": "LISE"
+            }
+          }
+        ],
+        "annotations": [
+          {
+            "name": "IsTableInBiModel",
+            "value": "False"
+          }
+        ]
+      },
+      {
+        "name": "Payroll_Incoming",
+        "sourceLineageTag": "[LISE].[Payroll_Incoming]",
+        "columns": [
+          {
+            "name": "PersonnelID",
+            "dataType": "int64",
+            "sourceColumn": "PersonnelID",
+            "formatString": "0",
+            "sourceProviderType": "int",
+            "sourceLineageTag": "PersonnelID",
+            "summarizeBy": "sum",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "Nom",
+            "dataType": "string",
+            "sourceColumn": "Nom",
+            "sourceProviderType": "varchar",
+            "sourceLineageTag": "Nom",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "Prenom",
+            "dataType": "string",
+            "sourceColumn": "Prenom",
+            "sourceProviderType": "varchar",
+            "sourceLineageTag": "Prenom",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "Periode",
+            "dataType": "string",
+            "sourceColumn": "Periode",
+            "sourceProviderType": "varchar",
+            "sourceLineageTag": "Periode",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "Date",
+            "dataType": "dateTime",
+            "sourceColumn": "Date",
+            "formatString": "General Date",
+            "sourceProviderType": "date",
+            "sourceLineageTag": "Date",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "Montant",
+            "dataType": "double",
+            "sourceColumn": "Montant",
+            "sourceProviderType": "decimal",
+            "sourceLineageTag": "Montant",
+            "summarizeBy": "sum",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              },
+              {
+                "name": "PBI_FormatHint",
+                "value": "{\"isGeneralNumber\":true}"
+              }
+            ]
+          },
+          {
+            "name": "Devise",
+            "dataType": "string",
+            "sourceColumn": "Devise",
+            "sourceProviderType": "varchar",
+            "sourceLineageTag": "Devise",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "ProfessionTypeID",
+            "dataType": "int64",
+            "sourceColumn": "ProfessionTypeID",
+            "formatString": "0",
+            "sourceProviderType": "int",
+            "sourceLineageTag": "ProfessionTypeID",
+            "summarizeBy": "sum",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "EtablissementID",
+            "dataType": "int64",
+            "sourceColumn": "EtablissementID",
+            "formatString": "0",
+            "sourceProviderType": "int",
+            "sourceLineageTag": "EtablissementID",
+            "summarizeBy": "sum",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "ClasseID",
+            "dataType": "int64",
+            "sourceColumn": "ClasseID",
+            "formatString": "0",
+            "sourceProviderType": "int",
+            "sourceLineageTag": "ClasseID",
+            "summarizeBy": "sum",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "NiveauID",
+            "dataType": "int64",
+            "sourceColumn": "NiveauID",
+            "formatString": "0",
+            "sourceProviderType": "int",
+            "sourceLineageTag": "NiveauID",
+            "summarizeBy": "sum",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          }
+        ],
+        "partitions": [
+          {
+            "name": "{{Partition_Name}}",
+            "mode": "directLake",
+            "source": {
+              "type": "entity",
+              "entityName": "Payroll_Incoming",
+              "expressionSource": "DatabaseQuery",
+              "schemaName": "LISE"
+            }
+          }
+        ],
+        "annotations": [
+          {
+            "name": "IsTableInBiModel",
+            "value": "False"
+          }
+        ]
+      },
+      {
         "name": "Pays",
         "sourceLineageTag": "[LISE].[Pays]",
         "columns": [
@@ -5368,6 +5757,3052 @@
             "source": {
               "type": "entity",
               "entityName": "Villes",
+              "expressionSource": "DatabaseQuery",
+              "schemaName": "LISE"
+            }
+          }
+        ],
+        "annotations": [
+          {
+            "name": "IsTableInBiModel",
+            "value": "False"
+          }
+        ]
+      },
+      {
+        "name": "vw_MartPayrollMix",
+        "sourceLineageTag": "[LISE].[vw_MartPayrollMix]",
+        "columns": [
+          {
+            "name": "CalendarYear",
+            "dataType": "int64",
+            "sourceColumn": "CalendarYear",
+            "formatString": "0",
+            "sourceProviderType": "int",
+            "sourceLineageTag": "CalendarYear",
+            "summarizeBy": "sum",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "CalendarMonth",
+            "dataType": "int64",
+            "sourceColumn": "CalendarMonth",
+            "formatString": "0",
+            "sourceProviderType": "int",
+            "sourceLineageTag": "CalendarMonth",
+            "summarizeBy": "sum",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "MonthName",
+            "dataType": "string",
+            "sourceColumn": "MonthName",
+            "sourceProviderType": "varchar",
+            "sourceLineageTag": "MonthName",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "SchoolYear",
+            "dataType": "string",
+            "sourceColumn": "SchoolYear",
+            "sourceProviderType": "char",
+            "sourceLineageTag": "SchoolYear",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "ProfessionTypeID",
+            "dataType": "int64",
+            "sourceColumn": "ProfessionTypeID",
+            "formatString": "0",
+            "sourceProviderType": "int",
+            "sourceLineageTag": "ProfessionTypeID",
+            "summarizeBy": "sum",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "ProfessionType",
+            "dataType": "string",
+            "sourceColumn": "ProfessionType",
+            "sourceProviderType": "varchar",
+            "sourceLineageTag": "ProfessionType",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "PersonnelCount",
+            "dataType": "int64",
+            "sourceColumn": "PersonnelCount",
+            "formatString": "0",
+            "sourceProviderType": "int",
+            "sourceLineageTag": "PersonnelCount",
+            "summarizeBy": "sum",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "TotalPayrollAmount",
+            "dataType": "double",
+            "sourceColumn": "TotalPayrollAmount",
+            "sourceProviderType": "decimal",
+            "sourceLineageTag": "TotalPayrollAmount",
+            "summarizeBy": "sum",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              },
+              {
+                "name": "PBI_FormatHint",
+                "value": "{\"isGeneralNumber\":true}"
+              }
+            ]
+          },
+          {
+            "name": "TotalMonthPayroll",
+            "dataType": "double",
+            "sourceColumn": "TotalMonthPayroll",
+            "sourceProviderType": "decimal",
+            "sourceLineageTag": "TotalMonthPayroll",
+            "summarizeBy": "sum",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              },
+              {
+                "name": "PBI_FormatHint",
+                "value": "{\"isGeneralNumber\":true}"
+              }
+            ]
+          },
+          {
+            "name": "PayrollShareOfMonth",
+            "dataType": "double",
+            "sourceColumn": "PayrollShareOfMonth",
+            "sourceProviderType": "decimal",
+            "sourceLineageTag": "PayrollShareOfMonth",
+            "summarizeBy": "sum",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              },
+              {
+                "name": "PBI_FormatHint",
+                "value": "{\"isGeneralNumber\":true}"
+              }
+            ]
+          }
+        ],
+        "partitions": [
+          {
+            "name": "{{Partition_Name}}",
+            "mode": "directLake",
+            "source": {
+              "type": "entity",
+              "entityName": "vw_MartPayrollMix",
+              "expressionSource": "DatabaseQuery",
+              "schemaName": "LISE"
+            }
+          }
+        ],
+        "annotations": [
+          {
+            "name": "IsTableInBiModel",
+            "value": "False"
+          }
+        ]
+      },
+      {
+        "name": "vw_MartPayrollMonthly",
+        "sourceLineageTag": "[LISE].[vw_MartPayrollMonthly]",
+        "columns": [
+          {
+            "name": "CalendarYear",
+            "dataType": "int64",
+            "sourceColumn": "CalendarYear",
+            "formatString": "0",
+            "sourceProviderType": "int",
+            "sourceLineageTag": "CalendarYear",
+            "summarizeBy": "sum",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "CalendarMonth",
+            "dataType": "int64",
+            "sourceColumn": "CalendarMonth",
+            "formatString": "0",
+            "sourceProviderType": "int",
+            "sourceLineageTag": "CalendarMonth",
+            "summarizeBy": "sum",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "MonthName",
+            "dataType": "string",
+            "sourceColumn": "MonthName",
+            "sourceProviderType": "varchar",
+            "sourceLineageTag": "MonthName",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "SchoolYear",
+            "dataType": "string",
+            "sourceColumn": "SchoolYear",
+            "sourceProviderType": "char",
+            "sourceLineageTag": "SchoolYear",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "EtablissementID",
+            "dataType": "int64",
+            "sourceColumn": "EtablissementID",
+            "formatString": "0",
+            "sourceProviderType": "int",
+            "sourceLineageTag": "EtablissementID",
+            "summarizeBy": "sum",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "Etablissement",
+            "dataType": "string",
+            "sourceColumn": "Etablissement",
+            "sourceProviderType": "varchar",
+            "sourceLineageTag": "Etablissement",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "NiveauID",
+            "dataType": "int64",
+            "sourceColumn": "NiveauID",
+            "formatString": "0",
+            "sourceProviderType": "int",
+            "sourceLineageTag": "NiveauID",
+            "summarizeBy": "sum",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "Niveau",
+            "dataType": "string",
+            "sourceColumn": "Niveau",
+            "sourceProviderType": "varchar",
+            "sourceLineageTag": "Niveau",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "ClasseID",
+            "dataType": "int64",
+            "sourceColumn": "ClasseID",
+            "formatString": "0",
+            "sourceProviderType": "int",
+            "sourceLineageTag": "ClasseID",
+            "summarizeBy": "sum",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "Classe",
+            "dataType": "string",
+            "sourceColumn": "Classe",
+            "sourceProviderType": "varchar",
+            "sourceLineageTag": "Classe",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "ClasseLibelle",
+            "dataType": "string",
+            "sourceColumn": "ClasseLibelle",
+            "sourceProviderType": "varchar",
+            "sourceLineageTag": "ClasseLibelle",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "ProfessionTypeID",
+            "dataType": "int64",
+            "sourceColumn": "ProfessionTypeID",
+            "formatString": "0",
+            "sourceProviderType": "int",
+            "sourceLineageTag": "ProfessionTypeID",
+            "summarizeBy": "sum",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "ProfessionType",
+            "dataType": "string",
+            "sourceColumn": "ProfessionType",
+            "sourceProviderType": "varchar",
+            "sourceLineageTag": "ProfessionType",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "PayrollLineCount",
+            "dataType": "int64",
+            "sourceColumn": "PayrollLineCount",
+            "formatString": "0",
+            "sourceProviderType": "int",
+            "sourceLineageTag": "PayrollLineCount",
+            "summarizeBy": "sum",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "PersonnelCount",
+            "dataType": "int64",
+            "sourceColumn": "PersonnelCount",
+            "formatString": "0",
+            "sourceProviderType": "int",
+            "sourceLineageTag": "PersonnelCount",
+            "summarizeBy": "sum",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "TotalPayrollAmount",
+            "dataType": "double",
+            "sourceColumn": "TotalPayrollAmount",
+            "sourceProviderType": "decimal",
+            "sourceLineageTag": "TotalPayrollAmount",
+            "summarizeBy": "sum",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              },
+              {
+                "name": "PBI_FormatHint",
+                "value": "{\"isGeneralNumber\":true}"
+              }
+            ]
+          },
+          {
+            "name": "AvgPayrollAmount",
+            "dataType": "double",
+            "sourceColumn": "AvgPayrollAmount",
+            "sourceProviderType": "decimal",
+            "sourceLineageTag": "AvgPayrollAmount",
+            "summarizeBy": "sum",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              },
+              {
+                "name": "PBI_FormatHint",
+                "value": "{\"isGeneralNumber\":true}"
+              }
+            ]
+          }
+        ],
+        "partitions": [
+          {
+            "name": "{{Partition_Name}}",
+            "mode": "directLake",
+            "source": {
+              "type": "entity",
+              "entityName": "vw_MartPayrollMonthly",
+              "expressionSource": "DatabaseQuery",
+              "schemaName": "LISE"
+            }
+          }
+        ],
+        "annotations": [
+          {
+            "name": "IsTableInBiModel",
+            "value": "False"
+          }
+        ]
+      },
+      {
+        "name": "vw_MartPayrollPersonnel",
+        "sourceLineageTag": "[LISE].[vw_MartPayrollPersonnel]",
+        "columns": [
+          {
+            "name": "PersonnelID",
+            "dataType": "int64",
+            "sourceColumn": "PersonnelID",
+            "formatString": "0",
+            "sourceProviderType": "int",
+            "sourceLineageTag": "PersonnelID",
+            "summarizeBy": "sum",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "FullName",
+            "dataType": "string",
+            "sourceColumn": "FullName",
+            "sourceProviderType": "varchar",
+            "sourceLineageTag": "FullName",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "ProfessionTypeID",
+            "dataType": "int64",
+            "sourceColumn": "ProfessionTypeID",
+            "formatString": "0",
+            "sourceProviderType": "int",
+            "sourceLineageTag": "ProfessionTypeID",
+            "summarizeBy": "sum",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "ProfessionType",
+            "dataType": "string",
+            "sourceColumn": "ProfessionType",
+            "sourceProviderType": "varchar",
+            "sourceLineageTag": "ProfessionType",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "EtablissementID",
+            "dataType": "int64",
+            "sourceColumn": "EtablissementID",
+            "formatString": "0",
+            "sourceProviderType": "int",
+            "sourceLineageTag": "EtablissementID",
+            "summarizeBy": "sum",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "Etablissement",
+            "dataType": "string",
+            "sourceColumn": "Etablissement",
+            "sourceProviderType": "varchar",
+            "sourceLineageTag": "Etablissement",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "NiveauID",
+            "dataType": "int64",
+            "sourceColumn": "NiveauID",
+            "formatString": "0",
+            "sourceProviderType": "int",
+            "sourceLineageTag": "NiveauID",
+            "summarizeBy": "sum",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "Niveau",
+            "dataType": "string",
+            "sourceColumn": "Niveau",
+            "sourceProviderType": "varchar",
+            "sourceLineageTag": "Niveau",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "ClasseID",
+            "dataType": "int64",
+            "sourceColumn": "ClasseID",
+            "formatString": "0",
+            "sourceProviderType": "int",
+            "sourceLineageTag": "ClasseID",
+            "summarizeBy": "sum",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "Classe",
+            "dataType": "string",
+            "sourceColumn": "Classe",
+            "sourceProviderType": "varchar",
+            "sourceLineageTag": "Classe",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "ClasseLibelle",
+            "dataType": "string",
+            "sourceColumn": "ClasseLibelle",
+            "sourceProviderType": "varchar",
+            "sourceLineageTag": "ClasseLibelle",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "CalendarYear",
+            "dataType": "int64",
+            "sourceColumn": "CalendarYear",
+            "formatString": "0",
+            "sourceProviderType": "int",
+            "sourceLineageTag": "CalendarYear",
+            "summarizeBy": "sum",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "CalendarMonth",
+            "dataType": "int64",
+            "sourceColumn": "CalendarMonth",
+            "formatString": "0",
+            "sourceProviderType": "int",
+            "sourceLineageTag": "CalendarMonth",
+            "summarizeBy": "sum",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "MonthName",
+            "dataType": "string",
+            "sourceColumn": "MonthName",
+            "sourceProviderType": "varchar",
+            "sourceLineageTag": "MonthName",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "SchoolYear",
+            "dataType": "string",
+            "sourceColumn": "SchoolYear",
+            "sourceProviderType": "char",
+            "sourceLineageTag": "SchoolYear",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "PayrollLineCount",
+            "dataType": "int64",
+            "sourceColumn": "PayrollLineCount",
+            "formatString": "0",
+            "sourceProviderType": "int",
+            "sourceLineageTag": "PayrollLineCount",
+            "summarizeBy": "sum",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "TotalPayrollAmount",
+            "dataType": "double",
+            "sourceColumn": "TotalPayrollAmount",
+            "sourceProviderType": "decimal",
+            "sourceLineageTag": "TotalPayrollAmount",
+            "summarizeBy": "sum",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              },
+              {
+                "name": "PBI_FormatHint",
+                "value": "{\"isGeneralNumber\":true}"
+              }
+            ]
+          },
+          {
+            "name": "AvgPayrollAmount",
+            "dataType": "double",
+            "sourceColumn": "AvgPayrollAmount",
+            "sourceProviderType": "decimal",
+            "sourceLineageTag": "AvgPayrollAmount",
+            "summarizeBy": "sum",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              },
+              {
+                "name": "PBI_FormatHint",
+                "value": "{\"isGeneralNumber\":true}"
+              }
+            ]
+          },
+          {
+            "name": "FirstPayrollDate",
+            "dataType": "dateTime",
+            "sourceColumn": "FirstPayrollDate",
+            "formatString": "General Date",
+            "sourceProviderType": "date",
+            "sourceLineageTag": "FirstPayrollDate",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "LastPayrollDate",
+            "dataType": "dateTime",
+            "sourceColumn": "LastPayrollDate",
+            "formatString": "General Date",
+            "sourceProviderType": "date",
+            "sourceLineageTag": "LastPayrollDate",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          }
+        ],
+        "partitions": [
+          {
+            "name": "{{Partition_Name}}",
+            "mode": "directLake",
+            "source": {
+              "type": "entity",
+              "entityName": "vw_MartPayrollPersonnel",
+              "expressionSource": "DatabaseQuery",
+              "schemaName": "LISE"
+            }
+          }
+        ],
+        "annotations": [
+          {
+            "name": "IsTableInBiModel",
+            "value": "False"
+          }
+        ]
+      },
+      {
+        "name": "vw_MartRevenueFamillesMonthly",
+        "sourceLineageTag": "[LISE].[vw_MartRevenueFamillesMonthly]",
+        "columns": [
+          {
+            "name": "CalendarYear",
+            "dataType": "int64",
+            "sourceColumn": "CalendarYear",
+            "formatString": "0",
+            "sourceProviderType": "int",
+            "sourceLineageTag": "CalendarYear",
+            "summarizeBy": "sum",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "CalendarMonth",
+            "dataType": "int64",
+            "sourceColumn": "CalendarMonth",
+            "formatString": "0",
+            "sourceProviderType": "int",
+            "sourceLineageTag": "CalendarMonth",
+            "summarizeBy": "sum",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "MonthName",
+            "dataType": "string",
+            "sourceColumn": "MonthName",
+            "sourceProviderType": "varchar",
+            "sourceLineageTag": "MonthName",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "SchoolYear",
+            "dataType": "string",
+            "sourceColumn": "SchoolYear",
+            "sourceProviderType": "char",
+            "sourceLineageTag": "SchoolYear",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "Ville",
+            "dataType": "string",
+            "sourceColumn": "Ville",
+            "sourceProviderType": "varchar",
+            "sourceLineageTag": "Ville",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "Profession",
+            "dataType": "string",
+            "sourceColumn": "Profession",
+            "sourceProviderType": "varchar",
+            "sourceLineageTag": "Profession",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "Reglement",
+            "dataType": "string",
+            "sourceColumn": "Reglement",
+            "sourceProviderType": "varchar",
+            "sourceLineageTag": "Reglement",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "Banque",
+            "dataType": "string",
+            "sourceColumn": "Banque",
+            "sourceProviderType": "varchar",
+            "sourceLineageTag": "Banque",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "FamilyInvoiceLineCount",
+            "dataType": "int64",
+            "sourceColumn": "FamilyInvoiceLineCount",
+            "formatString": "0",
+            "sourceProviderType": "int",
+            "sourceLineageTag": "FamilyInvoiceLineCount",
+            "summarizeBy": "sum",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "FamilyCount",
+            "dataType": "int64",
+            "sourceColumn": "FamilyCount",
+            "formatString": "0",
+            "sourceProviderType": "int",
+            "sourceLineageTag": "FamilyCount",
+            "summarizeBy": "sum",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "TotalFamilyBilledRevenue",
+            "dataType": "double",
+            "sourceColumn": "TotalFamilyBilledRevenue",
+            "sourceProviderType": "float",
+            "sourceLineageTag": "TotalFamilyBilledRevenue",
+            "summarizeBy": "sum",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              },
+              {
+                "name": "PBI_FormatHint",
+                "value": "{\"isGeneralNumber\":true}"
+              }
+            ]
+          },
+          {
+            "name": "AvgFamilyBilledRevenue",
+            "dataType": "double",
+            "sourceColumn": "AvgFamilyBilledRevenue",
+            "sourceProviderType": "float",
+            "sourceLineageTag": "AvgFamilyBilledRevenue",
+            "summarizeBy": "sum",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              },
+              {
+                "name": "PBI_FormatHint",
+                "value": "{\"isGeneralNumber\":true}"
+              }
+            ]
+          }
+        ],
+        "partitions": [
+          {
+            "name": "{{Partition_Name}}",
+            "mode": "directLake",
+            "source": {
+              "type": "entity",
+              "entityName": "vw_MartRevenueFamillesMonthly",
+              "expressionSource": "DatabaseQuery",
+              "schemaName": "LISE"
+            }
+          }
+        ],
+        "annotations": [
+          {
+            "name": "IsTableInBiModel",
+            "value": "False"
+          }
+        ]
+      },
+      {
+        "name": "vw_MartRevenueMonthly",
+        "sourceLineageTag": "[LISE].[vw_MartRevenueMonthly]",
+        "columns": [
+          {
+            "name": "CalendarYear",
+            "dataType": "int64",
+            "sourceColumn": "CalendarYear",
+            "formatString": "0",
+            "sourceProviderType": "int",
+            "sourceLineageTag": "CalendarYear",
+            "summarizeBy": "sum",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "CalendarMonth",
+            "dataType": "int64",
+            "sourceColumn": "CalendarMonth",
+            "formatString": "0",
+            "sourceProviderType": "int",
+            "sourceLineageTag": "CalendarMonth",
+            "summarizeBy": "sum",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "MonthName",
+            "dataType": "string",
+            "sourceColumn": "MonthName",
+            "sourceProviderType": "varchar",
+            "sourceLineageTag": "MonthName",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "SchoolYear",
+            "dataType": "string",
+            "sourceColumn": "SchoolYear",
+            "sourceProviderType": "char",
+            "sourceLineageTag": "SchoolYear",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "EtablissementID",
+            "dataType": "int64",
+            "sourceColumn": "EtablissementID",
+            "formatString": "0",
+            "sourceProviderType": "int",
+            "sourceLineageTag": "EtablissementID",
+            "summarizeBy": "sum",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "Etablissement",
+            "dataType": "string",
+            "sourceColumn": "Etablissement",
+            "sourceProviderType": "varchar",
+            "sourceLineageTag": "Etablissement",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "NiveauID",
+            "dataType": "int64",
+            "sourceColumn": "NiveauID",
+            "formatString": "0",
+            "sourceProviderType": "int",
+            "sourceLineageTag": "NiveauID",
+            "summarizeBy": "sum",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "Niveau",
+            "dataType": "string",
+            "sourceColumn": "Niveau",
+            "sourceProviderType": "varchar",
+            "sourceLineageTag": "Niveau",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "ClasseID",
+            "dataType": "int64",
+            "sourceColumn": "ClasseID",
+            "formatString": "0",
+            "sourceProviderType": "int",
+            "sourceLineageTag": "ClasseID",
+            "summarizeBy": "sum",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "Classe",
+            "dataType": "string",
+            "sourceColumn": "Classe",
+            "sourceProviderType": "varchar",
+            "sourceLineageTag": "Classe",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "ClasseLibelle",
+            "dataType": "string",
+            "sourceColumn": "ClasseLibelle",
+            "sourceProviderType": "varchar",
+            "sourceLineageTag": "ClasseLibelle",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "RegimeID",
+            "dataType": "int64",
+            "sourceColumn": "RegimeID",
+            "formatString": "0",
+            "sourceProviderType": "int",
+            "sourceLineageTag": "RegimeID",
+            "summarizeBy": "sum",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "Regime",
+            "dataType": "string",
+            "sourceColumn": "Regime",
+            "sourceProviderType": "varchar",
+            "sourceLineageTag": "Regime",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "RevenueLineCount",
+            "dataType": "int64",
+            "sourceColumn": "RevenueLineCount",
+            "formatString": "0",
+            "sourceProviderType": "int",
+            "sourceLineageTag": "RevenueLineCount",
+            "summarizeBy": "sum",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "StudentCount",
+            "dataType": "int64",
+            "sourceColumn": "StudentCount",
+            "formatString": "0",
+            "sourceProviderType": "int",
+            "sourceLineageTag": "StudentCount",
+            "summarizeBy": "sum",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "TotalBilledRevenue",
+            "dataType": "double",
+            "sourceColumn": "TotalBilledRevenue",
+            "sourceProviderType": "float",
+            "sourceLineageTag": "TotalBilledRevenue",
+            "summarizeBy": "sum",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              },
+              {
+                "name": "PBI_FormatHint",
+                "value": "{\"isGeneralNumber\":true}"
+              }
+            ]
+          },
+          {
+            "name": "AvgBilledPerLine",
+            "dataType": "double",
+            "sourceColumn": "AvgBilledPerLine",
+            "sourceProviderType": "float",
+            "sourceLineageTag": "AvgBilledPerLine",
+            "summarizeBy": "sum",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              },
+              {
+                "name": "PBI_FormatHint",
+                "value": "{\"isGeneralNumber\":true}"
+              }
+            ]
+          }
+        ],
+        "partitions": [
+          {
+            "name": "{{Partition_Name}}",
+            "mode": "directLake",
+            "source": {
+              "type": "entity",
+              "entityName": "vw_MartRevenueMonthly",
+              "expressionSource": "DatabaseQuery",
+              "schemaName": "LISE"
+            }
+          }
+        ],
+        "annotations": [
+          {
+            "name": "IsTableInBiModel",
+            "value": "False"
+          }
+        ]
+      },
+      {
+        "name": "vw_MartRevenueServicesMonthly",
+        "sourceLineageTag": "[LISE].[vw_MartRevenueServicesMonthly]",
+        "columns": [
+          {
+            "name": "CalendarYear",
+            "dataType": "int64",
+            "sourceColumn": "CalendarYear",
+            "formatString": "0",
+            "sourceProviderType": "int",
+            "sourceLineageTag": "CalendarYear",
+            "summarizeBy": "sum",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "CalendarMonth",
+            "dataType": "int64",
+            "sourceColumn": "CalendarMonth",
+            "formatString": "0",
+            "sourceProviderType": "int",
+            "sourceLineageTag": "CalendarMonth",
+            "summarizeBy": "sum",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "MonthName",
+            "dataType": "string",
+            "sourceColumn": "MonthName",
+            "sourceProviderType": "varchar",
+            "sourceLineageTag": "MonthName",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "SchoolYear",
+            "dataType": "string",
+            "sourceColumn": "SchoolYear",
+            "sourceProviderType": "char",
+            "sourceLineageTag": "SchoolYear",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "EtablissementID",
+            "dataType": "int64",
+            "sourceColumn": "EtablissementID",
+            "formatString": "0",
+            "sourceProviderType": "int",
+            "sourceLineageTag": "EtablissementID",
+            "summarizeBy": "sum",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "Etablissement",
+            "dataType": "string",
+            "sourceColumn": "Etablissement",
+            "sourceProviderType": "varchar",
+            "sourceLineageTag": "Etablissement",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "NiveauID",
+            "dataType": "int64",
+            "sourceColumn": "NiveauID",
+            "formatString": "0",
+            "sourceProviderType": "int",
+            "sourceLineageTag": "NiveauID",
+            "summarizeBy": "sum",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "Niveau",
+            "dataType": "string",
+            "sourceColumn": "Niveau",
+            "sourceProviderType": "varchar",
+            "sourceLineageTag": "Niveau",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "ClasseID",
+            "dataType": "int64",
+            "sourceColumn": "ClasseID",
+            "formatString": "0",
+            "sourceProviderType": "int",
+            "sourceLineageTag": "ClasseID",
+            "summarizeBy": "sum",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "Classe",
+            "dataType": "string",
+            "sourceColumn": "Classe",
+            "sourceProviderType": "varchar",
+            "sourceLineageTag": "Classe",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "ClasseLibelle",
+            "dataType": "string",
+            "sourceColumn": "ClasseLibelle",
+            "sourceProviderType": "varchar",
+            "sourceLineageTag": "ClasseLibelle",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "ServiceID",
+            "dataType": "int64",
+            "sourceColumn": "ServiceID",
+            "formatString": "0",
+            "sourceProviderType": "int",
+            "sourceLineageTag": "ServiceID",
+            "summarizeBy": "sum",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "Service",
+            "dataType": "string",
+            "sourceColumn": "Service",
+            "sourceProviderType": "varchar",
+            "sourceLineageTag": "Service",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "ServiceLineCount",
+            "dataType": "int64",
+            "sourceColumn": "ServiceLineCount",
+            "formatString": "0",
+            "sourceProviderType": "int",
+            "sourceLineageTag": "ServiceLineCount",
+            "summarizeBy": "sum",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "StudentCount",
+            "dataType": "int64",
+            "sourceColumn": "StudentCount",
+            "formatString": "0",
+            "sourceProviderType": "int",
+            "sourceLineageTag": "StudentCount",
+            "summarizeBy": "sum",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "TotalQuantity",
+            "dataType": "double",
+            "sourceColumn": "TotalQuantity",
+            "sourceProviderType": "float",
+            "sourceLineageTag": "TotalQuantity",
+            "summarizeBy": "sum",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              },
+              {
+                "name": "PBI_FormatHint",
+                "value": "{\"isGeneralNumber\":true}"
+              }
+            ]
+          },
+          {
+            "name": "TotalServiceRevenue",
+            "dataType": "double",
+            "sourceColumn": "TotalServiceRevenue",
+            "sourceProviderType": "float",
+            "sourceLineageTag": "TotalServiceRevenue",
+            "summarizeBy": "sum",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              },
+              {
+                "name": "PBI_FormatHint",
+                "value": "{\"isGeneralNumber\":true}"
+              }
+            ]
+          },
+          {
+            "name": "AvgServiceRevenuePerLine",
+            "dataType": "double",
+            "sourceColumn": "AvgServiceRevenuePerLine",
+            "sourceProviderType": "float",
+            "sourceLineageTag": "AvgServiceRevenuePerLine",
+            "summarizeBy": "sum",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              },
+              {
+                "name": "PBI_FormatHint",
+                "value": "{\"isGeneralNumber\":true}"
+              }
+            ]
+          }
+        ],
+        "partitions": [
+          {
+            "name": "{{Partition_Name}}",
+            "mode": "directLake",
+            "source": {
+              "type": "entity",
+              "entityName": "vw_MartRevenueServicesMonthly",
+              "expressionSource": "DatabaseQuery",
+              "schemaName": "LISE"
+            }
+          }
+        ],
+        "annotations": [
+          {
+            "name": "IsTableInBiModel",
+            "value": "False"
+          }
+        ]
+      },
+      {
+        "name": "vw_MartRevenueValidations",
+        "sourceLineageTag": "[LISE].[vw_MartRevenueValidations]",
+        "columns": [
+          {
+            "name": "CalendarYear",
+            "dataType": "int64",
+            "sourceColumn": "CalendarYear",
+            "formatString": "0",
+            "sourceProviderType": "int",
+            "sourceLineageTag": "CalendarYear",
+            "summarizeBy": "sum",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "CalendarMonth",
+            "dataType": "int64",
+            "sourceColumn": "CalendarMonth",
+            "formatString": "0",
+            "sourceProviderType": "int",
+            "sourceLineageTag": "CalendarMonth",
+            "summarizeBy": "sum",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "MonthName",
+            "dataType": "string",
+            "sourceColumn": "MonthName",
+            "sourceProviderType": "varchar",
+            "sourceLineageTag": "MonthName",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "SchoolYear",
+            "dataType": "string",
+            "sourceColumn": "SchoolYear",
+            "sourceProviderType": "char",
+            "sourceLineageTag": "SchoolYear",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "TypeFacture",
+            "dataType": "string",
+            "sourceColumn": "TypeFacture",
+            "sourceProviderType": "varchar",
+            "sourceLineageTag": "TypeFacture",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "ValidationLineCount",
+            "dataType": "int64",
+            "sourceColumn": "ValidationLineCount",
+            "formatString": "0",
+            "sourceProviderType": "int",
+            "sourceLineageTag": "ValidationLineCount",
+            "summarizeBy": "sum",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "TotalInvoicesValidated",
+            "dataType": "int64",
+            "sourceColumn": "TotalInvoicesValidated",
+            "formatString": "0",
+            "sourceProviderType": "int",
+            "sourceLineageTag": "TotalInvoicesValidated",
+            "summarizeBy": "sum",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          }
+        ],
+        "partitions": [
+          {
+            "name": "{{Partition_Name}}",
+            "mode": "directLake",
+            "source": {
+              "type": "entity",
+              "entityName": "vw_MartRevenueValidations",
+              "expressionSource": "DatabaseQuery",
+              "schemaName": "LISE"
+            }
+          }
+        ],
+        "annotations": [
+          {
+            "name": "IsTableInBiModel",
+            "value": "False"
+          }
+        ]
+      },
+      {
+        "name": "vw_PayrollDetailed",
+        "sourceLineageTag": "[LISE].[vw_PayrollDetailed]",
+        "columns": [
+          {
+            "name": "PaieID",
+            "sourceColumn": "PaieID",
+            "sourceProviderType": "uniqueidentifier",
+            "sourceLineageTag": "PaieID",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "PersonnelID",
+            "dataType": "int64",
+            "sourceColumn": "PersonnelID",
+            "formatString": "0",
+            "sourceProviderType": "int",
+            "sourceLineageTag": "PersonnelID",
+            "summarizeBy": "sum",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "FullName",
+            "dataType": "string",
+            "sourceColumn": "FullName",
+            "sourceProviderType": "varchar",
+            "sourceLineageTag": "FullName",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "Nom",
+            "dataType": "string",
+            "sourceColumn": "Nom",
+            "sourceProviderType": "varchar",
+            "sourceLineageTag": "Nom",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "Prenom",
+            "dataType": "string",
+            "sourceColumn": "Prenom",
+            "sourceProviderType": "varchar",
+            "sourceLineageTag": "Prenom",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "Periode",
+            "dataType": "string",
+            "sourceColumn": "Periode",
+            "sourceProviderType": "varchar",
+            "sourceLineageTag": "Periode",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "PayrollDate",
+            "dataType": "dateTime",
+            "sourceColumn": "PayrollDate",
+            "formatString": "General Date",
+            "sourceProviderType": "date",
+            "sourceLineageTag": "PayrollDate",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "CalendarYear",
+            "dataType": "int64",
+            "sourceColumn": "CalendarYear",
+            "formatString": "0",
+            "sourceProviderType": "int",
+            "sourceLineageTag": "CalendarYear",
+            "summarizeBy": "sum",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "CalendarMonth",
+            "dataType": "int64",
+            "sourceColumn": "CalendarMonth",
+            "formatString": "0",
+            "sourceProviderType": "int",
+            "sourceLineageTag": "CalendarMonth",
+            "summarizeBy": "sum",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "MonthName",
+            "dataType": "string",
+            "sourceColumn": "MonthName",
+            "sourceProviderType": "varchar",
+            "sourceLineageTag": "MonthName",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "SchoolYear",
+            "dataType": "string",
+            "sourceColumn": "SchoolYear",
+            "sourceProviderType": "char",
+            "sourceLineageTag": "SchoolYear",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "Montant",
+            "dataType": "double",
+            "sourceColumn": "Montant",
+            "sourceProviderType": "decimal",
+            "sourceLineageTag": "Montant",
+            "summarizeBy": "sum",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              },
+              {
+                "name": "PBI_FormatHint",
+                "value": "{\"isGeneralNumber\":true}"
+              }
+            ]
+          },
+          {
+            "name": "Devise",
+            "dataType": "string",
+            "sourceColumn": "Devise",
+            "sourceProviderType": "varchar",
+            "sourceLineageTag": "Devise",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "ProfessionTypeID",
+            "dataType": "int64",
+            "sourceColumn": "ProfessionTypeID",
+            "formatString": "0",
+            "sourceProviderType": "int",
+            "sourceLineageTag": "ProfessionTypeID",
+            "summarizeBy": "sum",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "ProfessionType",
+            "dataType": "string",
+            "sourceColumn": "ProfessionType",
+            "sourceProviderType": "varchar",
+            "sourceLineageTag": "ProfessionType",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "EtablissementID",
+            "dataType": "int64",
+            "sourceColumn": "EtablissementID",
+            "formatString": "0",
+            "sourceProviderType": "int",
+            "sourceLineageTag": "EtablissementID",
+            "summarizeBy": "sum",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "Etablissement",
+            "dataType": "string",
+            "sourceColumn": "Etablissement",
+            "sourceProviderType": "varchar",
+            "sourceLineageTag": "Etablissement",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "ClasseID",
+            "dataType": "int64",
+            "sourceColumn": "ClasseID",
+            "formatString": "0",
+            "sourceProviderType": "int",
+            "sourceLineageTag": "ClasseID",
+            "summarizeBy": "sum",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "Classe",
+            "dataType": "string",
+            "sourceColumn": "Classe",
+            "sourceProviderType": "varchar",
+            "sourceLineageTag": "Classe",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "ClasseLibelle",
+            "dataType": "string",
+            "sourceColumn": "ClasseLibelle",
+            "sourceProviderType": "varchar",
+            "sourceLineageTag": "ClasseLibelle",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "NiveauID",
+            "dataType": "int64",
+            "sourceColumn": "NiveauID",
+            "formatString": "0",
+            "sourceProviderType": "int",
+            "sourceLineageTag": "NiveauID",
+            "summarizeBy": "sum",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "Niveau",
+            "dataType": "string",
+            "sourceColumn": "Niveau",
+            "sourceProviderType": "varchar",
+            "sourceLineageTag": "Niveau",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          }
+        ],
+        "partitions": [
+          {
+            "name": "{{Partition_Name}}",
+            "mode": "directLake",
+            "source": {
+              "type": "entity",
+              "entityName": "vw_PayrollDetailed",
+              "expressionSource": "DatabaseQuery",
+              "schemaName": "LISE"
+            }
+          }
+        ],
+        "annotations": [
+          {
+            "name": "IsTableInBiModel",
+            "value": "False"
+          }
+        ]
+      },
+      {
+        "name": "vw_RevenueElevesDetailed",
+        "sourceLineageTag": "[LISE].[vw_RevenueElevesDetailed]",
+        "columns": [
+          {
+            "name": "EleveKey",
+            "dataType": "string",
+            "sourceColumn": "EleveKey",
+            "sourceProviderType": "varchar",
+            "sourceLineageTag": "EleveKey",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "EleveID",
+            "dataType": "int64",
+            "sourceColumn": "EleveID",
+            "formatString": "0",
+            "sourceProviderType": "int",
+            "sourceLineageTag": "EleveID",
+            "summarizeBy": "sum",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "ResponsableKey",
+            "dataType": "string",
+            "sourceColumn": "ResponsableKey",
+            "sourceProviderType": "varchar",
+            "sourceLineageTag": "ResponsableKey",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "ResponsableID",
+            "dataType": "int64",
+            "sourceColumn": "ResponsableID",
+            "formatString": "0",
+            "sourceProviderType": "int",
+            "sourceLineageTag": "ResponsableID",
+            "summarizeBy": "sum",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "ValidationKey",
+            "dataType": "string",
+            "sourceColumn": "ValidationKey",
+            "sourceProviderType": "varchar",
+            "sourceLineageTag": "ValidationKey",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "ValidationID",
+            "dataType": "int64",
+            "sourceColumn": "ValidationID",
+            "formatString": "0",
+            "sourceProviderType": "int",
+            "sourceLineageTag": "ValidationID",
+            "summarizeBy": "sum",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "ClasseKey",
+            "dataType": "string",
+            "sourceColumn": "ClasseKey",
+            "sourceProviderType": "varchar",
+            "sourceLineageTag": "ClasseKey",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "ClasseID",
+            "dataType": "int64",
+            "sourceColumn": "ClasseID",
+            "formatString": "0",
+            "sourceProviderType": "int",
+            "sourceLineageTag": "ClasseID",
+            "summarizeBy": "sum",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "RegimeID",
+            "dataType": "int64",
+            "sourceColumn": "RegimeID",
+            "formatString": "0",
+            "sourceProviderType": "int",
+            "sourceLineageTag": "RegimeID",
+            "summarizeBy": "sum",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "TotalEleve",
+            "dataType": "double",
+            "sourceColumn": "TotalEleve",
+            "sourceProviderType": "float",
+            "sourceLineageTag": "TotalEleve",
+            "summarizeBy": "sum",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              },
+              {
+                "name": "PBI_FormatHint",
+                "value": "{\"isGeneralNumber\":true}"
+              }
+            ]
+          },
+          {
+            "name": "DateFacture",
+            "dataType": "dateTime",
+            "sourceColumn": "DateFacture",
+            "formatString": "General Date",
+            "sourceProviderType": "date",
+            "sourceLineageTag": "DateFacture",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "CalendarYear",
+            "dataType": "int64",
+            "sourceColumn": "CalendarYear",
+            "formatString": "0",
+            "sourceProviderType": "int",
+            "sourceLineageTag": "CalendarYear",
+            "summarizeBy": "sum",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "CalendarMonth",
+            "dataType": "int64",
+            "sourceColumn": "CalendarMonth",
+            "formatString": "0",
+            "sourceProviderType": "int",
+            "sourceLineageTag": "CalendarMonth",
+            "summarizeBy": "sum",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "MonthName",
+            "dataType": "string",
+            "sourceColumn": "MonthName",
+            "sourceProviderType": "varchar",
+            "sourceLineageTag": "MonthName",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "SchoolYear",
+            "dataType": "string",
+            "sourceColumn": "SchoolYear",
+            "sourceProviderType": "char",
+            "sourceLineageTag": "SchoolYear",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "Classe",
+            "dataType": "string",
+            "sourceColumn": "Classe",
+            "sourceProviderType": "varchar",
+            "sourceLineageTag": "Classe",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "ClasseLibelle",
+            "dataType": "string",
+            "sourceColumn": "ClasseLibelle",
+            "sourceProviderType": "varchar",
+            "sourceLineageTag": "ClasseLibelle",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "NiveauID",
+            "dataType": "int64",
+            "sourceColumn": "NiveauID",
+            "formatString": "0",
+            "sourceProviderType": "int",
+            "sourceLineageTag": "NiveauID",
+            "summarizeBy": "sum",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "Niveau",
+            "dataType": "string",
+            "sourceColumn": "Niveau",
+            "sourceProviderType": "varchar",
+            "sourceLineageTag": "Niveau",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "EtablissementID",
+            "dataType": "int64",
+            "sourceColumn": "EtablissementID",
+            "formatString": "0",
+            "sourceProviderType": "int",
+            "sourceLineageTag": "EtablissementID",
+            "summarizeBy": "sum",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "Etablissement",
+            "dataType": "string",
+            "sourceColumn": "Etablissement",
+            "sourceProviderType": "varchar",
+            "sourceLineageTag": "Etablissement",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "Regime",
+            "dataType": "string",
+            "sourceColumn": "Regime",
+            "sourceProviderType": "varchar",
+            "sourceLineageTag": "Regime",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          }
+        ],
+        "partitions": [
+          {
+            "name": "{{Partition_Name}}",
+            "mode": "directLake",
+            "source": {
+              "type": "entity",
+              "entityName": "vw_RevenueElevesDetailed",
+              "expressionSource": "DatabaseQuery",
+              "schemaName": "LISE"
+            }
+          }
+        ],
+        "annotations": [
+          {
+            "name": "IsTableInBiModel",
+            "value": "False"
+          }
+        ]
+      },
+      {
+        "name": "vw_RevenueFamillesDetailed",
+        "sourceLineageTag": "[LISE].[vw_RevenueFamillesDetailed]",
+        "columns": [
+          {
+            "name": "ResponsableKey",
+            "dataType": "string",
+            "sourceColumn": "ResponsableKey",
+            "sourceProviderType": "varchar",
+            "sourceLineageTag": "ResponsableKey",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "ResponsableID",
+            "dataType": "int64",
+            "sourceColumn": "ResponsableID",
+            "formatString": "0",
+            "sourceProviderType": "int",
+            "sourceLineageTag": "ResponsableID",
+            "summarizeBy": "sum",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "ValidationKey",
+            "dataType": "string",
+            "sourceColumn": "ValidationKey",
+            "sourceProviderType": "varchar",
+            "sourceLineageTag": "ValidationKey",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "ValidationID",
+            "dataType": "int64",
+            "sourceColumn": "ValidationID",
+            "formatString": "0",
+            "sourceProviderType": "int",
+            "sourceLineageTag": "ValidationID",
+            "summarizeBy": "sum",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "FoyerID",
+            "dataType": "int64",
+            "sourceColumn": "FoyerID",
+            "formatString": "0",
+            "sourceProviderType": "int",
+            "sourceLineageTag": "FoyerID",
+            "summarizeBy": "sum",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "ProfessionID",
+            "dataType": "int64",
+            "sourceColumn": "ProfessionID",
+            "formatString": "0",
+            "sourceProviderType": "int",
+            "sourceLineageTag": "ProfessionID",
+            "summarizeBy": "sum",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "TotalFamille",
+            "dataType": "double",
+            "sourceColumn": "TotalFamille",
+            "sourceProviderType": "float",
+            "sourceLineageTag": "TotalFamille",
+            "summarizeBy": "sum",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              },
+              {
+                "name": "PBI_FormatHint",
+                "value": "{\"isGeneralNumber\":true}"
+              }
+            ]
+          },
+          {
+            "name": "DateFacture",
+            "dataType": "dateTime",
+            "sourceColumn": "DateFacture",
+            "formatString": "General Date",
+            "sourceProviderType": "date",
+            "sourceLineageTag": "DateFacture",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "CalendarYear",
+            "dataType": "int64",
+            "sourceColumn": "CalendarYear",
+            "formatString": "0",
+            "sourceProviderType": "int",
+            "sourceLineageTag": "CalendarYear",
+            "summarizeBy": "sum",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "CalendarMonth",
+            "dataType": "int64",
+            "sourceColumn": "CalendarMonth",
+            "formatString": "0",
+            "sourceProviderType": "int",
+            "sourceLineageTag": "CalendarMonth",
+            "summarizeBy": "sum",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "MonthName",
+            "dataType": "string",
+            "sourceColumn": "MonthName",
+            "sourceProviderType": "varchar",
+            "sourceLineageTag": "MonthName",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "SchoolYear",
+            "dataType": "string",
+            "sourceColumn": "SchoolYear",
+            "sourceProviderType": "char",
+            "sourceLineageTag": "SchoolYear",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "Ville",
+            "dataType": "string",
+            "sourceColumn": "Ville",
+            "sourceProviderType": "varchar",
+            "sourceLineageTag": "Ville",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "Profession",
+            "dataType": "string",
+            "sourceColumn": "Profession",
+            "sourceProviderType": "varchar",
+            "sourceLineageTag": "Profession",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "Nom",
+            "dataType": "string",
+            "sourceColumn": "Nom",
+            "sourceProviderType": "varchar",
+            "sourceLineageTag": "Nom",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "Prenom",
+            "dataType": "string",
+            "sourceColumn": "Prenom",
+            "sourceProviderType": "varchar",
+            "sourceLineageTag": "Prenom",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "Reglement",
+            "dataType": "string",
+            "sourceColumn": "Reglement",
+            "sourceProviderType": "varchar",
+            "sourceLineageTag": "Reglement",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "Banque",
+            "dataType": "string",
+            "sourceColumn": "Banque",
+            "sourceProviderType": "varchar",
+            "sourceLineageTag": "Banque",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          }
+        ],
+        "partitions": [
+          {
+            "name": "{{Partition_Name}}",
+            "mode": "directLake",
+            "source": {
+              "type": "entity",
+              "entityName": "vw_RevenueFamillesDetailed",
+              "expressionSource": "DatabaseQuery",
+              "schemaName": "LISE"
+            }
+          }
+        ],
+        "annotations": [
+          {
+            "name": "IsTableInBiModel",
+            "value": "False"
+          }
+        ]
+      },
+      {
+        "name": "vw_RevenueServicesDetailed",
+        "sourceLineageTag": "[LISE].[vw_RevenueServicesDetailed]",
+        "columns": [
+          {
+            "name": "EleveKey",
+            "dataType": "string",
+            "sourceColumn": "EleveKey",
+            "sourceProviderType": "varchar",
+            "sourceLineageTag": "EleveKey",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "EleveID",
+            "dataType": "int64",
+            "sourceColumn": "EleveID",
+            "formatString": "0",
+            "sourceProviderType": "int",
+            "sourceLineageTag": "EleveID",
+            "summarizeBy": "sum",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "ResponsableKey",
+            "dataType": "string",
+            "sourceColumn": "ResponsableKey",
+            "sourceProviderType": "varchar",
+            "sourceLineageTag": "ResponsableKey",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "ResponsableID",
+            "dataType": "int64",
+            "sourceColumn": "ResponsableID",
+            "formatString": "0",
+            "sourceProviderType": "int",
+            "sourceLineageTag": "ResponsableID",
+            "summarizeBy": "sum",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "ValidationKey",
+            "dataType": "string",
+            "sourceColumn": "ValidationKey",
+            "sourceProviderType": "varchar",
+            "sourceLineageTag": "ValidationKey",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "ValidationID",
+            "dataType": "int64",
+            "sourceColumn": "ValidationID",
+            "formatString": "0",
+            "sourceProviderType": "int",
+            "sourceLineageTag": "ValidationID",
+            "summarizeBy": "sum",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "ServiceID",
+            "dataType": "int64",
+            "sourceColumn": "ServiceID",
+            "formatString": "0",
+            "sourceProviderType": "int",
+            "sourceLineageTag": "ServiceID",
+            "summarizeBy": "sum",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "Quantite",
+            "dataType": "double",
+            "sourceColumn": "Quantite",
+            "sourceProviderType": "float",
+            "sourceLineageTag": "Quantite",
+            "summarizeBy": "sum",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              },
+              {
+                "name": "PBI_FormatHint",
+                "value": "{\"isGeneralNumber\":true}"
+              }
+            ]
+          },
+          {
+            "name": "Prix",
+            "dataType": "double",
+            "sourceColumn": "Prix",
+            "sourceProviderType": "float",
+            "sourceLineageTag": "Prix",
+            "summarizeBy": "sum",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              },
+              {
+                "name": "PBI_FormatHint",
+                "value": "{\"isGeneralNumber\":true}"
+              }
+            ]
+          },
+          {
+            "name": "Remise",
+            "dataType": "double",
+            "sourceColumn": "Remise",
+            "sourceProviderType": "float",
+            "sourceLineageTag": "Remise",
+            "summarizeBy": "sum",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              },
+              {
+                "name": "PBI_FormatHint",
+                "value": "{\"isGeneralNumber\":true}"
+              }
+            ]
+          },
+          {
+            "name": "TotalService",
+            "dataType": "double",
+            "sourceColumn": "TotalService",
+            "sourceProviderType": "float",
+            "sourceLineageTag": "TotalService",
+            "summarizeBy": "sum",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              },
+              {
+                "name": "PBI_FormatHint",
+                "value": "{\"isGeneralNumber\":true}"
+              }
+            ]
+          },
+          {
+            "name": "DateFacture",
+            "dataType": "dateTime",
+            "sourceColumn": "DateFacture",
+            "formatString": "General Date",
+            "sourceProviderType": "date",
+            "sourceLineageTag": "DateFacture",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "CalendarYear",
+            "dataType": "int64",
+            "sourceColumn": "CalendarYear",
+            "formatString": "0",
+            "sourceProviderType": "int",
+            "sourceLineageTag": "CalendarYear",
+            "summarizeBy": "sum",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "CalendarMonth",
+            "dataType": "int64",
+            "sourceColumn": "CalendarMonth",
+            "formatString": "0",
+            "sourceProviderType": "int",
+            "sourceLineageTag": "CalendarMonth",
+            "summarizeBy": "sum",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "MonthName",
+            "dataType": "string",
+            "sourceColumn": "MonthName",
+            "sourceProviderType": "varchar",
+            "sourceLineageTag": "MonthName",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "SchoolYear",
+            "dataType": "string",
+            "sourceColumn": "SchoolYear",
+            "sourceProviderType": "char",
+            "sourceLineageTag": "SchoolYear",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "Service",
+            "dataType": "string",
+            "sourceColumn": "Service",
+            "sourceProviderType": "varchar",
+            "sourceLineageTag": "Service",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "ClasseID",
+            "dataType": "int64",
+            "sourceColumn": "ClasseID",
+            "formatString": "0",
+            "sourceProviderType": "int",
+            "sourceLineageTag": "ClasseID",
+            "summarizeBy": "sum",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "Classe",
+            "dataType": "string",
+            "sourceColumn": "Classe",
+            "sourceProviderType": "varchar",
+            "sourceLineageTag": "Classe",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "ClasseLibelle",
+            "dataType": "string",
+            "sourceColumn": "ClasseLibelle",
+            "sourceProviderType": "varchar",
+            "sourceLineageTag": "ClasseLibelle",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "NiveauID",
+            "dataType": "int64",
+            "sourceColumn": "NiveauID",
+            "formatString": "0",
+            "sourceProviderType": "int",
+            "sourceLineageTag": "NiveauID",
+            "summarizeBy": "sum",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "Niveau",
+            "dataType": "string",
+            "sourceColumn": "Niveau",
+            "sourceProviderType": "varchar",
+            "sourceLineageTag": "Niveau",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "EtablissementID",
+            "dataType": "int64",
+            "sourceColumn": "EtablissementID",
+            "formatString": "0",
+            "sourceProviderType": "int",
+            "sourceLineageTag": "EtablissementID",
+            "summarizeBy": "sum",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "Etablissement",
+            "dataType": "string",
+            "sourceColumn": "Etablissement",
+            "sourceProviderType": "varchar",
+            "sourceLineageTag": "Etablissement",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          }
+        ],
+        "partitions": [
+          {
+            "name": "{{Partition_Name}}",
+            "mode": "directLake",
+            "source": {
+              "type": "entity",
+              "entityName": "vw_RevenueServicesDetailed",
               "expressionSource": "DatabaseQuery",
               "schemaName": "LISE"
             }

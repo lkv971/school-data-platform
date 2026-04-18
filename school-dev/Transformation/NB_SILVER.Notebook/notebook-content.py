@@ -1238,7 +1238,9 @@ df_factures_validations = df_factures_validations.filter(col("DATEVALIDATION").i
 df_factures_eleves = df_factures_eleves.dropDuplicates()
 df_factures_familles = df_factures_familles.dropDuplicates()
 df_factures_niveaux = df_factures_niveaux.dropDuplicates()
-df_factures_services = df_factures_services.dropDuplicates()
+df_factures_services = df_factures_services.dropDuplicates(
+    subset=["KEYELEVE", "KEYRESPONSABLE", "KEYVALIDATION", "IDSERVICE", "DATEFACTURE", "QUANTITE", "PRIX", "REMISE", "TOTALSERVICE"]
+)
 df_factures_validations = df_factures_validations .dropDuplicates()
 df_dates = df_dates.dropDuplicates(subset=["IDDATE"])
 df_enfants = df_enfants.dropDuplicates(subset=["IDELEVE"])
@@ -1304,9 +1306,9 @@ fact_key_cols = {
     "fact_factures_eleves": ["KEYELEVE", "KEYRESPONSABLE", "KEYVALIDATION"],
     "fact_factures_niveaux": ["IDNIVEAU", "KEYRESPONSABLE", "KEYVALIDATION"],
     "fact_factures_familles": ["KEYRESPONSABLE", "KEYVALIDATION"],
-    "fact_factures_services": ["KEYELEVE", "KEYRESPONSABLE", "KEYVALIDATION"],
+    "fact_factures_services": ["KEYELEVE", "KEYRESPONSABLE", "KEYVALIDATION", "IDSERVICE", "DATEFACTURE"],
     "fact_factures_validations": ["KEYVALIDATION"],
-    "fact_payroll_current": ["PersonnelID", "Periode", "TransactionDate", "ProfessionTypeID", "EtablissementID", "ClasseID"]
+    "fact_payroll_current": ["PersonnelID", "Periode", "TransactionDate", "ProfessionTypeID", "EtablissementID", "ClasseID", "NiveauID"]
 }
 
 
@@ -1326,6 +1328,7 @@ def make_merge_condition(table_name, keys):
             AND t.ProfessionTypeID = s.ProfessionTypeID
             AND t.EtablissementID = s.EtablissementID
             AND coalesce(t.ClasseID, -1) = coalesce(s.ClasseID, -1)
+            AND coalesce(t.NiveauID, -1) = coalesce(s.NiveauID, -1)
         """
     else:
         return " AND ".join([f"t.{col} = s.{col}" for col in keys])

@@ -16,3 +16,4 @@ sources:
       - name: Etablissements
       - name: Regimes
       - name: Services
+      - name: Personnels

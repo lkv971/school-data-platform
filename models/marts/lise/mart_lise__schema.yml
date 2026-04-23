@@ -16,15 +16,36 @@ models:
       - name: EtablissementID
         tests:
           - not_null
+          - relationships:
+              arguments: 
+                to: ref('stg_lise__etablissements')
+                field: EtablissementID
+      - name: NiveauID
+        tests:
+          - relationships:
+              arguments: 
+                to: ref('stg_lise__niveaux')
+                field: NiveauID
+      - name: ClasseID
+        tests:
+          - relationships:
+              arguments: 
+                to: ref('stg_lise__classes')
+                field: ClasseID
       - name: ProfessionTypeID
         tests:
           - not_null
+          - relationships:
+              arguments: 
+                to: ref('stg_lise__profession_types')
+                field: ProfessionTypeID
       - name: PayrollLineCount
         tests:
           - not_null
       - name: PersonnelCount
         tests:
           - not_null
+      - name: TotalPayrollAmount
 
   - name: mart_lise__revenue_monthly
     description: "Monthly billed revenue mart."
@@ -41,15 +62,31 @@ models:
       - name: EtablissementID
         tests:
           - not_null
+          - relationships:
+              arguments: 
+                to: ref('stg_lise__etablissements')
+                field: EtablissementID
       - name: NiveauID
         tests:
           - not_null
+          - relationships:
+              arguments: 
+                to: ref('stg_lise__niveaux')
+                field: NiveauID
       - name: ClasseID
         tests:
           - not_null
+          - relationships:
+              arguments: 
+                to: ref('stg_lise__classes')
+                field: ClasseID
       - name: RegimeID
         tests:
           - not_null
+          - relationships:
+              arguments: 
+                to: ref('stg_lise__regimes')
+                field: RegimeID
       - name: RevenueLineCount
         tests:
           - not_null
@@ -75,13 +112,30 @@ models:
       - name: EtablissementID
         tests:
           - not_null
+          - relationships:
+              arguments: 
+                to: ref('stg_lise__etablissements')
+                field: EtablissementID
       - name: NiveauID
         tests:
           - not_null
+          - relationships:
+              arguments: 
+                to: ref('stg_lise__niveaux')
+                field: NiveauID
       - name: ClasseID
         tests:
           - not_null
+          - relationships:
+              arguments: 
+                to: ref('stg_lise__classes')
+                field: ClasseID
       - name: ServiceID
+        tests:
+          - relationships:
+              arguments: 
+                to: ref('stg_lise__services')
+                field: ServiceID
       - name: ServiceLineCount
         tests:
           - not_null
@@ -107,6 +161,10 @@ models:
       - name: EtablissementID
         tests:
           - not_null
+          - relationships:
+              arguments: 
+                to: ref('stg_lise__etablissements')
+                field: EtablissementID
       - name: NiveauID
       - name: ClasseID
       - name: TotalBilledRevenue

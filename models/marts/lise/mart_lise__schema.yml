@@ -1,0 +1,120 @@
+version: 2
+
+models:
+  - name: mart_lise__payroll_monthly
+    description: "Monthly payroll mart."
+    columns:
+      - name: CalendarYear
+        tests:
+          - not_null
+      - name: CalendarMonth
+        tests:
+          - not_null
+      - name: SchoolYear
+        tests:
+          - not_null
+      - name: EtablissementID
+        tests:
+          - not_null
+      - name: ProfessionTypeID
+        tests:
+          - not_null
+      - name: PayrollLineCount
+        tests:
+          - not_null
+      - name: PersonnelCount
+        tests:
+          - not_null
+
+  - name: mart_lise__revenue_monthly
+    description: "Monthly billed revenue mart."
+    columns:
+      - name: CalendarYear
+        tests:
+          - not_null
+      - name: CalendarMonth
+        tests:
+          - not_null
+      - name: SchoolYear
+        tests:
+          - not_null
+      - name: EtablissementID
+        tests:
+          - not_null
+      - name: NiveauID
+        tests:
+          - not_null
+      - name: ClasseID
+        tests:
+          - not_null
+      - name: RegimeID
+        tests:
+          - not_null
+      - name: RevenueLineCount
+        tests:
+          - not_null
+      - name: StudentCount
+        tests:
+          - not_null
+      - name: TotalBilledRevenue
+        tests:
+          - not_null
+
+  - name: mart_lise__revenue_services_monthly
+    description: "Monthly service revenue mart."
+    columns:
+      - name: CalendarYear
+        tests:
+          - not_null
+      - name: CalendarMonth
+        tests:
+          - not_null
+      - name: SchoolYear
+        tests:
+          - not_null
+      - name: EtablissementID
+        tests:
+          - not_null
+      - name: NiveauID
+        tests:
+          - not_null
+      - name: ClasseID
+        tests:
+          - not_null
+      - name: ServiceID
+      - name: ServiceLineCount
+        tests:
+          - not_null
+      - name: StudentCount
+        tests:
+          - not_null
+      - name: TotalServiceRevenue
+        tests:
+          - not_null
+
+  - name: mart_lise__margin_monthly
+    description: "Monthly margin mart."
+    columns:
+      - name: CalendarYear
+        tests:
+          - not_null
+      - name: CalendarMonth
+        tests:
+          - not_null
+      - name: SchoolYear
+        tests:
+          - not_null
+      - name: EtablissementID
+        tests:
+          - not_null
+      - name: NiveauID
+      - name: ClasseID
+      - name: TotalBilledRevenue
+        tests:
+          - not_null
+      - name: TotalPayrollAmount
+        tests:
+          - not_null
+      - name: GrossMargin
+        tests:
+          - not_null

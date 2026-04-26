@@ -442,6 +442,118 @@
                   ]
                 }
               ]
+            },
+            {
+              "type": "InvokeDataBuildToolJob",
+              "typeProperties": {
+                "dataBuildToolJobId": "08821557-aac4-b194-4d1e-e1c6f78875d1",
+                "workspaceId": "00000000-0000-0000-0000-000000000000",
+                "select": "+mart_lise__payroll_monthly +mart_lise__revenue_monthly +mart_lise__revenue_services_monthly +mart_lise__margin_monthly",
+                "failFast": true,
+                "threads": 4
+              },
+              "externalReferences": {
+                "connection": "e2834fbc-ab67-43aa-87b4-3c94fd1e5703"
+              },
+              "policy": {
+                "timeout": "0.12:00:00",
+                "retry": 0,
+                "retryIntervalInSeconds": 30,
+                "secureInput": false,
+                "secureOutput": false
+              },
+              "name": "RunDbtBuild",
+              "dependsOn": [
+                {
+                  "activity": "InsertLogSuccess",
+                  "dependencyConditions": [
+                    "Succeeded"
+                  ]
+                }
+              ]
+            },
+            {
+              "type": "PBISemanticModelRefresh",
+              "typeProperties": {
+                "method": "post",
+                "groupId": "ca671cc1-0874-4ef0-aac1-5c341115234f",
+                "datasetId": "1730c506-9c0a-4741-b6a9-f77bfb6cbd9b",
+                "commitMode": "Transactional",
+                "objects": [
+                  {
+                    "table": "LISE vw_MartPayrollMix"
+                  },
+                  {
+                    "table": "LISE vw_MartPayrollMonthly"
+                  },
+                  {
+                    "table": "LISE vw_MartRevenueMonthly"
+                  },
+                  {
+                    "table": "LISE vw_MartRevenueServicesMonthly"
+                  },
+                  {
+                    "table": "LISE vw_PayrollDetailed"
+                  },
+                  {
+                    "table": "DateTableTemplate_fc491923-6e5e-4f46-bf1e-0fbbc923121a"
+                  },
+                  {
+                    "table": "LocalDateTable_c13eb9b6-5bf9-4ce8-b6f0-e278a6923bb2"
+                  },
+                  {
+                    "table": "LISE vw_RevenueElevesDetailed"
+                  },
+                  {
+                    "table": "LocalDateTable_08110641-637c-4b73-8559-01c46feae5d4"
+                  },
+                  {
+                    "table": "LISE vw_RevenueServicesDetailed"
+                  },
+                  {
+                    "table": "LocalDateTable_a9c9d214-dfff-4377-b7bd-836dff4cf649"
+                  },
+                  {
+                    "table": "LISE vw_MartMarginByProfessionType"
+                  },
+                  {
+                    "table": "LISE vw_MartMarginMonthly"
+                  },
+                  {
+                    "table": "LISE Dates"
+                  },
+                  {
+                    "table": "LocalDateTable_45c87c02-966f-465e-a58b-84e7c361a68c"
+                  },
+                  {
+                    "table": "DimMonth"
+                  },
+                  {
+                    "table": "LocalDateTable_c506bea9-cb9b-41ab-b607-be8aeea5b834"
+                  }
+                ],
+                "waitOnCompletion": true,
+                "operationType": "SemanticModelRefresh"
+              },
+              "externalReferences": {
+                "connection": "b4418025-1e53-4b7a-af51-7ea76afb5557"
+              },
+              "policy": {
+                "timeout": "0.12:00:00",
+                "retry": 0,
+                "retryIntervalInSeconds": 30,
+                "secureInput": false,
+                "secureOutput": false
+              },
+              "name": "RefreshSemanticModel",
+              "dependsOn": [
+                {
+                  "activity": "RunDbtBuild",
+                  "dependencyConditions": [
+                    "Succeeded"
+                  ]
+                }
+              ]
             }
           ],
           "ifFalseActivities": [

@@ -157,7 +157,7 @@
               "type": "LakehouseMaintenance",
               "typeProperties": {
                 "table": "fact_factures_eleves",
-                "schema": "",
+                "schema": "dbo",
                 "optimizeEnabled": true,
                 "vOrderEnabled": true,
                 "zOrderEnabled": false,

@@ -8,15 +8,15 @@
 # META   },
 # META   "dependencies": {
 # META     "lakehouse": {
-# META       "default_lakehouse": "b727fb41-33d0-41ec-90bd-dfc3c112f2b3",
+# META       "default_lakehouse": "5b11fd41-c6a9-48d3-968c-c2b8633746e8",
 # META       "default_lakehouse_name": "LH_SILVER",
-# META       "default_lakehouse_workspace_id": "28e6a84a-1953-410e-8b52-272e6318afde",
+# META       "default_lakehouse_workspace_id": "ca671cc1-0874-4ef0-aac1-5c341115234f",
 # META       "known_lakehouses": [
 # META         {
-# META           "id": "bfe479b8-2f70-44bc-84d5-dfa2ec50d321"
+# META           "id": "5b11fd41-c6a9-48d3-968c-c2b8633746e8"
 # META         },
 # META         {
-# META           "id": "b727fb41-33d0-41ec-90bd-dfc3c112f2b3"
+# META           "id": "1d3872cf-5662-4218-8fb2-0cac4a7f5491"
 # META         }
 # META       ]
 # META     },
@@ -49,10 +49,10 @@ import json
 
 # CELL ********************
 
-BRONZE_BASE = "abfss://LISE@onelake.dfs.fabric.microsoft.com/LH_BRONZE.Lakehouse/Files"
+BRONZE_BASE = "abfss://LISE_DEV@onelake.dfs.fabric.microsoft.com/LH_BRONZE.Lakehouse/Files"
 
 def p(year: str, filename: str) -> str:
-    return f"{BRONZE_BASE}/Lise_Data/{year}/{filename}"
+    return f"{BRONZE_BASE}/LISE ACADEMY/{year}/{filename}"
 
 
 # METADATA ********************
@@ -128,6 +128,18 @@ paths = {
 
 # CELL ********************
 
+# PAYROLL SOURCE FOLDER
+payroll_folder = f"{BRONZE_BASE}/LISE ACADEMY/PAYROLL"
+
+# METADATA ********************
+
+# META {
+# META   "language": "python",
+# META   "language_group": "synapse_pyspark"
+# META }
+
+# CELL ********************
+
 def read_csv(year: str, dataset_name: str):
     try:
         path = paths[year][dataset_name]
@@ -180,6 +192,170 @@ df_pays = union_dfs("pays")
 
 # CELL ********************
 
+def list_payroll_files(payroll_folder: str):
+    files = mssparkutils.fs.ls(payroll_folder)
+
+    payroll_files = [
+        f.path for f in files
+        if f.name.startswith("Payroll_") and f.name.endswith(".csv")
+    ]
+
+    return payroll_files
+
+
+def read_payroll_files(payroll_folder: str):
+    payroll_files = list_payroll_files(payroll_folder)
+
+    if not payroll_files:
+        raise ValueError(f"No payroll files found in {payroll_folder}")
+
+    dfs = []
+
+    for file_path in payroll_files:
+        df = spark.read.csv(
+            file_path,
+            header=True,
+            inferSchema=False,
+            sep=","
+        )
+
+        clean_columns = [c.strip().replace("\uFEFF", "").replace('"', "").strip() for c in df.columns]
+        df = df.toDF(*clean_columns)
+
+        for col_name in df.columns:
+            df = df.withColumn(
+                col_name,
+                regexp_replace(col(col_name).cast("string"), "[\uFEFF\x00-\x1F\x7F]", "")
+            )
+
+        df = (
+            df
+            .withColumn("SourceFilePath", input_file_name())
+            .withColumn("SourceFileName", regexp_extract(input_file_name(), r"([^/]+$)", 1))
+            .withColumn("PayrollMonth", regexp_extract(input_file_name(), r"Payroll_(\d{4}-\d{2})\.csv", 1))
+            .withColumn("IngestedAtUTC", current_timestamp())
+        )
+
+        dfs.append(df)
+
+    return reduce(lambda a, b: a.unionByName(b, allowMissingColumns=True), dfs)
+
+# METADATA ********************
+
+# META {
+# META   "language": "python",
+# META   "language_group": "synapse_pyspark"
+# META }
+
+# CELL ********************
+
+df_payroll_raw = read_payroll_files(payroll_folder)
+
+# METADATA ********************
+
+# META {
+# META   "language": "python",
+# META   "language_group": "synapse_pyspark"
+# META }
+
+# CELL ********************
+
+df_payroll = (
+    df_payroll_raw
+    .withColumn("PersonnelID", col("PersonnelID").cast(IntegerType()))
+    .withColumn("PersonnelKey", trim(col("PersonnelKey")))
+    .withColumn("Nom", upper(trim(col("Nom"))))
+    .withColumn("Prenom", initcap(trim(col("Prenom"))))
+    .withColumn("Periode", initcap(lower(trim(col("Periode")))))
+    .withColumn(
+        "TransactionDate",
+        coalesce(
+            to_date(trim(col("Date")), "yyyy-MM-dd"),
+            to_date(trim(col("Date")), "yyyyMMdd"),
+            to_date(trim(col("Date")), "dd/MM/yyyy")
+        )
+    )
+    .withColumn(
+        "Montant",
+        regexp_replace(
+            regexp_replace(trim(col("Montant")), " ", ""),
+            ",",
+            "."
+        ).cast(DecimalType(18, 2))
+    )
+    .withColumn("Devise", upper(trim(col("Devise"))))
+    .withColumn("ProfessionTypeID", col("ProfessionTypeID").cast(IntegerType()))
+    .withColumn("EtablissementID", col("EtablissementID").cast(IntegerType()))
+    .withColumn("ClasseID", col("ClasseID").cast(IntegerType()))
+    .withColumn("NiveauID", col("NiveauID").cast(IntegerType()))
+    .withColumn(
+        "SchoolYear",
+        when(
+            month(col("TransactionDate")) >= 7,
+            concat(year(col("TransactionDate")), lit("-"), year(col("TransactionDate")) + 1)
+        ).otherwise(
+            concat(year(col("TransactionDate")) - 1, lit("-"), year(col("TransactionDate")))
+        )
+    )
+    .select(
+        "PersonnelID",
+        "PersonnelKey",
+        "Nom",
+        "Prenom",
+        "Periode",
+        "TransactionDate",
+        "PayrollMonth",
+        "SchoolYear",
+        "Montant",
+        "Devise",
+        "ProfessionTypeID",
+        "EtablissementID",
+        "ClasseID",
+        "NiveauID",
+        "SourceFileName",
+        "SourceFilePath",
+        "IngestedAtUTC"
+    )
+)
+
+# METADATA ********************
+
+# META {
+# META   "language": "python",
+# META   "language_group": "synapse_pyspark"
+# META }
+
+# CELL ********************
+
+payroll_keys = [
+    "PersonnelID",
+    "Periode",
+    "TransactionDate",
+    "ProfessionTypeID",
+    "EtablissementID",
+    "ClasseID"
+]
+
+df_payroll = (
+    df_payroll
+    .filter(col("PersonnelID").isNotNull())
+    .filter(col("Periode").isNotNull() & (trim(col("Periode")) != ""))
+    .filter(col("TransactionDate").isNotNull())
+    .filter(col("ProfessionTypeID").isNotNull())
+    .filter(col("EtablissementID").isNotNull())
+    .filter(col("Montant").isNotNull())
+    .dropDuplicates(payroll_keys)
+)
+
+# METADATA ********************
+
+# META {
+# META   "language": "python",
+# META   "language_group": "synapse_pyspark"
+# META }
+
+# CELL ********************
+
 new_class_rows = [
     Row(IDCLASSE=24, CL_CODE="5EG", CL_LIBELLE="5ème - Gamma", IDETABLISSEMENT=1, IDNIVEAU=3, CL_CLASSE_RECTORAT="5EME", SCHOOLYEAR="2024-2025"),
     Row(IDCLASSE=25, CL_CODE="5EK", CL_LIBELLE="5ème - Kappa", IDETABLISSEMENT=1, IDNIVEAU=3, CL_CLASSE_RECTORAT="5EME", SCHOOLYEAR="2024-2025"),
@@ -210,7 +386,7 @@ villes_schema = StructType([
     StructField("PAYS", StringType(), True)
 ])
 
-villes_path = "abfss://LISE@onelake.dfs.fabric.microsoft.com/LH_BRONZE.Lakehouse/Files/External_Data/VILLES.csv"
+villes_path = "abfss://LISE_DEV@onelake.dfs.fabric.microsoft.com/LH_BRONZE.Lakehouse/Files/LISE ACADEMY/VILLES.csv"
 
 window_villes = Window.orderBy(col("VILLE"))
 
@@ -860,6 +1036,8 @@ df_factures_services = df_factures_services.withColumnRenamed("HL_QUANTITE", "QU
                                           .join(df_services, on = "SERVICE", how = "left") \
                                           .join(df_factures_eleves, on = ["KEYELEVE", "IDELEVE", "KEYRESPONSABLE", "IDRESPONSABLE", "KEYVALIDATION", "IDVALIDATION", "SCHOOLYEAR"], how ="left") 
 
+df_factures_services = df_factures_services.filter(col("IDSERVICE").isNotNull() & (trim(col("IDSERVICE").cast("string")) != ""))
+
 # METADATA ********************
 
 # META {
@@ -1062,7 +1240,9 @@ df_factures_validations = df_factures_validations.filter(col("DATEVALIDATION").i
 df_factures_eleves = df_factures_eleves.dropDuplicates()
 df_factures_familles = df_factures_familles.dropDuplicates()
 df_factures_niveaux = df_factures_niveaux.dropDuplicates()
-df_factures_services = df_factures_services.dropDuplicates()
+df_factures_services = df_factures_services.dropDuplicates(
+    subset=["KEYELEVE", "KEYRESPONSABLE", "KEYVALIDATION", "IDSERVICE", "DATEFACTURE", "QUANTITE", "PRIX", "REMISE", "TOTALSERVICE"]
+)
 df_factures_validations = df_factures_validations .dropDuplicates()
 df_dates = df_dates.dropDuplicates(subset=["IDDATE"])
 df_enfants = df_enfants.dropDuplicates(subset=["IDELEVE"])
@@ -1120,15 +1300,17 @@ append_tables = {
     "fact_factures_niveaux": df_factures_niveaux,
     "fact_factures_familles": df_factures_familles,
     "fact_factures_services": df_factures_services,
-    "fact_factures_validations": df_factures_validations
+    "fact_factures_validations": df_factures_validations,
+    "fact_payroll_current": df_payroll
 }
 
 fact_key_cols = {
     "fact_factures_eleves": ["KEYELEVE", "KEYRESPONSABLE", "KEYVALIDATION"],
     "fact_factures_niveaux": ["IDNIVEAU", "KEYRESPONSABLE", "KEYVALIDATION"],
     "fact_factures_familles": ["KEYRESPONSABLE", "KEYVALIDATION"],
-    "fact_factures_services": ["KEYELEVE", "KEYRESPONSABLE", "KEYVALIDATION"],
-    "fact_factures_validations": ["KEYVALIDATION"]
+    "fact_factures_services": ["KEYELEVE", "KEYRESPONSABLE", "KEYVALIDATION", "IDSERVICE", "DATEFACTURE"],
+    "fact_factures_validations": ["KEYVALIDATION"],
+    "fact_payroll_current": ["PersonnelID", "Periode", "TransactionDate", "ProfessionTypeID", "EtablissementID", "ClasseID", "NiveauID"]
 }
 
 
@@ -1139,15 +1321,26 @@ for table_name, overwrite_df in overwrite_tables.items():
     except Exception as e:
         print(f"Error overwriting table {table_name}: {e}")
 
-def make_merge_condition(keys):
-    return " AND ".join([f"t.{col} = s.{col}" for col in keys])
+def make_merge_condition(table_name, keys):
+    if table_name == "fact_payroll_current":
+        return """
+            t.PersonnelID = s.PersonnelID
+            AND t.Periode = s.Periode
+            AND t.TransactionDate = s.TransactionDate
+            AND t.ProfessionTypeID = s.ProfessionTypeID
+            AND t.EtablissementID = s.EtablissementID
+            AND coalesce(t.ClasseID, -1) = coalesce(s.ClasseID, -1)
+            AND coalesce(t.NiveauID, -1) = coalesce(s.NiveauID, -1)
+        """
+    else:
+        return " AND ".join([f"t.{col} = s.{col}" for col in keys])
 
 for table_name, append_df in append_tables.items():
     keys = fact_key_cols.get(table_name)
     if not keys:
         raise ValueError(f"No business key defined for table {table_name}")
 
-    merge_condition = make_merge_condition(keys)
+    merge_condition = make_merge_condition(table_name, keys)
 
     try:
         src = append_df.dropDuplicates(keys)
@@ -1196,7 +1389,8 @@ rows_processed = {
     "fact_factures_niveaux": df_factures_niveaux.count(),
     "fact_factures_familles": df_factures_familles.count(),
     "fact_factures_services": df_factures_services.count(),
-    "fact_factures_validations": df_factures_validations.count()
+    "fact_factures_validations": df_factures_validations.count(),
+    "fact_payroll_current": df_payroll.count()
 }
 
 total_rows_processed = __builtins__.sum(rows_processed.values())

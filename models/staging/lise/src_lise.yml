@@ -1,0 +1,19 @@
+version: 2
+
+sources:
+  - name: lise
+    database: WH_GOLD
+    schema: LISE
+    tables:
+    
+      - name: Payroll
+      - name: ProfessionTypes
+      - name: FacturesEleves
+      - name: FacturesServices
+      - name: Dates
+      - name: Classes
+      - name: Niveaux
+      - name: Etablissements
+      - name: Regimes
+      - name: Services
+      - name: Personnels

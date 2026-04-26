@@ -1,15 +1,14 @@
 CREATE TABLE [LISE].[Payroll_Incoming] (
 
-	[PersonnelID] int NULL, 
-	[Nom] varchar(100) NULL, 
-	[Prenom] varchar(100) NULL, 
-	[Periode] varchar(50) NULL, 
-	[Date] date NULL, 
-	[Montant] float NULL, 
+	[PersonnelID] int NOT NULL, 
+	[Nom] varchar(255) NULL, 
+	[Prenom] varchar(255) NULL, 
+	[Periode] varchar(100) NOT NULL, 
+	[Date] date NOT NULL, 
+	[Montant] decimal(18,2) NOT NULL, 
 	[Devise] varchar(20) NULL, 
-	[ProfessionTypeID] int NULL, 
-	[EtablissementID] int NULL, 
+	[ProfessionTypeID] int NOT NULL, 
+	[EtablissementID] int NOT NULL, 
 	[ClasseID] int NULL, 
-	[NiveauID] int NULL, 
-	[PersonnelKey] varchar(50) NULL
+	[NiveauID] int NULL
 );

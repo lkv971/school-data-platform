@@ -1,0 +1,171 @@
+version: 2
+
+models:
+  - name: stg_lise__dates
+    description: "Staging model for the Dates table."
+    columns:
+      - name: Date
+        tests:
+          - not_null
+          - unique
+      - name: CalendarYear
+        tests:
+          - not_null
+      - name: CalendarMonth
+        tests:
+          - not_null
+      - name: SchoolYear
+        tests:
+          - not_null
+
+  - name: stg_lise__classes
+    description: "Staging model for Classes."
+    columns:
+      - name: ClasseID
+        tests:
+          - not_null
+          - unique
+
+  - name: stg_lise__niveaux
+    description: "Staging model for Niveaux."
+    columns:
+      - name: NiveauID
+        tests:
+          - not_null
+          - unique
+
+  - name: stg_lise__etablissements
+    description: "Staging model for Etablissements."
+    columns:
+      - name: EtablissementID
+        tests:
+          - not_null
+          - unique
+
+  - name: stg_lise__profession_types
+    description: "Staging model for payroll profession types."
+    columns:
+      - name: ProfessionTypeID
+        tests:
+          - not_null
+          - unique
+
+  - name: stg_lise__regimes
+    description: "Staging model for Regimes."
+    columns:
+      - name: RegimeID
+        tests:
+          - not_null
+          - unique
+
+  - name: stg_lise__services
+    description: "Staging model for Services."
+    columns:
+      - name: ServiceID
+        tests:
+          - not_null
+          - unique
+  
+  - name: stg_lise__personnels
+    description: "Staging model for Personnels."
+    columns:
+      - name: PersonnelID
+        tests:
+          - not_null
+          - unique
+
+  - name: stg_lise__payroll
+    description: "Staging model for Payroll."
+    columns:
+      - name: PaieID
+        tests:
+          - not_null
+      - name: PersonnelID
+        tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('stg_lise__personnels')
+                field: PersonnelID
+      - name: Periode
+        tests:
+          - not_null
+      - name: Date
+        tests:
+          - not_null
+      - name: ProfessionTypeID
+        tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('stg_lise__profession_types')
+                field: ProfessionTypeID
+      - name: EtablissementID
+        tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('stg_lise__etablissements')
+                field: EtablissementID
+      - name: ClasseID
+        tests:
+          - relationships:
+              arguments: 
+                to: ref('stg_lise__classes')
+                field: ClasseID
+      - name: NiveauID
+        tests:
+          - relationships:
+              arguments: 
+                to: ref('stg_lise__niveaux')
+                field: NiveauID
+      - name: Montant
+
+  - name: stg_lise__factures_eleves
+    description: "Staging model for FacturesEleves."
+    columns:
+      - name: EleveKey
+        tests:
+          - not_null
+      - name: EleveID
+        tests:
+          - not_null
+      - name: ValidationKey
+        tests:
+          - not_null
+      - name: ClasseID
+        tests:
+          - not_null
+          - relationships:
+              arguments: 
+                to: ref('stg_lise__classes')
+                field: ClasseID
+      - name: RegimeID
+        tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('stg_lise__regimes')
+                field: RegimeID
+      - name: DateFacture
+        tests:
+          - not_null
+
+  - name: stg_lise__factures_services
+    description: "Staging model for FacturesServices."
+    columns:
+      - name: EleveKey
+        tests:
+          - not_null
+      - name: ValidationKey
+        tests:
+          - not_null
+      - name: ServiceID
+        tests:
+          - relationships:
+              arguments: 
+                to: ref('stg_lise__services')
+                field: ServiceID
+      - name: DateFacture
+        tests:
+          - not_null

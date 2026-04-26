@@ -324,3 +324,84 @@ models:
 
       - name: PayrollPctOfRevenue
         description: "Payroll as a percentage of revenue."
+
+  
+  - name: fct_lise__student_billing_activity
+    description: "Student billing activity fact used for true distinct student and revenue-per-student measures."
+    columns:
+      - name: MonthKey
+        description: "Foreign key to dim_lise__month."
+        data_tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('dim_lise__month')
+                field: MonthKey
+
+      - name: ClassKey
+        description: "Foreign key to dim_lise__class."
+        data_tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('dim_lise__class')
+                field: ClassKey
+
+      - name: StudentKey
+        description: "Student activity key used for DISTINCTCOUNT measures."
+        data_tests:
+          - not_null
+
+      - name: RegimeKey
+        description: "Foreign key to dim_lise__regime."
+        data_tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('dim_lise__regime')
+                field: RegimeKey
+
+      - name: BilledAmount
+        description: "Billed amount at student activity grain."
+        data_tests:
+          - not_null
+
+  - name: fct_lise__personnel_payroll_activity
+    description: "Personnel payroll activity fact used for true distinct personnel and payroll-per-personnel measures."
+    columns:
+      - name: MonthKey
+        description: "Foreign key to dim_lise__month."
+        data_tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('dim_lise__month')
+                field: MonthKey
+
+      - name: ClassKey
+        description: "Foreign key to dim_lise__class."
+        data_tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('dim_lise__class')
+                field: ClassKey
+
+      - name: PersonnelKey
+        description: "Personnel activity key used for DISTINCTCOUNT measures."
+        data_tests:
+          - not_null
+
+      - name: ProfessionTypeKey
+        description: "Foreign key to dim_lise__profession_type."
+        data_tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('dim_lise__profession_type')
+                field: ProfessionTypeKey
+
+      - name: PayrollAmount
+        description: "Payroll amount at personnel activity grain."
+        data_tests:
+          - not_null

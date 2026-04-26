@@ -1,0 +1,35 @@
+{
+  "project": {
+    "projectType": "GitHub",
+    "branch": "dev",
+    "folderPath": "dbt",
+    "externalReferences": {
+      "connection": "bdda4a01-3fe7-4e6a-81c9-cb5ebb2f23e6"
+    }
+  },
+  "profile": {
+    "profileType": "DataWarehouse",
+    "schema": "dbt_school_dev",
+    "connectionSettings": {
+      "name": "WH_GOLD",
+      "properties": {
+        "type": "DataWarehouse",
+        "typeProperties": {
+          "workspaceId": "ca671cc1-0874-4ef0-aac1-5c341115234f",
+          "artifactId": "dfeb41e8-5d30-44e8-9958-443d69433f33",
+          "endPoint": "blhnrhw756mevdmbsb4226lysu-yeogpstubdye5kwblq2bcfjdj4.datawarehouse.fabric.microsoft.com"
+        }
+      }
+    }
+  },
+  "command": {
+    "operation": "build",
+    "arguments": {
+      "select": "+mart_lise__payroll_monthly +mart_lise__revenue_monthly +mart_lise__revenue_services_monthly +mart_lise__margin_monthly",
+      "exclude": "",
+      "failFast": true,
+      "threads": 4,
+      "selectorName": ""
+    }
+  }
+}

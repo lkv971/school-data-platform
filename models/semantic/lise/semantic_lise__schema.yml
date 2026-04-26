@@ -1,0 +1,326 @@
+version: 2
+
+models:
+  - name: dim_lise__month
+    description: "Conformed month dimension for the LISE semantic model."
+    columns:
+      - name: MonthKey
+        description: "Monthly key in YYYYMM format."
+        data_tests:
+          - not_null
+          - unique
+
+      - name: MonthStartDate
+        description: "First date in the month."
+        data_tests:
+          - not_null
+
+      - name: CalendarYear
+        description: "Calendar year for the month."
+        data_tests:
+          - not_null
+
+      - name: CalendarMonth
+        description: "Calendar month number."
+        data_tests:
+          - not_null
+
+      - name: MonthName
+        description: "Month name."
+        data_tests:
+          - not_null
+
+      - name: SchoolYear
+        description: "School year associated with the month."
+        data_tests:
+          - not_null
+
+  - name: dim_lise__class
+    description: "Conformed class dimension that flattens class, niveau, and etablissement for semantic-model use."
+    columns:
+      - name: ClassKey
+        description: "Conformed class key used by all semantic-model fact tables."
+        data_tests:
+          - not_null
+          - unique
+
+      - name: ClasseID
+        description: "Original class identifier when a row is linked to a class."
+
+      - name: Classe
+        description: "Class label."
+        data_tests:
+          - not_null
+
+      - name: ClasseLibelle
+        description: "Detailed class label."
+        data_tests:
+          - not_null
+
+      - name: NiveauID
+        description: "Original niveau identifier where available."
+
+      - name: Niveau
+        description: "Niveau label."
+        data_tests:
+          - not_null
+
+      - name: EtablissementID
+        description: "Original etablissement identifier where available."
+
+      - name: Etablissement
+        description: "Etablissement label."
+        data_tests:
+          - not_null
+
+      - name: IsUnassigned
+        description: "Flag indicating whether the row is an unassigned or unknown class mapping."
+        data_tests:
+          - not_null
+
+  - name: dim_lise__regime
+    description: "Conformed regime dimension."
+    columns:
+      - name: RegimeKey
+        description: "Regime surrogate/conformed key."
+        data_tests:
+          - not_null
+          - unique
+
+      - name: RegimeID
+        description: "Original regime identifier where available."
+
+      - name: Regime
+        description: "Regime label."
+        data_tests:
+          - not_null
+
+  - name: dim_lise__service
+    description: "Conformed service dimension."
+    columns:
+      - name: ServiceKey
+        description: "Service surrogate/conformed key."
+        data_tests:
+          - not_null
+          - unique
+
+      - name: ServiceID
+        description: "Original service identifier where available."
+
+      - name: Service
+        description: "Service label."
+        data_tests:
+          - not_null
+
+  - name: dim_lise__profession_type
+    description: "Conformed profession type dimension."
+    columns:
+      - name: ProfessionTypeKey
+        description: "Profession type surrogate/conformed key."
+        data_tests:
+          - not_null
+          - unique
+
+      - name: ProfessionTypeID
+        description: "Original profession type identifier where available."
+
+      - name: ProfessionType
+        description: "Profession type label."
+        data_tests:
+          - not_null
+
+  - name: fct_lise__revenue_monthly
+    description: "Monthly billed revenue fact table for the LISE semantic model."
+    columns:
+      - name: MonthKey
+        description: "Foreign key to dim_lise__month."
+        data_tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('dim_lise__month')
+                field: MonthKey
+
+      - name: ClassKey
+        description: "Foreign key to dim_lise__class."
+        data_tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('dim_lise__class')
+                field: ClassKey
+
+      - name: RegimeKey
+        description: "Foreign key to dim_lise__regime."
+        data_tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('dim_lise__regime')
+                field: RegimeKey
+
+      - name: RevenueLineCount
+        description: "Number of billed revenue lines."
+        data_tests:
+          - not_null
+
+      - name: StudentCount
+        description: "Distinct student count at the monthly class/regime grain."
+        data_tests:
+          - not_null
+
+      - name: TotalBilledRevenue
+        description: "Total billed student revenue."
+        data_tests:
+          - not_null
+
+      - name: AvgBilledPerLine
+        description: "Average billed amount per revenue line."
+
+  - name: fct_lise__revenue_services_monthly
+    description: "Monthly service revenue fact table for the LISE semantic model."
+    columns:
+      - name: MonthKey
+        description: "Foreign key to dim_lise__month."
+        data_tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('dim_lise__month')
+                field: MonthKey
+
+      - name: ClassKey
+        description: "Foreign key to dim_lise__class."
+        data_tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('dim_lise__class')
+                field: ClassKey
+
+      - name: ServiceKey
+        description: "Foreign key to dim_lise__service."
+        data_tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('dim_lise__service')
+                field: ServiceKey
+
+      - name: ServiceLineCount
+        description: "Number of service revenue lines."
+        data_tests:
+          - not_null
+
+      - name: StudentCount
+        description: "Distinct student count at the monthly class/service grain."
+        data_tests:
+          - not_null
+
+      - name: TotalQuantity
+        description: "Total service quantity."
+        data_tests:
+          - not_null
+
+      - name: TotalServiceRevenue
+        description: "Total service revenue."
+        data_tests:
+          - not_null
+
+      - name: AvgServiceRevenuePerLine
+        description: "Average service revenue per line."
+
+  - name: fct_lise__payroll_monthly
+    description: "Monthly payroll fact table for the LISE semantic model."
+    columns:
+      - name: MonthKey
+        description: "Foreign key to dim_lise__month."
+        data_tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('dim_lise__month')
+                field: MonthKey
+
+      - name: ClassKey
+        description: "Foreign key to dim_lise__class."
+        data_tests:
+          - relationships:
+              arguments:
+                to: ref('dim_lise__class')
+                field: ClassKey
+
+      - name: ProfessionTypeKey
+        description: "Foreign key to dim_lise__profession_type."
+        data_tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('dim_lise__profession_type')
+                field: ProfessionTypeKey
+
+      - name: PayrollLineCount
+        description: "Number of payroll lines."
+        data_tests:
+          - not_null
+
+      - name: PersonnelCount
+        description: "Distinct personnel count at the monthly class/profession-type grain."
+        data_tests:
+          - not_null
+
+      - name: TotalPayrollAmount
+        description: "Total payroll amount."
+
+      - name: AvgPayrollAmount
+        description: "Average payroll amount per line."
+
+  - name: fct_lise__margin_monthly
+    description: "Monthly margin fact table for the LISE semantic model."
+    columns:
+      - name: MonthKey
+        description: "Foreign key to dim_lise__month."
+        data_tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('dim_lise__month')
+                field: MonthKey
+
+      - name: ClassKey
+        description: "Foreign key to dim_lise__class."
+        data_tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('dim_lise__class')
+                field: ClassKey
+
+      - name: StudentCount
+        description: "Distinct student count at the monthly class grain."
+        data_tests:
+          - not_null
+
+      - name: PersonnelCount
+        description: "Distinct personnel count at the monthly class grain."
+        data_tests:
+          - not_null
+
+      - name: TotalBilledRevenue
+        description: "Total billed revenue used in margin calculation."
+        data_tests:
+          - not_null
+
+      - name: TotalPayrollAmount
+        description: "Total payroll amount used in margin calculation."
+
+      - name: GrossMargin
+        description: "Gross margin amount."
+        data_tests:
+          - not_null
+
+      - name: GrossMarginPct
+        description: "Gross margin percentage."
+
+      - name: PayrollPctOfRevenue
+        description: "Payroll as a percentage of revenue."

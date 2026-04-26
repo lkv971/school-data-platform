@@ -1036,6 +1036,8 @@ df_factures_services = df_factures_services.withColumnRenamed("HL_QUANTITE", "QU
                                           .join(df_services, on = "SERVICE", how = "left") \
                                           .join(df_factures_eleves, on = ["KEYELEVE", "IDELEVE", "KEYRESPONSABLE", "IDRESPONSABLE", "KEYVALIDATION", "IDVALIDATION", "SCHOOLYEAR"], how ="left") 
 
+df_factures_services = df_factures_services.filter(col("IDSERVICE").isNotNull() & (trim(col("IDSERVICE").cast("string")) != ""))
+
 # METADATA ********************
 
 # META {
